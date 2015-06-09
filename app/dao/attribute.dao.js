@@ -4,16 +4,6 @@ var q = require('q');
 
 var url = config.api_url_dev + 'attr';
 
-exports = {
-    createNewAttr: createNewAttr,
-    getAttrByName: getAttrByName,
-    getAllAttr: getAllAttr
-}; 
-
-
-//////////////////////////////
-
-
 function parseAll(body) {
     var deferred = q.defer();
     var attrs = JSON.parse(body);
