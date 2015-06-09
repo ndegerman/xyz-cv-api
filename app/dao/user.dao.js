@@ -7,7 +7,7 @@ var url = config.api_url_dev + 'user';
 function parseUsers(body) {
     var deferred = q.defer();
     var users = JSON.parse(body);
-     if (!users) {
+    if (!users) {
         users = [];
     }
     deferred.resolve(users);
@@ -17,28 +17,28 @@ function parseUsers(body) {
 function parseUser(body) {
     var deferred = q.defer();
     parseUsers(body)
-    .then(function(users) {
-        var user = null;
-        if (users.length) {
-            user = users[0]
-        }
-        deferred.resolve(user);
-    });
+        .then(function(users) {
+            var user = null;
+            if (users.length) {
+                user = users[0]
+            }
+            deferred.resolve(user);
+        });
     return deferred.promise;
 };
 
 // res[0]: the response
 // res[1]: the body
 // res[2]: the error
-function parseResponse(res) {
+function parseResponse(response) {
     var deferred = q.defer();
-    if (!res) {
+    if (!response) {
         deferred.reject(new Error('Invalid response format'));
     }
-    if (res[2]) {
-        deferred.reject(res[2]);
+    if (response[2]) {
+        deferred.reject(response[2]);
     }
-    deferred.resolve(res[1]);
+    deferred.resolve(response[1]);
     return deferred.promise;
 };
 
@@ -50,7 +50,7 @@ exports.createNewUser = function(user) {
     };
 
     return q.nfcall(request, options)
-    .then(parseResponse);
+        .then(parseResponse);
 };
 
 
@@ -61,8 +61,8 @@ exports.getUserByEmail = function(email) {
     };
 
     return q.nfcall(request, options)
-    .then(parseResponse)
-    .then(parseUser);
+        .then(parseResponse)
+        .then(parseUser);
 };
 
 
@@ -73,7 +73,7 @@ exports.getAllUsers = function() {
     };
 
     return q.nfcall(request, options)
-    .then(parseResponse)
-    .then(parseUsers);
+        .then(parseResponse)
+        .then(parseUsers);
 };
 

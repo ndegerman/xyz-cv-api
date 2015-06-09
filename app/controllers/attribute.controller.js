@@ -1,39 +1,39 @@
 var request = require('request');
 var config = require('../config/config');
-var attrDao = require('../dao/attribute.dao');
+var attributeDao = require('../dao/attribute.dao');
 var q = require('q');
 
-var url = config.api_url_dev + 'attr';
+var url = config.api_url_dev + 'attribute';
 
 
 // TODO: Make the validation more covering
-function validateAttr(attr) {
-     var deferred = q.defer();
-    if (attr && attr.name) {
-        deferred.resolve(attr);
+function validateAttribute(attribute) {
+    var deferred = q.defer();
+    if (attribute && attribute.name) {
+        deferred.resolve(attribute);
     } else {
-        defered.reject(new Error('Not a valid attr object!'));
+        defered.reject(new Error('Not a valid attribute object!'));
     }
     return deferred.promise;
 };
 
 
-exports.getAttrTemplate = function() {
+exports.getAttributeTemplate = function() {
     return {
         name: null
     };
 };
 
-exports.createNewAttr = function(attrobj) {
-    return validateAttr(attrobj)
-    .then(attrDao.createNewAttr);
+exports.createNewAttribute = function(attributeObject) {
+    return validateAttribute(attributeObject)
+        .then(attributeDao.createNewAttribute);
 };
 
 
-exports.getAttrByName = function(name) {
-    return attrDao.getAttrByName(name);
+exports.getAttributeByName = function(name) {
+    return attributeDao.getAttributeByName(name);
 };
 
-exports.getAllAttrs = function() {
-    return attrDao.getAllAttrs();
+exports.getAllAttributes = function() {
+    return attributeDao.getAllAttributes();
 };

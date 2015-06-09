@@ -6,9 +6,9 @@ var url = config.api_url_dev + 'attr';
 
 function parseAll(body) {
     var deferred = q.defer();
-    var attrs = JSON.parse(body);
-    if (attrs) {
-        deferred.resolve(attrs);
+    var attributes = JSON.parse(body);
+    if (attributes) {
+        deferred.resolve(attributes);
     }
     deferred.resolve([]);
     return deferred.promise;
@@ -17,60 +17,60 @@ function parseAll(body) {
 function parseOne(body) {
     var deferred = q.defer();
     parseAll(body)
-    .then(function(attrs) {
-        if (attrs.length) {
-            deferred.resolve(attrs);
-        }
-        deferred.resolve(null);
-    });
+        .then(function(attributes) {
+            if (attributes.length) {
+                deferred.resolve(attributes);
+            }
+            deferred.resolve(null);
+        });
 };
 
 // res[0]: the response
 // res[1]: the body
 // res[2]: the error
-function parseResponse(res) {
+function parseResponse(response) {
     var deferred = q.defer();
-    if (!res) {
+    if (!response) {
         deferred.reject(new Error('Invalid response format'));
     }
-    if (res[2]) {
-        deferred.reject(res[2]);
+    if (response[2]) {
+        deferred.reject(response[2]);
     }
-    deferred.resolve(res[1]);
+    deferred.resolve(response[1]);
     return deferred.promise;
 };
 
-exports.createNewAttr = function(attr) {
+exports.createNewAttribute = function(attribute) {
     var options = {
         uri: url,
         method: 'POST',
-        json: attr
+        json: attribute
     };
 
     return q.nfcall(request, options)
-    .then(parseResponse);
+        .then(parseResponse);
 };
 
 
-exports.getAttrByName = function(name) {
+exports.getAttributeByName = function(name) {
     var options = {
         uri: url + '?name=' + name,
         method: 'GET',
     };
 
     return q.nfcall(request, options)
-    .then(parseResponse)
-    .then(parseOne);
+        .then(parseResponse)
+        .then(parseOne);
 };
 
-exports.getAllAttrs = function() {
+exports.getAllAttributes = function() {
     var options = {
         uri: url,
         method: 'GET',
     };
 
     return q.nfcall(request, options)
-    .then(parseResponse)
-    .then(parseAll);
+        .then(parseResponse)
+        .then(parseAll);
 };
 

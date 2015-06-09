@@ -4,8 +4,8 @@ var request = require('request');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 
-var authRoutes = require('./routes/authentication.routes')(express.Router());
-var attrRoutes = require('./routes/attribute.routes')(express.Router());
+var authenticationRoutes = require('./routes/authentication.routes')(express.Router());
+var attributeRoutes = require('./routes/attribute.routes')(express.Router());
 var userRoutes = require('./routes/user.routes')(express.Router());
 
 var config = require('./config/config');
@@ -29,8 +29,8 @@ app.use(morgan('dev'));
 
 // ROUTES
 // ============================================================================
-app.use('/api/', authRoutes);
-app.use('/api/attr', attrRoutes);
+app.use('/api/', authenticationRoutes);
+app.use('/api/attribute', attributeRoutes);
 app.use('/api/user', userRoutes);
 
 // for debugging
