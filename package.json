@@ -1,0 +1,12 @@
+{
+  "name": "xyz-nodejs",
+  "dependencies": {
+    "body-parser": "^1.12.4",
+    "express": "^4.12.4",
+    "jsonwebtoken": "^5.0.1",
+    "morgan": "^1.5.3",
+    "request": "^2.57.0",
+    "q": "*"
+  },
+  "repository": {}
+}
