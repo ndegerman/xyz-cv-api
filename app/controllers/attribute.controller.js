@@ -5,10 +5,18 @@ var q = require('q');
 
 var url = config.api_url_dev + 'attr';
 
+
 // TODO: Make the validation more covering
-function validateAttr(attr, next) {
-    return next(attr && attr.name);
+function validateAttr(attr) {
+     var deferred = q.defer();
+    if (attr && attr.name) {
+        deferred.resolve(attr);
+    } else {
+        defered.reject(new Error('Not a valid attr object!'));
+    }
+    return deferred.promise;
 };
+
 
 exports.getAttrTemplate = function() {
     return {
@@ -16,40 +24,16 @@ exports.getAttrTemplate = function() {
     };
 };
 
-exports.createNewAttr = function(attrobj, next) {
-    validateAttr(attrobj, function(valid) {
-        if (!valid) {
-            return next(new Error('Not a valid attr object!'));
-        }
-
-        attrDao.createNewAttr(attrobj, function(err, attr) {
-            if (err) {
-                return next(err);
-            }
-
-           if (!attr) {
-                return next(new Error('No attr was returned from the call.'))
-            }
-            return next(null, attr);
-        });
-    });
+exports.createNewAttr = function(attrobj) {
+    return validateAttr(attrobj)
+    .then(attrDao.createNewAttr);
 };
 
 
-exports.getAttrByName = function(name, next) {
-    attrDao.getAttrByName(email, function(err, attr) {
-        if (err) {
-            return next(err);
-        }
-        return next(null, attr);
-    });
+exports.getAttrByName = function(name) {
+    return attrDao.getAttrByName(name);
 };
 
-exports.getAllAttrs = function(next) {
-    attrDao.getAllAttrs(function(err, attrs) {
-        if (err) {
-            return next(err);
-        }
-        return next(attrs);
-    });
+exports.getAllAttrs = function() {
+    return attrDao.getAllAttrs();
 };
