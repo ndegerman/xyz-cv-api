@@ -11,23 +11,24 @@ module.exports = function(routes) {
 
   // create an attribute
     routes.post('/', function(req, res) {
-        attrController.createNewAttr(req.body, function(err, data) {
-            if (err) {
-                return res.send(err);
-            }
-            return res.json(data)
+        attrController.createNewAttr(req.body)
+        .then(function(attr) {
+            return res.json(attr);
+        })
+        .catch(function(err) {
+            return res.send(err);
         });
     });
 
   // get attributes
     routes.get('/', function(req, res) {
-        attrController.getAllAttrs(function(err, attrs) {
-            if (err) {
-                return res.send(err);
-            }
-            return res.json(attrs);
+        attrController.getAllAttrs()
+        .then(function(attrs) {
+            return res.json(attrs);      
+        })
+        .catch(function(err) {
+            return res.send(err);
         });
     });
-
     return routes;
 };

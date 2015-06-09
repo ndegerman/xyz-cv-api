@@ -63,13 +63,13 @@ exports.getAttrByName = function(name) {
     .then(parseOne);
 };
 
-exports.getAllAttr = function() {
+exports.getAllAttrs = function() {
     var options = {
         uri: url,
         method: 'GET',
     };
 
-    q.nfcall(request, options)
+    return q.nfcall(request, options)
     .then(parseResponse)
     .then(parseAll);
 };
