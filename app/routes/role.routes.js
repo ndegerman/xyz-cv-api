@@ -21,7 +21,7 @@ module.exports = function(routes) {
 
     // delete a role given an id
     routes.delete('/:id', function(request, response) {
-        roleController.deleteRole(request.params.id)
+        roleController.deleteRoleById(request.params.id)
             .then(function() {
                 return response.json({ message: 'The role was successfully deleted.' });
             })

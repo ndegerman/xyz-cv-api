@@ -112,9 +112,9 @@ exports.createNewRole = function(role) {
         .then(parsePost);
 };
 
-exports.deleteRole = function(roleId) {
+exports.deleteRoleById = function(id) {
     var options = {
-        uri: url + '/' + roleId,
+        uri: url + '/' + id,
         method: 'DELETE'
     };
 
@@ -126,6 +126,18 @@ exports.deleteRole = function(roleId) {
 exports.getRoleByName = function(name) {
     var options = {
         uri: url + '?name=' + name,
+        method: 'GET',
+    };
+
+    return q.nfcall(request, options)
+        .then(parseResponse)
+        .then(parseGet)
+        .then(parseOne);
+};
+
+exports.getRoleById = function(id) {
+    var options = {
+        uri: url + '/' + id,
         method: 'GET',
     };
 
