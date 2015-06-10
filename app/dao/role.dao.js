@@ -31,12 +31,12 @@ function parseOne(body) {
 function parseResponse(response) {
     return q.promise(function(resolve, reject) {
         if (!response) {
-            reject(new Error('Invalid response format'));
+            return reject(new Error('Invalid response format'));
         }
         if (response[2]) {
-            reject(response[2]);
+            return reject(response[2]);
         }
-        resolve(response);
+        return resolve(response);
     });
 };
 
@@ -44,15 +44,13 @@ function parseDelete(response) {
     return q.promise(function(resolve, reject) {
         switch (response[0].statusCode) {
             case 204:
-                resolve(response[1]);
-                break;
+                return resolve(response[1]);
             case 404:
-                reject(new Error('No item with the given id was found.'));
+                return reject(new Error('No item with the given id was found.'));
             case 500:
-                reject(new Error('The item could not be removed.'));
-                break;
+                return reject(new Error('The item could not be removed.'));
             default:
-                reject(new Error('Not a valid response code.'));
+                return reject(new Error('Not a valid response code.'));
         };
     });
 };
@@ -61,15 +59,13 @@ function parsePost(response) {
     return q.promise(function(resolve, reject) {
         switch(response[0].statusCode) {
             case 200:
-                resolve(response[1]);
-                break;
+                return resolve(response[1]);
             case 400:
-                reject(new Error('The JSON object in the request was omitted.'));
+                return reject(new Error('The JSON object in the request was omitted.'));
             case 500:
-                reject(new Error('The item could not be saved.'));
-                break;
+                return reject(new Error('The item could not be saved.'));
             default:
-                reject(new Error('Not a valid response code.'));    
+                return reject(new Error('Not a valid response code.'));    
         }
     });
 };
@@ -78,15 +74,13 @@ function parsePut(response) {
     return q.promise(function(resolve, reject) {
         switch(response[0].statusCode) {
             case 204:
-                resolve(response[1]);
-                break;
+                return resolve(response[1]);
             case 400:
-                reject(new Error('The JSON object in the request was omitted.'));
+                return reject(new Error('The JSON object in the request was omitted.'));
             case 500:
-                reject(new Error('The item could not be saved.'));
-                break;
+                return reject(new Error('The item could not be saved.'));
             default:
-                reject(new Error('Not a valid response code.'));    
+                return reject(new Error('Not a valid response code.'));    
         }
     });
 };
@@ -95,15 +89,13 @@ function parseGet(response) {
     return q.promise(function(resolve, reject) {
         switch(response[0].statusCode) {
             case 200:
-                resolve(response[1]);
-                break;
+                return resolve(response[1]);
             case 404:
-                reject(new Error('No item with the given id was found.'));
+                return reject(new Error('No item with the given id was found.'));
             case 500:
-                reject(new Error('The item/items could not be fetched.'));
-                break;
+                return reject(new Error('The item/items could not be fetched.'));
             default:
-                reject(new Error('Not a valid response code.'));    
+                return reject(new Error('Not a valid response code.'));    
         }
     });
 };
