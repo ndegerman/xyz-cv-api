@@ -1,43 +1,25 @@
 var q = require('q');
 var accessDao = require('../dao/access.dao');
 
-
 function validateAccess(access) {
-    var deferred = q.defer();
-    if (!access.user_id || !access.attribute_id) {
-        deferred.reject(new Error('Not a valid access object!'));
-    }
-    deferred.resolve(access);
-    return deferred.promise;
+    return q.promise(function(resolve, reject) {
+        if (!access.user_id || !access.attribute_id) {
+            return reject(new Error('Not a valid access object!'));
+        }
+        return resolve(access);
+    });
 };
 
-exports.assignAttributes = function(attributes, user) {
-    var deferred = q.defer();
+exports.assignAttributesToRole = function(attributes, role) {
     promises = [];
-    attributes.forEach(function(attribute_id) {
+    attributes.forEach(function(attributeId) {
         var access = {
-            user_id: user.id,
-            attribute_id: attribute_id
+            role_id: role.id,
+            attribute_id: attributeId
         };
         promises.push(createAccess(access));
     });
-    q.all(promises)
-        .then(function(accesses) {
-            deferred.resolve(accesses);
-        })
-        .catch(function(error) {
-            deferred.reject(error);
-        });
-    return deferred.promise;
-};
-
-exports.assignUser = function(user) {
-    return assignAttributes(roles.user, user);
-};
-
-exports.assignAdmin = function(user) {
-    return assignAttributes(roles.admin, user);
-  
+    return q.all(promises);
 };
 
 exports.createAccess = function(access) {
@@ -45,18 +27,27 @@ exports.createAccess = function(access) {
         .then(accessDao.createAccess);
 };
 
-exports.getAccessesForUser = function(user) {
-    return accessDao.getAccessesbyUserId(user.id);
+exports.getAccessesForRole = function(role) {
+    return accessDao.getAccessesbyRoleId(role.id);
 };
 
 exports.getAccessesForAttribute = function(attribute) {
     return accessDao.getAccessesbyAttributeId(attribute.id);
 };
 
-exports.deleteAccessForUser = function(user) {
-    return getAccessesForUser(user)
-        .then(function(accesses) {
-
-        })
+exports.deleteAccess = function(accessId) {
+    return accessDao.deleteAccess(accessId);
 };
 
+exports.deleteAccesses = function(accesses) {
+    var promises = [];
+    accesses.forEach(function(access) {
+        promises.push(deleteAccess(access.id));
+    });
+    return q.all(promises);
+};
+
+exports.deleteAccessForRole = function(role) {
+    return getAccessesForRole(role)
+        .then(deleteAccesses);
+};
