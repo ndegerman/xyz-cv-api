@@ -9,14 +9,14 @@ var q = require('q');
 module.exports = function(routes) {
 
     // get users
-    routes.get('/', function(req, res) {
+    routes.get('/', function(request, response) {
         userController.getAllUsers()
-        .then(function(users) {
-            return res.json(users);
-        }).catch(function(error) {
-            return res.send(error);
-        });
+            .then(function(users) {
+                return response.json(users);
+            })
+            .catch(function(error) {
+                return response.send(error);
+            });
     });
-
     return routes;
 };

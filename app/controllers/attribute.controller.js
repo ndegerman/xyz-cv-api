@@ -1,55 +1,39 @@
 var request = require('request');
 var config = require('../config/config');
-var attrDao = require('../dao/attribute.dao');
+var attributeDao = require('../dao/attribute.dao');
 var q = require('q');
 
-var url = config.api_url_dev + 'attr';
+var url = config.api_url_dev + 'attribute';
+
 
 // TODO: Make the validation more covering
-function validateAttr(attr, next) {
-    return next(attr && attr.name);
+function validateAttribute(attribute) {
+    var deferred = q.defer();
+    if (attribute && attribute.name) {
+        deferred.resolve(attribute);
+    } else {
+        defered.reject(new Error('Not a valid attribute object!'));
+    }
+    return deferred.promise;
 };
 
-exports.getAttrTemplate = function() {
+
+exports.getAttributeTemplate = function() {
     return {
         name: null
     };
 };
 
-exports.createNewAttr = function(attrobj, next) {
-    validateAttr(attrobj, function(valid) {
-        if (!valid) {
-            return next(new Error('Not a valid attr object!'));
-        }
-
-        attrDao.createNewAttr(attrobj, function(err, attr) {
-            if (err) {
-                return next(err);
-            }
-
-           if (!attr) {
-                return next(new Error('No attr was returned from the call.'))
-            }
-            return next(null, attr);
-        });
-    });
+exports.createNewAttribute = function(attributeObject) {
+    return validateAttribute(attributeObject)
+        .then(attributeDao.createNewAttribute);
 };
 
 
-exports.getAttrByName = function(name, next) {
-    attrDao.getAttrByName(email, function(err, attr) {
-        if (err) {
-            return next(err);
-        }
-        return next(null, attr);
-    });
+exports.getAttributeByName = function(name) {
+    return attributeDao.getAttributeByName(name);
 };
 
-exports.getAllAttrs = function(next) {
-    attrDao.getAllAttrs(function(err, attrs) {
-        if (err) {
-            return next(err);
-        }
-        return next(attrs);
-    });
+exports.getAllAttributes = function() {
+    return attributeDao.getAllAttributes();
 };
