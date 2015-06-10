@@ -1,29 +1,91 @@
-# XYZ Docker NodeJS #
+XYZ CV API
+=======
 
-This image is a default docker image for NodeJS.
+## What?
 
-## Local development ##
+This is a REST API server built using ExpressJS.
+It is built for the XYZ build system and comunicates with the [laughing batman](https://github.com/Softhouse/laughing-batman) DREAMS API.
 
-Just run the following commands
+## Get started
 
-    npm install
-    node server/server.js
+1. Connect you app to XYZ build system; follow the instructions [here](https://github.com/guzmo/xyz-docker-docs).
 
-You should now see a statically served index.html file if you go to
-http://localhost:9000
+### TODO
 
-## Testing for live deploy ##
+You'll now have a dynamic REST API listening on port `3232` (or the port provided via `PORT` env variable).
 
-Before deploying your code you can test it with a local docker installation
-by running the following commands
+## Development
 
-**Build:** 
+1. Install [NodeJS](http://nodejs.org/download/).
+2. Install and run a local copy of the DREAMS api from [here](https://github.com/guzmo/xyz-docker-docs).
+3. Open your terminal and do the following:
 
-    docker build -t my-nodejs-app .
+```bash
+git clone <this repo>
 
-**Run:** 
+cd <repo folder>
 
-    docker run -p 9000:9000 -it --rm --name my-running-app my-nodejs-app
+npm install
+
+node app/server.js
+
+```
+## API
+
+**NOTE** Every request to the api needs to contain two headers, containing `x-forwarded-user` and `x-forwarded-email`. The is used by the server to create users upon connecting.
+
+### `POST /api/attribute`
+
+Used to create attributes that are used for access purposes. Make sure that the request is a formatted JSON object (in POST Man you need to add a `Contant-Type` header with `application/json`). The json object should have the following fields:
+	
+	"name": "yourAttributeName" 
+	
+#### Responses
+
+`200` - The given JSON body was saved to the `attribute` collection and returned in the response.
+
+`400` - The JSON body was omitted when the request was made.
+
+`500` - The item could not be saved.
+
+### `GET /api/attribute`
+
+Get all attributes.
+
+#### Responses
+
+`200` - all the items in the collection, contained in a list.
+
+`500` - Something went wrong when querying the database.
 
 
-In this case we run the application at port 9000 so don't forget to expose port 9000 in VirtualBox Manager.
+### `GET /api/user`
+
+Get all users.
+
+#### Responses
+
+`200` - all the items in the collection, contained in a list.
+
+`500` - Something went wrong when querying the database.
+
+
+### `GET /api/user/<id>`
+
+Get a user item by its id.
+
+#### Responses
+
+`200` - The user with id `<id>` in the `user` collection.
+
+`404` - No user with id `<id>` was found in the collection.
+
+`500` - Something went wrong when querying the database.
+
+
+
+TODO
+
+## License
+
+TODO
