@@ -7,6 +7,7 @@ var morgan = require('morgan');
 var authenticationRoutes = require('./routes/authentication.routes')(express.Router());
 var attributeRoutes = require('./routes/attribute.routes')(express.Router());
 var userRoutes = require('./routes/user.routes')(express.Router());
+var roleRoutes = require('./routes/role.routes')(express.Router());
 
 var config = require('./config/config');
 
@@ -32,6 +33,7 @@ app.use(morgan('dev'));
 app.use('/api/', authenticationRoutes);
 app.use('/api/attribute', attributeRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/role', roleRoutes);
 
 // for debugging
 app.get('/kalle', function(req, res) {
