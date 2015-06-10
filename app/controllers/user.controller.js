@@ -29,7 +29,6 @@ exports.createNewUser = function(userObject) {
         .then(userDao.createNewUser);
 };
 
-
 exports.getUserByEmail = function(email) {
     return userDao.getUserByEmail(email);
 };

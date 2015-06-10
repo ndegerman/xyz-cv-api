@@ -5,11 +5,10 @@
  */
 var attributeController = require('../controllers/attribute.controller');
 var config = require('../config/config');
-var jwt = require('jsonwebtoken');
 
 module.exports = function(routes) {
 
-  // create an attribute
+    // create an attribute
     routes.post('/', function(request, response) {
         attributeController.createNewAttribute(request.body)
             .then(function(attribute) {
@@ -20,7 +19,7 @@ module.exports = function(routes) {
             });
     });
 
-  // get attributes
+    // get attributes
     routes.get('/', function(request, response) {
         attributeController.getAllAttributes()
             .then(function(attributes) {
