@@ -17,7 +17,6 @@ function validateAttribute(attribute) {
     return deferred.promise;
 };
 
-
 exports.getAttributeTemplate = function() {
     return {
         name: null
@@ -28,7 +27,6 @@ exports.createNewAttribute = function(attributeObject) {
     return validateAttribute(attributeObject)
         .then(attributeDao.createNewAttribute);
 };
-
 
 exports.getAttributeByName = function(name) {
     return attributeDao.getAttributeByName(name);

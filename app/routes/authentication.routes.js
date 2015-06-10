@@ -9,7 +9,7 @@ var q = require('q');
 
 module.exports = function(routes) {
 
-  // middleware
+    // middleware
     routes.use(function(request, response, next) {   
         var email = request.headers['x-forwarded-email']
         var name = request.headers['x-forwarded-user']

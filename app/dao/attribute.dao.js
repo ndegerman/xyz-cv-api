@@ -51,7 +51,6 @@ exports.createNewAttribute = function(attribute) {
         .then(parseResponse);
 };
 
-
 exports.getAttributeByName = function(name) {
     var options = {
         uri: url + '?name=' + name,
@@ -73,4 +72,3 @@ exports.getAllAttributes = function() {
         .then(parseResponse)
         .then(parseAll);
 };
-

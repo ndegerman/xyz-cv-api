@@ -123,7 +123,6 @@ exports.deleteRole = function(roleId) {
         .then(parseDelete);
 };
 
-
 exports.getRoleByName = function(name) {
     var options = {
         uri: url + '?name=' + name,
@@ -147,4 +146,3 @@ exports.getAllRoles = function() {
         .then(parseGet)
         .then(parseAll);
 };
-

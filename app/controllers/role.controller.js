@@ -14,7 +14,6 @@ function validateRole(role) {
     return deferred.promise;
 };
 
-
 exports.getRoleTemplate = function() {
     return {
         name: null
@@ -29,7 +28,6 @@ exports.createNewRole = function(roleObject) {
 exports.deleteRole = function(roleId) {
     return roleDao.deleteRole(roleId);
 };
-
 
 exports.getRoleByName = function(name) {
     return roleDao.getRoleByName(name);

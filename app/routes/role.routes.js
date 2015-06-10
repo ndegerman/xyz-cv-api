@@ -5,11 +5,10 @@
  */
 var roleController = require('../controllers/role.controller');
 var config = require('../config/config');
-var jwt = require('jsonwebtoken');
 
 module.exports = function(routes) {
 
-  // create a role
+    // create a role
     routes.post('/', function(request, response) {
         roleController.createNewRole(request.body)
             .then(function(role) {
@@ -31,7 +30,7 @@ module.exports = function(routes) {
             });
     });
 
-  // get roles
+    // get roles
     routes.get('/', function(request, response) {
         roleController.getAllRoles()
             .then(function(roles) {
@@ -41,5 +40,6 @@ module.exports = function(routes) {
                 return response.send(error);
             });
     });
+
     return routes;
 };

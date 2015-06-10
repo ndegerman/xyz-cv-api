@@ -53,7 +53,6 @@ exports.createNewUser = function(user) {
         .then(parseResponse);
 };
 
-
 exports.getUserByEmail = function(email) {
     var options = {
         uri: url + '?email=' + email,
@@ -65,7 +64,6 @@ exports.getUserByEmail = function(email) {
         .then(parseUser);
 };
 
-
 exports.getAllUsers = function() {
     var options = {
         uri: url,
@@ -76,4 +74,3 @@ exports.getAllUsers = function() {
         .then(parseResponse)
         .then(parseUsers);
 };
-
