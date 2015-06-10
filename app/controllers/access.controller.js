@@ -10,11 +10,11 @@ function validateAccess(access) {
     });
 };
 
-exports.assignAttributesToRole = function(attributes, role) {
+exports.assignAttributesToRole = function(attributes, roleId) {
     promises = [];
     attributes.forEach(function(attributeId) {
         var access = {
-            role_id: role.id,
+            role_id: roleId,
             attribute_id: attributeId
         };
         promises.push(createAccess(access));
@@ -27,15 +27,15 @@ exports.createAccess = function(access) {
         .then(accessDao.createAccess);
 };
 
-exports.getAccessesForRole = function(role) {
-    return accessDao.getAccessesbyRoleId(role.id);
+exports.getAccessesByRoleId = function(roleId) {
+    return accessDao.getAccessesbyRoleId(roleId);
 };
 
-exports.getAccessesForAttribute = function(attribute) {
-    return accessDao.getAccessesbyAttributeId(attribute.id);
+exports.getAccessesByAttributeId = function(attributeId) {
+    return accessDao.getAccessesbyAttributeId(attributeId);
 };
 
-exports.deleteAccess = function(accessId) {
+exports.deleteAccessById = function(id) {
     return accessDao.deleteAccess(accessId);
 };
 
@@ -47,7 +47,7 @@ exports.deleteAccesses = function(accesses) {
     return q.all(promises);
 };
 
-exports.deleteAccessForRole = function(role) {
-    return getAccessesForRole(role)
+exports.deleteAccessByRoleId = function(roleId) {
+    return getAccessesForRole(roleId)
         .then(deleteAccesses);
 };
