@@ -1,18 +1,18 @@
 XYZ CV API
-=======
+==========
 
 ## What?
 
 This is a REST API server built using ExpressJS.
-It is built for the XYZ build system and comunicates with the [laughing batman](https://github.com/Softhouse/laughing-batman) DREAMS API.
+It is built for the XYZ build system and communicates with the [laughing batman](https://github.com/Softhouse/laughing-batman) DREAMS API.
 
-## Get started
+## Getting started
 
-1. Connect you app to XYZ build system; follow the instructions [here](https://github.com/guzmo/xyz-docker-docs).
+1. Connect your app to XYZ build system; follow the instructions [here](https://github.com/guzmo/xyz-docker-docs).
 
 ### TODO
 
-You'll now have a dynamic REST API listening on port `3232` (or the port provided via `PORT` env variable).
+You'll now have a dynamic REST API listening on port `3232` (or the port provided via the `PORT` environment variable).
 
 ## Development
 
@@ -36,7 +36,7 @@ node app/server.js
 
 ### `POST /api/attribute`
 
-Used to create attributes that are used for access purposes. Make sure that the request is a formatted JSON object (in POST Man you need to add a `Contant-Type` header with `application/json`). The json object should have the following fields:
+Used to create attributes that are used for access purposes. Make sure that the request is a formatted JSON object (in [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm) you need to add a `Content-Type` header with `application/json`). The json object should have the following field:
 	
 	"name": "yourAttributeName" 
 	
@@ -58,7 +58,6 @@ Get all attributes.
 
 `500` - Something went wrong when querying the database.
 
-
 ### `GET /api/user`
 
 Get all users.
@@ -68,7 +67,6 @@ Get all users.
 `200` - all the items in the collection, contained in a list.
 
 `500` - Something went wrong when querying the database.
-
 
 ### `GET /api/user/<id>`
 
@@ -81,8 +79,6 @@ Get a user item by its id.
 `404` - No user with id `<id>` was found in the collection.
 
 `500` - Something went wrong when querying the database.
-
-
 
 TODO
 
