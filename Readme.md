@@ -36,7 +36,7 @@ node app/server.js
 
 ### `POST /api/attribute`
 
-Used to create attributes that are used for access purposes. Make sure that the request is a formatted JSON object (in [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm) you need to add a `Contant-Type` header with `application/json`). The json object should have the following field:
+Used to create attributes that are used for access purposes. Make sure that the request is a formatted JSON object (in [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm) you need to add a `Content-Type` header with `application/json`). The json object should have the following field:
 	
 	"name": "yourAttributeName" 
 	
