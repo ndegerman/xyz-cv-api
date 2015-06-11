@@ -1,24 +1,22 @@
-'use strict';
-
 var request = require('request');
 var config = require('../config/config');
 var q = require('q');
 
-var url = config.api_url_dev + 'role';
+var url = config.api_url_dev + 'access';
 
 function parsePolyQuery(body) {
     return q.promise(function(resolve) {
-        var roles = JSON.parse(body) || [];
-        return resolve(roles);
+        var accesses = JSON.parse(body) || [];
+        return resolve(accesses);
     });
 }
 
 function parseMonoQuery(body) {
     return q.promise(function(resolve) {
         parsePolyQuery(body)
-            .then(function(roles) {
-                var role = (roles.length > 0) ? roles[0] : null;
-                return resolve(role);
+            .then(function(accesses) {
+                var access = (accesses.length > 0) ? accesses[0] : null;
+                return resolve(access);
             });
     });
 }
@@ -38,21 +36,6 @@ function parseResponse(response) {
     });
 }
 
-function parseDelete(response) {
-    return q.promise(function(resolve, reject) {
-        switch (response[0].statusCode) {
-            case 204:
-                return resolve(response[1]);
-            case 404:
-                return reject(new Error('No item with the given id was found.'));
-            case 500:
-                return reject(new Error('The item could not be removed.'));
-            default:
-                return reject(new Error('Not a valid response code.'));
-        }
-    });
-}
-
 function parsePost(response) {
     return q.promise(function(resolve, reject) {
         switch(response[0].statusCode) {
@@ -66,22 +49,7 @@ function parsePost(response) {
                 return reject(new Error('Not a valid response code.'));
         }
     });
-}
-
-function parsePut(response) {
-    return q.promise(function(resolve, reject) {
-        switch(response[0].statusCode) {
-            case 204:
-                return resolve(response[1]);
-            case 400:
-                return reject(new Error('The JSON object in the request was omitted.'));
-            case 500:
-                return reject(new Error('The item could not be saved.'));
-            default:
-                return reject(new Error('Not a valid response code.'));
-        }
-    });
-}
+};
 
 function parseGet(response) {
     return q.promise(function(resolve, reject) {
@@ -96,13 +64,44 @@ function parseGet(response) {
                 return reject(new Error('Not a valid response code.'));
         }
     });
-}
+};
 
-exports.createNewRole = function(role) {
+function parsePut(response) {
+    return q.promise(function(resolve, reject) {
+        switch(response[0].statusCode) {
+            case 204:
+                return resolve(response[1]);
+            case 400:
+                return reject(new Error('The JSON object in the request was omitted.'));
+            case 500:
+                return reject(new Error('The item could not be saved.'));
+            default:
+                return reject(new Error('Not a valid response code.'));
+        }
+    });
+};
+
+function parseDelete(response) {
+    return q.promise(function(resolve, reject) {
+        switch (response[0].statusCode) {
+            case 204:
+                return resolve(response[1]);
+            case 404:
+                return reject(new Error('No item with the given id was found.'));
+            case 500:
+                return reject(new Error('The item could not be removed.'));
+            default:
+                console.log(response[0].statusCode);
+                return reject(new Error('Not a valid response code.'));
+        };
+    });
+};
+
+exports.createAccess = function(access) {
     var options = {
         uri: url,
         method: 'POST',
-        json: role
+        json: access
     };
 
     return q.nfcall(request, options)
@@ -110,52 +109,50 @@ exports.createNewRole = function(role) {
         .then(parsePost);
 };
 
-exports.deleteRoleById = function(id) {
+exports.getAccessesByAttributeId = function(id) {
     var options = {
-        uri: url + '/' + id,
-        method: 'DELETE'
-    };
-
-    return q.nfcall(request, options)
-        .then(parseResponse)
-        .then(parseDelete);
-};
-
-exports.getRoleByName = function(name) {
-    var options = {
-        uri: url + '?name=' + name,
-        method: 'GET',
-    };
-
-    return q.nfcall(request, options)
-        .then(parseResponse)
-        .then(parseGet)
-        .then(parseMonoQuery);
-};
-
-exports.getRoleById = function(id) {
-    var options = {
-        uri: url + '/' + id,
-        method: 'GET',
-        json: true
-    };
-
-    return q.nfcall(request, options)
-        .then(parseResponse)
-        .then(function(value) {
-            console.log(value);
-        })
-        .then(parseGet);
-};
-
-exports.getAllRoles = function() {
-    var options = {
-        uri: url,
-        method: 'GET',
+        uri: url + '?attribute_id=' + id,
+        method: 'GET'
     };
 
     return q.nfcall(request, options)
         .then(parseResponse)
         .then(parseGet)
         .then(parsePolyQuery);
+};
+
+exports.getAccessesByRoleId = function(id) {
+    var options = {
+        uri: url + '?role_id=' + id,
+        method: 'GET'
+    };
+
+    return q.nfcall(request, options)
+        .then(parseResponse)
+        .then(parseGet)
+        .then(parsePolyQuery);
+};
+
+exports.getAllAccesses = function() {
+    var options = {
+        uri: url,
+        method: 'GET'
+    };
+
+    return q.nfcall(request, options)
+        .then(parseResponse)
+        .then(parseGet)
+        .then(parsePolyQuery);
+};
+
+exports.deleteAccess = function(accessId) {
+    console.log(accessId);
+    var options = {
+        uri: url + '/' + accessId,
+        method: 'DELETE'
+    };
+
+    return q.nfcall(request, options)
+        .then(parseResponse)
+        .then(parseDelete);
 };
