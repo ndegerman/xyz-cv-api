@@ -26,7 +26,7 @@ exports.createNewRole = function(roleObject) {
 };
 
 exports.deleteRoleById = function(id) {
-    return roleDao.deleteRole(roleId);
+    return roleDao.deleteRoleById(id);
 };
 
 exports.getRoleByName = function(name) {

@@ -1,29 +1,27 @@
+'use strict';
+
 var request = require('request');
 var config = require('../config/config');
 var q = require('q');
 
 var url = config.api_url_dev + 'role';
 
-function parseAll(body) {
-    var deferred = q.defer();
-    var roles = JSON.parse(body);
-    if (roles) {
-        deferred.resolve(roles);
-    }
-    deferred.resolve([]);
-    return deferred.promise;
-};
+function parsePolyQuery(body) {
+    return q.promise(function(resolve) {
+        var roles = JSON.parse(body) || [];
+        return resolve(roles);
+    });
+}
 
-function parseOne(body) {
-    var deferred = q.defer();
-    parseAll(body)
-        .then(function(roles) {
-            if (roles.length) {
-                deferred.resolve(roles);
-            }
-            deferred.resolve(null);
-        });
-};
+function parseMonoQuery(body) {
+    return q.promise(function(resolve) {
+        parsePolyQuery(body)
+            .then(function(roles) {
+                var role = (roles.length > 0) ? roles[0] : null;
+                return resolve(role);
+            });
+    });
+}
 
 // res[0]: the response
 // res[1]: the body
@@ -38,7 +36,7 @@ function parseResponse(response) {
         }
         return resolve(response);
     });
-};
+}
 
 function parseDelete(response) {
     return q.promise(function(resolve, reject) {
@@ -51,9 +49,9 @@ function parseDelete(response) {
                 return reject(new Error('The item could not be removed.'));
             default:
                 return reject(new Error('Not a valid response code.'));
-        };
+        }
     });
-};
+}
 
 function parsePost(response) {
     return q.promise(function(resolve, reject) {
@@ -65,10 +63,10 @@ function parsePost(response) {
             case 500:
                 return reject(new Error('The item could not be saved.'));
             default:
-                return reject(new Error('Not a valid response code.'));    
+                return reject(new Error('Not a valid response code.'));
         }
     });
-};
+}
 
 function parsePut(response) {
     return q.promise(function(resolve, reject) {
@@ -80,10 +78,10 @@ function parsePut(response) {
             case 500:
                 return reject(new Error('The item could not be saved.'));
             default:
-                return reject(new Error('Not a valid response code.'));    
+                return reject(new Error('Not a valid response code.'));
         }
     });
-};
+}
 
 function parseGet(response) {
     return q.promise(function(resolve, reject) {
@@ -95,10 +93,10 @@ function parseGet(response) {
             case 500:
                 return reject(new Error('The item/items could not be fetched.'));
             default:
-                return reject(new Error('Not a valid response code.'));    
+                return reject(new Error('Not a valid response code.'));
         }
     });
-};
+}
 
 exports.createNewRole = function(role) {
     var options = {
@@ -132,19 +130,22 @@ exports.getRoleByName = function(name) {
     return q.nfcall(request, options)
         .then(parseResponse)
         .then(parseGet)
-        .then(parseOne);
+        .then(parseMonoQuery);
 };
 
 exports.getRoleById = function(id) {
     var options = {
         uri: url + '/' + id,
         method: 'GET',
+        json: true
     };
 
     return q.nfcall(request, options)
         .then(parseResponse)
-        .then(parseGet)
-        .then(parseOne);
+        .then(function(value) {
+            console.log(value);
+        })
+        .then(parseGet);
 };
 
 exports.getAllRoles = function() {
@@ -156,5 +157,5 @@ exports.getAllRoles = function() {
     return q.nfcall(request, options)
         .then(parseResponse)
         .then(parseGet)
-        .then(parseAll);
+        .then(parsePolyQuery);
 };
