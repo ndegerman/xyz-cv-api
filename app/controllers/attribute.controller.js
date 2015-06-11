@@ -3,8 +3,6 @@ var config = require('../config/config');
 var attributeDao = require('../dao/attribute.dao');
 var q = require('q');
 
-var url = config.api_url_dev + 'attribute';
-
 
 // TODO: Make the validation more covering
 function validateAttribute(attribute) {

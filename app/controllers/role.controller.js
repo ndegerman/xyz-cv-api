@@ -25,12 +25,16 @@ exports.createNewRole = function(roleObject) {
         .then(roleDao.createNewRole);
 };
 
-exports.deleteRole = function(roleId) {
-    return roleDao.deleteRole(roleId);
+exports.deleteRoleById = function(id) {
+    return roleDao.deleteRoleById(id);
 };
 
 exports.getRoleByName = function(name) {
     return roleDao.getRoleByName(name);
+};
+
+exports.getRoleById = function(id) {
+    return roleDao.getRoleById(id);
 };
 
 exports.getAllRoles = function() {

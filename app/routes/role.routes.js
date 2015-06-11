@@ -19,22 +19,33 @@ module.exports = function(routes) {
             });
     });
 
-    // delete a role given an id
-    routes.delete('/:id', function(request, response) {
-        roleController.deleteRole(request.params.id)
-            .then(function() {
-                return response.json({ message: 'The role was successfully deleted.' });
+    // get roles
+    routes.get('/', function(request, response) {
+        roleController.getAllRoles()
+            .then(function(roles) {
+                return response.json(roles);      
             })
             .catch(function(error) {
                 return response.send(error);
             });
     });
 
-    // get roles
-    routes.get('/', function(request, response) {
-        roleController.getAllRoles()
-            .then(function(roles) {
-                return response.json(roles);      
+    // get role by the given id
+    routes.get('/:id', function(request, response) {
+        roleController.getRoleById(request.params.id)
+            .then(function(role) {
+                return response.json(role);      
+            })
+            .catch(function(error) {
+                return response.send(error);
+            });
+    });
+
+    // delete a role given an id
+    routes.delete('/:id', function(request, response) {
+        roleController.deleteRoleById(request.params.id)
+            .then(function() {
+                return response.json({ message: 'The role was successfully deleted.' });
             })
             .catch(function(error) {
                 return response.send(error);
