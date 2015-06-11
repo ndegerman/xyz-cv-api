@@ -1,8 +1,7 @@
 var server = require('../app/server');
 var assert = require('assert');
 var http = require('http');
-var request = require('superagent');
-var request2 = require('supertest');
+var request = require('supertest');
 var expect = require('expect.js');
 var url = 'localhost:9000';
 
@@ -25,7 +24,7 @@ describe('/api/attribute', function () {
    //getting all attributes
     it('should reply with HTTP status code 200 when the correct email and ' + 
         'user headers are set', function(done) {
-        request2(url)
+        request(url)
             .get('/api/attribute')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
             .set('x-forwarded-user', 'Anton Lundin2')
@@ -44,7 +43,7 @@ describe('/api/attribute', function () {
 
     //posting an attribute
     it('should respond with a correctly formatted json object containing the posted attribute "test1"', function(done) {
-        request2(url)
+        request(url)
             .post('/api/attribute')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
             .set('x-forwarded-user', 'Anton Lundin2')
@@ -77,7 +76,7 @@ describe('/api/attribute', function () {
     //retrieving previously posted attribute by its id
     it('should respond with a correctly formatted json object containing the previously posted attribute "test1"', function(done) {
         console.log('/api/attribute/' + id);
-        request2(url)
+        request(url)
             .get('/api/attribute/' + id)
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
             .set('x-forwarded-user', 'Anton Lundin2')
@@ -108,7 +107,7 @@ describe('/api/attribute', function () {
     //delete previously posted attribute by its ids
     it('should respond with HTTP status code 200 after deleting attribute "test1"', function(done) {
         console.log('/api/attribute/' + id);
-        request2(url)
+        request(url)
             .delete('/api/attribute/' + id)
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
             .set('x-forwarded-user', 'Anton Lundin2')
