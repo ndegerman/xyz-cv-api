@@ -8,6 +8,7 @@ var authenticationRoutes = require('./routes/authentication.routes')(express.Rou
 var attributeRoutes = require('./routes/attribute.routes')(express.Router());
 var userRoutes = require('./routes/user.routes')(express.Router());
 var roleRoutes = require('./routes/role.routes')(express.Router());
+var accessRoutes = require('./routes/access.routes')(express.Router());
 
 var config = require('./config/config');
 
@@ -33,6 +34,7 @@ app.use('/api/', authenticationRoutes);
 app.use('/api/attribute', attributeRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/role', roleRoutes);
+app.use('/api/access', accessRoutes);
 
 // for debugging
 app.get('/kalle', function(req, res) {

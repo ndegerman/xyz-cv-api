@@ -2,7 +2,7 @@ var request = require('request');
 var config = require('../config/config');
 var q = require('q');
 
-var url = config.api_url_dev + 'attr';
+var url = config.api_url_dev + 'attribute';
 
 function parseAll(body) {
     var deferred = q.defer();
