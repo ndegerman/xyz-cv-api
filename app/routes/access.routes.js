@@ -10,11 +10,12 @@ module.exports = function(routes) {
 
     // create an access
     routes.post('/', function(request, response) {
-        accessController.createNewAccess(request.body)
+        accessController.createAccess(request.body)
             .then(function(access) {
                 return response.json(access);
             })
             .catch(function(error) {
+                console.log(error);
                 return response.send(error);
             });
     });
@@ -23,29 +24,40 @@ module.exports = function(routes) {
     routes.get('/', function(request, response) {
         accessController.getAllAccesses()
             .then(function(accesses) {
-                return response.json(accesses);      
+                return response.json(accesses);
             })
             .catch(function(error) {
                 return response.send(error);
             });
     });
 
-    // get accesses for role 
+    // delete the access with the given id
+    routes.delete('/:id', function(request, response) {
+        accessController.deleteAccessById(request.params.id)
+            .then(function() {
+                return response.json({ message: 'The access was successfully removed.' });
+            })
+            .catch(function(error) {
+                return response.send(error);
+            });
+    });
+
+    // get accesses for role
     routes.get('/role/:id', function(request, response) {
         accessController.getAccessesByRoleId(request.params.id)
             .then(function(accesses) {
-                return response.json(accesses);      
+                return response.json(accesses);
             })
             .catch(function(error) {
                 return response.send(error);
             });
     });
 
-    // get accesses for attribute 
+    // get accesses for attribute
     routes.get('/attribute/:id', function(request, response) {
         accessController.getAccessesByAttributeId(request.params.id)
             .then(function(accesses) {
-                return response.json(accesses);      
+                return response.json(accesses);
             })
             .catch(function(error) {
                 return response.send(error);
@@ -59,6 +71,7 @@ module.exports = function(routes) {
                 return response.json({ message: 'The accesses were successfully removed.' });
             })
             .catch(function(error) {
+                console.log(error);
                 return response.send(error);
             });
     });

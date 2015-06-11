@@ -4,26 +4,22 @@ var q = require('q');
 
 var url = config.api_url_dev + 'access';
 
-function parseAll(body) {
-    var deferred = q.defer();
-    var accesses = JSON.parse(body);
-    if (accesses) {
-        deferred.resolve(accesses);
-    }
-    deferred.resolve([]);
-    return deferred.promise;
-};
+function parsePolyQuery(body) {
+    return q.promise(function(resolve) {
+        var accesses = JSON.parse(body) || [];
+        return resolve(accesses);
+    });
+}
 
-function parseOne(body) {
-    var deferred = q.defer();
-    parseAll(body)
-        .then(function(accesses) {
-            if (accesses.length) {
-                deferred.resolve(accesses[0]);
-            }
-            deferred.resolve(null);
-        });
-};
+function parseMonoQuery(body) {
+    return q.promise(function(resolve) {
+        parsePolyQuery(body)
+            .then(function(accesses) {
+                var access = (accesses.length > 0) ? accesses[0] : null;
+                return resolve(access);
+            });
+    });
+}
 
 // res[0]: the response
 // res[1]: the body
@@ -38,7 +34,7 @@ function parseResponse(response) {
         }
         return resolve(response);
     });
-};
+}
 
 function parsePost(response) {
     return q.promise(function(resolve, reject) {
@@ -50,7 +46,7 @@ function parsePost(response) {
             case 500:
                 return reject(new Error('The item could not be saved.'));
             default:
-                return reject(new Error('Not a valid response code.'));    
+                return reject(new Error('Not a valid response code.'));
         }
     });
 };
@@ -65,7 +61,7 @@ function parseGet(response) {
             case 500:
                 return reject(new Error('The item/items could not be fetched.'));
             default:
-                return reject(new Error('Not a valid response code.'));    
+                return reject(new Error('Not a valid response code.'));
         }
     });
 };
@@ -80,7 +76,7 @@ function parsePut(response) {
             case 500:
                 return reject(new Error('The item could not be saved.'));
             default:
-                return reject(new Error('Not a valid response code.'));    
+                return reject(new Error('Not a valid response code.'));
         }
     });
 };
@@ -95,12 +91,13 @@ function parseDelete(response) {
             case 500:
                 return reject(new Error('The item could not be removed.'));
             default:
+                console.log(response[0].statusCode);
                 return reject(new Error('Not a valid response code.'));
         };
     });
 };
 
-exports.createNewAccess = function(access) {
+exports.createAccess = function(access) {
     var options = {
         uri: url,
         method: 'POST',
@@ -121,7 +118,7 @@ exports.getAccessesByAttributeId = function(id) {
     return q.nfcall(request, options)
         .then(parseResponse)
         .then(parseGet)
-        .then(parseAll);
+        .then(parsePolyQuery);
 };
 
 exports.getAccessesByRoleId = function(id) {
@@ -133,7 +130,7 @@ exports.getAccessesByRoleId = function(id) {
     return q.nfcall(request, options)
         .then(parseResponse)
         .then(parseGet)
-        .then(parseAll);
+        .then(parsePolyQuery);
 };
 
 exports.getAllAccesses = function() {
@@ -145,10 +142,11 @@ exports.getAllAccesses = function() {
     return q.nfcall(request, options)
         .then(parseResponse)
         .then(parseGet)
-        .then(parseAll);
+        .then(parsePolyQuery);
 };
 
 exports.deleteAccess = function(accessId) {
+    console.log(accessId);
     var options = {
         uri: url + '/' + accessId,
         method: 'DELETE'

@@ -3,7 +3,7 @@ var accessDao = require('../dao/access.dao');
 
 function validateAccess(access) {
     return q.promise(function(resolve, reject) {
-        if (!access.user_id || !access.attribute_id) {
+        if (!access.role_id || !access.attribute_id) {
             return reject(new Error('Not a valid access object!'));
         }
         return resolve(access);
@@ -28,26 +28,30 @@ exports.createAccess = function(access) {
 };
 
 exports.getAccessesByRoleId = function(roleId) {
-    return accessDao.getAccessesbyRoleId(roleId);
+    return accessDao.getAccessesByRoleId(roleId);
 };
 
 exports.getAccessesByAttributeId = function(attributeId) {
-    return accessDao.getAccessesbyAttributeId(attributeId);
+    return accessDao.getAccessesByAttributeId(attributeId);
+};
+
+exports.getAllAccesses = function() {
+    return accessDao.getAllAccesses();
 };
 
 exports.deleteAccessById = function(id) {
-    return accessDao.deleteAccess(accessId);
+    return accessDao.deleteAccess(id);
 };
 
 exports.deleteAccesses = function(accesses) {
     var promises = [];
     accesses.forEach(function(access) {
-        promises.push(deleteAccess(access.id));
+        promises.push(exports.deleteAccessById(access._id));
     });
     return q.all(promises);
 };
 
-exports.deleteAccessByRoleId = function(roleId) {
-    return getAccessesForRole(roleId)
-        .then(deleteAccesses);
+exports.deleteAccessesByRoleId = function(roleId) {
+    return exports.getAccessesByRoleId(roleId)
+        .then(exports.deleteAccesses);
 };
