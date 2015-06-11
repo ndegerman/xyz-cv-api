@@ -12,7 +12,7 @@ function validateAttribute(attribute) {
     if (attribute && attribute.name) {
         deferred.resolve(attribute);
     } else {
-        defered.reject(new Error('Not a valid attribute object!'));
+        deferred.reject(new Error('Not a valid attribute object!'));
     }
     return deferred.promise;
 };
