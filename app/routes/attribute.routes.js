@@ -23,9 +23,10 @@ module.exports = function(routes) {
     routes.get('/', function(request, response) {
         attributeController.getAllAttributes()
             .then(function(attributes) {
-                return response.json(attributes);      
+                return response.json(attributes);
             })
             .catch(function(error) {
+                console.log(error);
                 return response.send(error);
             });
     });

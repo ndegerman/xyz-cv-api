@@ -23,9 +23,10 @@ module.exports = function(routes) {
     routes.get('/', function(request, response) {
         roleController.getAllRoles()
             .then(function(roles) {
-                return response.json(roles);      
+                return response.json(roles);
             })
             .catch(function(error) {
+                console.log(error);
                 return response.send(error);
             });
     });
@@ -34,7 +35,7 @@ module.exports = function(routes) {
     routes.get('/:id', function(request, response) {
         roleController.getRoleById(request.params.id)
             .then(function(role) {
-                return response.json(role);      
+                return response.json(role);
             })
             .catch(function(error) {
                 return response.send(error);
