@@ -1,13 +1,15 @@
 var userDao = require('../dao/user.dao');
 var q = require('q');
+var errorHandler = require('../utils/error.handler');
 
 // TODO: Make the validation more covering
 function validateUser(user) {
-    q.promise(function(resolve, reject) {
+    return q.promise(function(resolve, reject) {
         if (user && user.name && user.email) {
             return resolve(user);
         }
-        return reject(new Error('Not a valid user object!'));
+        return errorHandler.getHttpError(400)
+            .then(reject);
     });
 }
 

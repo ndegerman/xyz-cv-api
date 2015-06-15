@@ -1,12 +1,14 @@
 var q = require('q');
 var accessDao = require('../dao/access.dao');
+var errorHandler = require('../utils/error.handler');
 
 function validateAccess(access) {
-    return q.promise(function(resolve, reject) {
+    return q.promise(function(resolve) {
         if (access && access.role_id && access.attribute_id) {
             return resolve(access);
         }
-            return reject(new Error('Not a valid access object!'));
+            return errorHandler.getHttpError(400)
+                .then(reject);
     });
 }
 

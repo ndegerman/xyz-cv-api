@@ -1,13 +1,15 @@
 var roleDao = require('../dao/role.dao');
 var q = require('q');
+var errorHandler = require('../utils/error.handler');
 
 // TODO: Make the validation more covering
 function validateRole(role) {
-    q.promise(function(resolve, reject) {
+    return q.promise(function(resolve, reject) {
         if (role && role.name) {
             return resolve(role);
         }
-       return reject(new Error('Not a valid role object!'));
+        return errorHandler.getHttpError(400)
+            .then(reject);
     });
 }
 
