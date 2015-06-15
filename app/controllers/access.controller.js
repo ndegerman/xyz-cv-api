@@ -7,8 +7,8 @@ function validateAccess(access) {
         if (access && access.role_id && access.attribute_id) {
             return resolve(access);
         }
-            return errorHandler.getHttpError(400)
-                .then(reject);
+        return errorHandler.getHttpError(400)
+            .then(reject);
     });
 }
 
