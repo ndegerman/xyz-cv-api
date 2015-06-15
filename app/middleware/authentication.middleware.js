@@ -18,18 +18,11 @@ exports.authentication = function(request, response, next) {
     userController.getUserByEmail(email)
         .then(function(user) {
             if (!user) {
-                var user = userController.getUserTemplate();
-                user.name = name;
-                user.email = email;
-                userController.createNewUser(user)
-                    .then(function() {
-                        next();
-                    });
+                userController.createNewUser(name, email)
+                    .then(next);
             } else {
                 next();
             }
         })
-        .catch(function(error) {
-            response.send(error);
-        });
+        .catch(response.send);
 };
