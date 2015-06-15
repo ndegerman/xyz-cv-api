@@ -15,7 +15,7 @@ module.exports = function(routes) {
                 return response.json(users);
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
     return routes;
