@@ -1,19 +1,15 @@
-var request = require('request');
-var config = require('../config/config');
 var attributeDao = require('../dao/attribute.dao');
 var q = require('q');
 
-
 // TODO: Make the validation more covering
 function validateAttribute(attribute) {
-    var deferred = q.defer();
-    if (attribute && attribute.name) {
-        deferred.resolve(attribute);
-    } else {
-        deferred.reject(new Error('Not a valid attribute object!'));
-    }
-    return deferred.promise;
-};
+    q.promise(function(resolve, reject) {
+        if (attribute && attribute.name) {
+            return resolve(attribute);
+        }
+        return reject(new Error('Not a valid attribute object!'));
+    })
+}
 
 exports.getAttributeTemplate = function() {
     return {

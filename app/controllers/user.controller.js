@@ -1,21 +1,15 @@
-var request = require('request');
-var config = require('../config/config');
 var userDao = require('../dao/user.dao');
 var q = require('q');
 
-var url = config.api_url_dev + 'user';
-
 // TODO: Make the validation more covering
 function validateUser(user) {
-    var deferred = q.defer();
-    if (user && user.name && user.email) {
-        deferred.resolve(user);
-    }
-    else {
-        deferred.reject(new Error('Not a valid user object!'));
-    }
-    return deferred.promise;
-};
+    q.promise(function(resolve, reject) {
+        if (user && user.name && user.email) {
+            return resolve(user);
+        }
+        return reject(new Error('Not a valid user object!'));
+    });
+}
 
 exports.getUserTemplate = function() {
     return {
