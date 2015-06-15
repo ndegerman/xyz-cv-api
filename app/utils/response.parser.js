@@ -1,13 +1,15 @@
-function parsePolyQuery(body) {
+var q = require('q');
+
+exports.parsePolyQuery = function(body) {
     return q.promise(function(resolve) {
         var items = JSON.parse(body) || [];
         return resolve(items);
     });
 }
 
-function parseMonoQuery(body) {
+exports.parseMonoQuery = function(body) {
     return q.promise(function(resolve) {
-        parsePolyQuery(body)
+        exports.parsePolyQuery(body)
             .then(function(items) {
                 var item = (items.length > 0) ? items[0] : null;
                 return resolve(item);
@@ -15,10 +17,10 @@ function parseMonoQuery(body) {
     });
 }
 
-// res[0]: the response
-// res[1]: the body
-// res[2]: the error
-function parseResponse(response) {
+// response[0]: the response
+// response[1]: the body
+// response[2]: the error
+exports.parseResponse = function(response) {
     return q.promise(function(resolve, reject) {
         if (!response) {
             return reject(new Error('Invalid response format'));
@@ -30,7 +32,7 @@ function parseResponse(response) {
     });
 }
 
-function parseDelete(response) {
+exports.parseDelete = function(response) {
     return q.promise(function(resolve, reject) {
         switch (response[0].statusCode) {
             case 204:
@@ -45,7 +47,7 @@ function parseDelete(response) {
     });
 }
 
-function parsePost(response) {
+exports.parsePost = function(response) {
     return q.promise(function(resolve, reject) {
         switch(response[0].statusCode) {
             case 200:
@@ -60,7 +62,7 @@ function parsePost(response) {
     });
 }
 
-function parsePut(response) {
+exports.parsePut = function(response) {
     return q.promise(function(resolve, reject) {
         switch(response[0].statusCode) {
             case 204:
@@ -75,7 +77,7 @@ function parsePut(response) {
     });
 }
 
-function parseGet(response) {
+exports.parseGet = function(response) {
     return q.promise(function(resolve, reject) {
         switch(response[0].statusCode) {
             case 200:
