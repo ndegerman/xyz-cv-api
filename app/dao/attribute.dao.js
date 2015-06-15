@@ -1,44 +1,9 @@
 var request = require('request');
-var config = require('../config/config');
 var q = require('q');
+var config = require('../config/config');
+var responseParser = require('../utils/response.parser');
 
 var url = config.api_url_dev + 'attribute';
-
-function parseAll(body) {
-    var deferred = q.defer();
-    var attributes = JSON.parse(body);
-    if (attributes) {
-        deferred.resolve(attributes);
-    }
-    deferred.resolve([]);
-    return deferred.promise;
-};
-
-function parseOne(body) {
-    var deferred = q.defer();
-    parseAll(body)
-        .then(function(attributes) {
-            if (attributes.length) {
-                deferred.resolve(attributes);
-            }
-            deferred.resolve(null);
-        });
-};
-
-// res[0]: the response
-// res[1]: the body
-// res[2]: the error
-function parseResponse(response) {
-    var deferred = q.defer();
-    if (!response) {
-        deferred.reject(new Error('Invalid response format'));
-    }
-    if (response[2]) {
-        deferred.reject(response[2]);
-    }
-    deferred.resolve(response[1]);
-    return deferred.promise;
-};
 
 exports.createNewAttribute = function(attribute) {
     var options = {
@@ -48,7 +13,8 @@ exports.createNewAttribute = function(attribute) {
     };
 
     return q.nfcall(request, options)
-        .then(parseResponse);
+        .then(responseParser.parseResponse)
+        .then(parsePost);
 };
 
 exports.getAttributeByName = function(name) {
@@ -58,8 +24,9 @@ exports.getAttributeByName = function(name) {
     };
 
     return q.nfcall(request, options)
-        .then(parseResponse)
-        .then(parseOne);
+        .then(responseParser.parseResponse)
+        .then(responseParser.parseGet)
+        .then(responseParser.parseMonoQuery);
 };
 
 exports.getAllAttributes = function() {
@@ -69,6 +36,7 @@ exports.getAllAttributes = function() {
     };
 
     return q.nfcall(request, options)
-        .then(parseResponse)
-        .then(parseAll);
+        .then(responseParser.parseResponse)
+        .then(responseParser.parseGet)
+        .then(responseParser.parsePolyQuery);
 };

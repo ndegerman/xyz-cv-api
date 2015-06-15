@@ -1,46 +1,9 @@
 var request = require('request');
-var config = require('../config/config');
 var q = require('q');
+var config = require('../config/config');
+var responseParser = require('../utils/response.parser');
 
 var url = config.api_url_dev + 'user';
-
-function parseUsers(body) {
-    var deferred = q.defer();
-    var users = JSON.parse(body);
-    if (!users) {
-        users = [];
-    }
-    deferred.resolve(users);
-    return deferred.promise;
-};
-
-function parseUser(body) {
-    var deferred = q.defer();
-    parseUsers(body)
-        .then(function(users) {
-            var user = null;
-            if (users.length) {
-                user = users[0]
-            }
-            deferred.resolve(user);
-        });
-    return deferred.promise;
-};
-
-// res[0]: the response
-// res[1]: the body
-// res[2]: the error
-function parseResponse(response) {
-    var deferred = q.defer();
-    if (!response) {
-        deferred.reject(new Error('Invalid response format'));
-    }
-    if (response[2]) {
-        deferred.reject(response[2]);
-    }
-    deferred.resolve(response[1]);
-    return deferred.promise;
-};
 
 exports.createNewUser = function(user) {
     var options = {
@@ -50,7 +13,8 @@ exports.createNewUser = function(user) {
     };
 
     return q.nfcall(request, options)
-        .then(parseResponse);
+        .then(responseParser.parseResponse)
+        .then(responseParser.parsePost);
 };
 
 exports.getUserByEmail = function(email) {
@@ -60,8 +24,9 @@ exports.getUserByEmail = function(email) {
     };
 
     return q.nfcall(request, options)
-        .then(parseResponse)
-        .then(parseUser);
+        .then(responseParser.parseResponse)
+        .then(responseParser.parseGet)
+        .then(responseParser.parseMonoQuery);
 };
 
 exports.getAllUsers = function() {
@@ -71,6 +36,7 @@ exports.getAllUsers = function() {
     };
 
     return q.nfcall(request, options)
-        .then(parseResponse)
-        .then(parseUsers);
+        .then(responseParser.parseResponse)
+        .then(responseParser.parseGet)
+        .then(responseParser.parseMonoQuery);
 };
