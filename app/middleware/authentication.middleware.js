@@ -18,8 +18,8 @@ exports.authentication = function(request, response, next) {
         errorHandler.getHttpError(401)
             .then(responseHandler.sendErrorResponse(response))
     }
-    
+
     userController.createUserIfNonexistent(name, email)
-        .then(responseHandler.sendNext(next))
+        .then(responseHandler.sendToNext(next))
         .catch(responseHandler.sendErrorResponse(response));
 };

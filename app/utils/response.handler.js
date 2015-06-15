@@ -81,7 +81,7 @@ exports.sendErrorResponse = function(response) {
     };
 };
 
-exports.sendNext = function(next) {
+exports.sendToNext = function(next) {
     return function() {
         next();
     };
