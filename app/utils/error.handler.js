@@ -8,6 +8,8 @@ exports.getHttpError = function(statusCode) {
             case 400:
                 error.message = "Invalid JSON object."
                 break;
+            case 401:
+                error.message = "Unauthorized access."
             case 404:
                 error.message = "No item with the given id was found."
                 break;

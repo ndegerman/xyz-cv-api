@@ -6,7 +6,7 @@ exports.parsePolyQuery = function(body) {
         var items = JSON.parse(body) || [];
         return resolve(items);
     });
-}
+};
 
 exports.parseMonoQuery = function(body) {
     return q.promise(function(resolve) {
@@ -16,7 +16,7 @@ exports.parseMonoQuery = function(body) {
                 return resolve(item);
             });
     });
-}
+};
 
 // response[0]: the response
 // response[1]: the body
@@ -33,7 +33,7 @@ exports.parseResponse = function(response) {
         }
         return resolve(response);
     });
-}
+};
 
 exports.parseDelete = function(response) {
     return q.promise(function(resolve, reject) {
@@ -43,7 +43,7 @@ exports.parseDelete = function(response) {
         return errorHandler.getHttpError(response[0].statusCode)
             .then(reject);
     });
-}
+};
 
 exports.parsePost = function(response) {
     return q.promise(function(resolve, reject) {
@@ -53,7 +53,7 @@ exports.parsePost = function(response) {
         return errorHandler.getHttpError(response[0].statusCode)
             .then(reject);
     });
-}
+};
 
 exports.parsePut = function(response) {
     return q.promise(function(resolve, reject) {
@@ -63,7 +63,7 @@ exports.parsePut = function(response) {
         return errorHandler.getHttpError(response[0].statusCode)
             .then(reject);
     });
-}
+};
 
 exports.parseGet = function(response) {
     return q.promise(function(resolve, reject) {
@@ -73,4 +73,16 @@ exports.parseGet = function(response) {
         return errorHandler.getHttpError(response[0].statusCode)
             .then(reject);
     });
-}
+};
+
+exports.sendErrorResponse = function(response) {
+    return function(error) {
+        response.status(error.status || 500).send(error.message);
+    };
+};
+
+exports.sendNext = function(next) {
+    return function() {
+        next();
+    };
+};

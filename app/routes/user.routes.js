@@ -5,18 +5,16 @@
  */
 var userController = require('../controllers/user.controller');
 var q = require('q');
+var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {
 
     // get users
     routes.get('/', function(request, response) {
         userController.getAllUsers()
-            .then(function(users) {
-                return response.json(users);
-            })
-            .catch(function(error) {
-                return response.status(error.status || 500).send(error.message);
-            });
+            .then(response.json.bind(response))
+            .catch(responseHandler.sendErrorResponse(response));
     });
+    
     return routes;
 };

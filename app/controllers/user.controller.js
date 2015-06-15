@@ -13,19 +13,28 @@ function validateUser(user) {
     });
 }
 
-exports.getUserTemplate = function() {
+exports.getUserTemplate = function(name, email) {
     return {
-        email: null,
-        name: null
+        email: email,
+        name: name
     };
 };
 
-exports.createNewUser = function(name, email) {
-    var user = getUserTemplate();
-    user.email = email;
-    user.name = name;
+exports.createNewUser = function(user) {
     return validateUser(user)
         .then(userDao.createNewUser);
+};
+exports.createUserIfNonexistent = function(name, email) {
+    return exports.getUserByEmail(email)
+        .then(function(user) {
+            return q.promise(function(resolve, reject) {
+                if (!user) {
+                    return exports.createNewUser(exports.getUserTemplate(name, email));
+                } else {
+                    return resolve(user);
+                }
+            });
+        });
 };
 
 exports.getUserByEmail = function(email) {

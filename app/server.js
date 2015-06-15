@@ -48,11 +48,6 @@ app.get('/kalle', function(req, res) {
     res.send('Your email is: ' + req.headers['x-forwarded-email'] + ' and your accname: ' + req.headers['x-forwarded-user']);
 });
 
-// app.use(function(err, req, res, next) {
-//   console.error(err.stack);
-//   res.status(500).send('Something broke!');
-// });
-
 var server = app.listen(port, function() {
     console.log('Server started: http://localhost:%s/', server.address().port);
 });

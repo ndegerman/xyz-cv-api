@@ -5,30 +5,22 @@
  */
 var attributeController = require('../controllers/attribute.controller');
 var config = require('../config/config');
+var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {
 
     // create an attribute
     routes.post('/', function(request, response) {
         attributeController.createNewAttribute(request.body)
-            .then(function(attribute) {
-                return response.json(attribute);
-            })
-            .catch(function(error) {
-                return response.status(error.status || 500).send(error.message);
-            });
+            .then(response.json.bind(response))
+            .catch(responseHandler.sendErrorResponse(response));
     });
 
     // get attributes
     routes.get('/', function(request, response) {
         attributeController.getAllAttributes()
-            .then(function(attributes) {
-                return response.json(attributes);
-            })
-            .catch(function(error) {
-                console.log(error);
-                return response.status(error.status || 500).send(error.message);
-            });
+            .then(response.json.bind(response))
+            .catch(responseHandler.sendErrorResponse(response));
     });
     return routes;
 };
