@@ -12,7 +12,7 @@ module.exports = function(routes) {
     // get users
     routes.get('/', function(request, response) {
         userController.getAllUsers()
-            .then(response.json.bind(response))
+            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
     

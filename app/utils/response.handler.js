@@ -86,3 +86,10 @@ exports.sendToNext = function(next) {
         next();
     };
 };
+
+exports.sendJsonResponse = function(response) {
+    return function(object) {
+        return response.json(object);
+        //return response.json.bind(response))
+        }
+};

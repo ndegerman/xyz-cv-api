@@ -12,14 +12,14 @@ module.exports = function(routes) {
     // create an attribute
     routes.post('/', function(request, response) {
         attributeController.createNewAttribute(request.body)
-            .then(response.json.bind(response))
+            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     // get attributes
     routes.get('/', function(request, response) {
         attributeController.getAllAttributes()
-            .then(response.json.bind(response))
+            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
     return routes;

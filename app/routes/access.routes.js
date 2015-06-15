@@ -12,14 +12,14 @@ module.exports = function(routes) {
     // create an access
     routes.post('/', function(request, response) {
         accessController.createAccess(request.body)
-            .then(response.json.bind(response))
+            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     // get all accesses
     routes.get('/', function(request, response) {
         accessController.getAllAccesses()
-            .then(response.json.bind(response))
+            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
@@ -35,14 +35,14 @@ module.exports = function(routes) {
     // get accesses for role
     routes.get('/role/:id', function(request, response) {
         accessController.getAccessesByRoleId(request.params.id)
-            .then(response.json.bind(response))
+            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     // get accesses for attribute
     routes.get('/attribute/:id', function(request, response) {
         accessController.getAccessesByAttributeId(request.params.id)
-            .then(response.json.bind(response))
+            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
