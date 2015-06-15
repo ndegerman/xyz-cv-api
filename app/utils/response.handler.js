@@ -90,6 +90,5 @@ exports.sendToNext = function(next) {
 exports.sendJsonResponse = function(response) {
     return function(object) {
         return response.json(object);
-        //return response.json.bind(response))
         }
 };
