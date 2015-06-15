@@ -3,12 +3,12 @@ var accessDao = require('../dao/access.dao');
 
 function validateAccess(access) {
     return q.promise(function(resolve, reject) {
-        if (!access.role_id || !access.attribute_id) {
-            return reject(new Error('Not a valid access object!'));
+        if (access && access.role_id && access.attribute_id) {
+            return resolve(access);
         }
-        return resolve(access);
+            return reject(new Error('Not a valid access object!'));
     });
-};
+}
 
 exports.assignAttributesToRole = function(attributes, roleId) {
     promises = [];
