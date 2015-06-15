@@ -1,18 +1,15 @@
-var request = require('request');
-var config = require('../config/config');
 var roleDao = require('../dao/role.dao');
 var q = require('q');
 
 // TODO: Make the validation more covering
 function validateRole(role) {
-    var deferred = q.defer();
-    if (role && role.name) {
-        deferred.resolve(role);
-    } else {
-        defered.reject(new Error('Not a valid role object!'));
-    }
-    return deferred.promise;
-};
+    q.promise(function(resolve, reject) {
+        if (role && role.name) {
+            return resolve(role);
+        }
+       return reject(new Error('Not a valid role object!'));
+    });
+}
 
 exports.getRoleTemplate = function() {
     return {
