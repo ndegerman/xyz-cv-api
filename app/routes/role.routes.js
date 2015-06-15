@@ -15,7 +15,7 @@ module.exports = function(routes) {
                 return response.json(role);
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -27,7 +27,7 @@ module.exports = function(routes) {
             })
             .catch(function(error) {
                 console.log(error);
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -38,7 +38,7 @@ module.exports = function(routes) {
                 return response.json(role);
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -49,7 +49,7 @@ module.exports = function(routes) {
                 return response.json({ message: 'The role was successfully deleted.' });
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 

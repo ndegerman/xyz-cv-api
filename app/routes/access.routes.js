@@ -16,7 +16,7 @@ module.exports = function(routes) {
             })
             .catch(function(error) {
                 console.log(error);
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -27,7 +27,7 @@ module.exports = function(routes) {
                 return response.json(accesses);
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -38,7 +38,7 @@ module.exports = function(routes) {
                 return response.json({ message: 'The access was successfully removed.' });
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -49,7 +49,7 @@ module.exports = function(routes) {
                 return response.json(accesses);
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -60,7 +60,7 @@ module.exports = function(routes) {
                 return response.json(accesses);
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -72,7 +72,7 @@ module.exports = function(routes) {
             })
             .catch(function(error) {
                 console.log(error);
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -83,7 +83,7 @@ module.exports = function(routes) {
                 return response.json({ message: 'The accesses were successfully removed.' });
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 

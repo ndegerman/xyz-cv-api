@@ -15,7 +15,7 @@ module.exports = function(routes) {
                 return response.json(attribute);
             })
             .catch(function(error) {
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
 
@@ -27,7 +27,7 @@ module.exports = function(routes) {
             })
             .catch(function(error) {
                 console.log(error);
-                return response.send(error);
+                return response.status(error.status || 500).send(error.message);
             });
     });
     return routes;

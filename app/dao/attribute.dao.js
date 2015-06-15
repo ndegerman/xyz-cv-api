@@ -14,7 +14,7 @@ exports.createNewAttribute = function(attribute) {
 
     return q.nfcall(request, options)
         .then(responseParser.parseResponse)
-        .then(parsePost);
+        .then(responseParser.parsePost);
 };
 
 exports.getAttributeByName = function(name) {

@@ -1,13 +1,15 @@
 var attributeDao = require('../dao/attribute.dao');
 var q = require('q');
+var errorHandler = require('../utils/error.handler');
 
 // TODO: Make the validation more covering
 function validateAttribute(attribute) {
-    q.promise(function(resolve, reject) {
+    return q.promise(function(resolve, reject) {
         if (attribute && attribute.name) {
             return resolve(attribute);
         }
-        return reject(new Error('Not a valid attribute object!'));
+        return errorHandler.getHttpError(400)
+            .then(reject);
     })
 }
 
