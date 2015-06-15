@@ -1,7 +1,7 @@
 var request = require('request');
 var q = require('q');
 var config = require('../config/config');
-var responseParser = require('../utils/response.parser');
+var responseHandler = require('../utils/response.handler');
 
 var url = config.api_url_dev + 'user';
 
@@ -13,8 +13,8 @@ exports.createNewUser = function(user) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parsePost);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parsePost);
 };
 
 exports.getUserByEmail = function(email) {
@@ -24,9 +24,9 @@ exports.getUserByEmail = function(email) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet)
-        .then(responseParser.parseMonoQuery);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet)
+        .then(responseHandler.parseMonoQuery);
 };
 
 exports.getAllUsers = function() {
@@ -36,7 +36,7 @@ exports.getAllUsers = function() {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet)
-        .then(responseParser.parseMonoQuery);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet)
+        .then(responseHandler.parseMonoQuery);
 };

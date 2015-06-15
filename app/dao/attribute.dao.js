@@ -1,7 +1,7 @@
 var request = require('request');
 var q = require('q');
 var config = require('../config/config');
-var responseParser = require('../utils/response.parser');
+var responseHandler = require('../utils/response.handler');
 
 var url = config.api_url_dev + 'attribute';
 
@@ -13,8 +13,8 @@ exports.createNewAttribute = function(attribute) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parsePost);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parsePost);
 };
 
 exports.getAttributeByName = function(name) {
@@ -24,9 +24,9 @@ exports.getAttributeByName = function(name) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet)
-        .then(responseParser.parseMonoQuery);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet)
+        .then(responseHandler.parseMonoQuery);
 };
 
 exports.getAllAttributes = function() {
@@ -36,7 +36,7 @@ exports.getAllAttributes = function() {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet)
-        .then(responseParser.parsePolyQuery);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet)
+        .then(responseHandler.parsePolyQuery);
 };

@@ -3,7 +3,7 @@
 var request = require('request');
 var config = require('../config/config');
 var q = require('q');
-var responseParser = require('../utils/response.parser');
+var responseHandler = require('../utils/response.handler');
 
 var url = config.api_url_dev + 'role';
 
@@ -15,8 +15,8 @@ exports.createNewRole = function(role) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parsePost);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parsePost);
 };
 
 exports.deleteRoleById = function(id) {
@@ -26,8 +26,8 @@ exports.deleteRoleById = function(id) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseDelete);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseDelete);
 };
 
 exports.getRoleByName = function(name) {
@@ -37,9 +37,9 @@ exports.getRoleByName = function(name) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet)
-        .then(responseParser.parseMonoQuery);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet)
+        .then(responseHandler.parseMonoQuery);
 };
 
 exports.getRoleById = function(id) {
@@ -50,8 +50,8 @@ exports.getRoleById = function(id) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet);
 };
 
 exports.getAllRoles = function() {
@@ -61,7 +61,7 @@ exports.getAllRoles = function() {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet)
-        .then(responseParser.parsePolyQuery);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet)
+        .then(responseHandler.parsePolyQuery);
 };

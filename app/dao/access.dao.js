@@ -1,7 +1,7 @@
 var request = require('request');
 var q = require('q');
 var config = require('../config/config');
-var responseParser = require('../utils/response.parser');
+var responseHandler = require('../utils/response.handler');
 
 var url = config.api_url_dev + 'access';
 
@@ -13,8 +13,8 @@ exports.createAccess = function(access) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parsePost);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parsePost);
 };
 
 exports.getAccessesByAttributeId = function(id) {
@@ -24,9 +24,9 @@ exports.getAccessesByAttributeId = function(id) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet)
-        .then(responseParser.parsePolyQuery);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet)
+        .then(responseHandler.parsePolyQuery);
 };
 
 exports.getAccessesByRoleId = function(id) {
@@ -36,9 +36,9 @@ exports.getAccessesByRoleId = function(id) {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet)
-        .then(responseParser.parsePolyQuery);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet)
+        .then(responseHandler.parsePolyQuery);
 };
 
 exports.getAllAccesses = function() {
@@ -48,19 +48,18 @@ exports.getAllAccesses = function() {
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseGet)
-        .then(responseParser.parsePolyQuery);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseGet)
+        .then(responseHandler.parsePolyQuery);
 };
 
 exports.deleteAccess = function(accessId) {
-    console.log(accessId);
     var options = {
         uri: url + '/' + accessId,
         method: 'DELETE'
     };
 
     return q.nfcall(request, options)
-        .then(responseParser.parseResponse)
-        .then(responseParser.parseDelete);
+        .then(responseHandler.parseResponse)
+        .then(responseHandler.parseDelete);
 };
