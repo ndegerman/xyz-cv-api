@@ -20,8 +20,11 @@ exports.getUserTemplate = function() {
     };
 };
 
-exports.createNewUser = function(userObject) {
-    return validateUser(userObject)
+exports.createNewUser = function(name, email) {
+    var user = getUserTemplate();
+    user.email = email;
+    user.name = name;
+    return validateUser(user)
         .then(userDao.createNewUser);
 };
 
