@@ -33,7 +33,7 @@ describe('/api/role', function() {
         .get('/role')
         .reply(200, resultAllGet);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when making a GET request to /api/role', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all roles', function(done) {
         request(url)
             .get('/api/role')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -67,7 +67,7 @@ describe('/api/role', function() {
     })
     .reply(200, resultPost);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when making a POST request to /api/role', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when creating a new role', function(done) {
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -95,10 +95,10 @@ describe('/api/role', function() {
     };
 
     var couchdb = nock(mockedUrl, {allowUnmocked: true})
-    .delete('/role/1234')
-    .reply(200, resultDelete);
+        .delete('/role/1234')
+        .reply(200, resultDelete);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when making a DELETE request to /api/role/1234', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when deleting an existing role', function(done) {
         request(url)
             .delete('/api/role/1234')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -130,7 +130,7 @@ describe('/api/role', function() {
     .get('/role/1234')
     .reply(200, resultGetOne);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when making a GET request to /api/role/1234', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a role by its id', function(done) {
         request(url)
             .get('/api/role/1234')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -166,7 +166,7 @@ describe('/api/role', function() {
     .post('/role')
     .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when making an empty POST request to api/role', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting an empty role', function(done) {
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -198,7 +198,7 @@ describe('/api/role', function() {
     .post('/role')
     .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when making a POST request with an empty name field to api/role', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a role with the name field empty', function(done) {
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -232,7 +232,7 @@ describe('/api/role', function() {
     .post('/role')
     .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when making a POST request with an additional field to api/role', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a role with additional fields', function(done) {
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -267,7 +267,7 @@ describe('/api/role', function() {
     .post('/role')
     .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when making a POST request without a name field to api/role', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a role without a name field', function(done) {
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -301,7 +301,7 @@ describe('/api/role', function() {
     .post('/role')
     .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when making a POST request with a JSON list to api/role', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a role with a Json list', function(done) {
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -326,7 +326,7 @@ describe('/api/role', function() {
 
 //===============================================================================
 
-    var resultNotJson = 'Invalid JSON object.';
+    var resultNotJson = 'invalid json';
 
     badResultPost = {
         "name": "test1",
@@ -339,7 +339,7 @@ describe('/api/role', function() {
     .post('/role')
     .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when making a POST request not formatted as JSON to api/role', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a role not correctly formatted as Json', function(done) {
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -357,6 +357,55 @@ describe('/api/role', function() {
     });
 
 //===============================================================================  
+    
+    var resultRoleNotInDb = 'No item with the given id was found.';
 
+    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    .get('/role/123')
+    .reply(404, resultRoleNotInDb);
+
+    it('should reply with HTTP status code 404 and a correctly formatted string when getting a role not in the database', function(done) {
+        request(url)
+            .get('/api/role/123')
+            .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
+            .set('x-forwarded-user', 'Anton Lundin2')
+            .set('Content-Type', 'application/json')
+            .send()
+            // end handles the response
+            .end(function(err, res) {               
+                expect(err).to.exist;
+                expect(res).to.exist;                
+                expect(res.status).to.equal(404);
+                expect(res.error.text).to.equal(resultRoleNotInDb);
+                done();
+            })
+    });
+
+//=============================================================================== 
+
+   var resultRoleNotInDb = 'No item with the given id was found.';
+
+    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    .delete('/role/123')
+    .reply(404, resultRoleNotInDb);
+
+    it('should reply with HTTP status code 404 and a correctly formatted string when deleting a role not in the database', function(done) {
+        request(url)
+            .delete('/api/role/123')
+            .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
+            .set('x-forwarded-user', 'Anton Lundin2')
+            .set('Content-Type', 'application/json')
+            .send()
+            // end handles the response
+            .end(function(err, res) {               
+                expect(err).to.exist;
+                expect(res).to.exist;                
+                expect(res.status).to.equal(404);
+                expect(res.error.text).to.equal(resultRoleNotInDb);
+                done();
+            })
+    });
+
+//=============================================================================== 
 
 });
