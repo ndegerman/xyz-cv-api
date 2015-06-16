@@ -22,5 +22,22 @@ module.exports = function(routes) {
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
+
+    // get an attribute by the given id
+    routes.get('/:id', function(request, response) {
+        attributeController.getAttributeById(request.params.id)
+            .then(responseHandler.sendJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    // delete an attribute given an id
+    routes.delete('/:id', function(request, response) {
+        attributeController.deleteAttributeById(request.params.id)
+            .then(function() {
+                return response.json({ message: 'The attribute were successfully removed.' });
+            })
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
     return routes;
 };

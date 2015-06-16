@@ -23,7 +23,7 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get role by the given id
+    // get a role by the given id
     routes.get('/:id', function(request, response) {
         roleController.getRoleById(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
@@ -33,7 +33,9 @@ module.exports = function(routes) {
     // delete a role given an id
     routes.delete('/:id', function(request, response) {
         roleController.deleteRoleById(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
+            .then(function() {
+                return response.json({ message: 'The role were successfully removed.' });
+            })
             .catch(responseHandler.sendErrorResponse(response));
     });
 
