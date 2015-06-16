@@ -1,3 +1,5 @@
+'use strict';
+
 var roleDao = require('../dao/role.dao');
 var q = require('q');
 var errorHandler = require('../utils/error.handler');

@@ -1,3 +1,5 @@
+'use strict';
+
 var q = require('q');
 var errorHandler = require('./error.handler');
 
@@ -90,5 +92,5 @@ exports.sendToNext = function(next) {
 exports.sendJsonResponse = function(response) {
     return function(object) {
         return response.json(object);
-    }
+    };
 };
