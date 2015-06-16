@@ -98,6 +98,6 @@ exports.sendJsonResponse = function(response) {
     }
 };
 
-exports.sendSuccessJsonResponse = function(response) {
+exports.sendSuccessfulDeleteJsonResponse = function(response) {
     response.json({ message: 'The item was successfully removed.' });
 };

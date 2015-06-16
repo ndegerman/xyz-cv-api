@@ -33,7 +33,7 @@ module.exports = function(routes) {
     // delete a role given an id
     routes.delete('/:id', function(request, response) {
         roleController.deleteRoleById(request.params.id)
-            .then(responseHandler.sendSuccessJsonResponse(response))
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 

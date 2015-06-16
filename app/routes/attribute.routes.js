@@ -33,7 +33,7 @@ module.exports = function(routes) {
     // delete an attribute given an id
     routes.delete('/:id', function(request, response) {
         attributeController.deleteAttributeById(request.params.id)
-            .then(responseHandler.sendSuccessJsonResponse(response))
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
