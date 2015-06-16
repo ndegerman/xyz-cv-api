@@ -26,9 +26,7 @@ module.exports = function(routes) {
     // delete the access with the given id
     routes.delete('/:id', function(request, response) {
         accessController.deleteAccessById(request.params.id)
-            .then(function() {
-                return response.json({ message: 'The access was successfully removed.' });
-            })
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
@@ -49,18 +47,14 @@ module.exports = function(routes) {
     // delete accesses containing the given role id
     routes.delete('/role/:id', function(request, response) {
         accessController.deleteAccessesByRoleId(request.params.id)
-            .then(function() {
-                return response.json({ message: 'The accesses were successfully removed.' });
-            })
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     // delete accesses containing the given attribute id
     routes.delete('/attribute/:id', function(request, response) {
         accessController.deleteAccessesByAttributeId(request.params.id)
-            .then(function() {
-                return response.json({ message: 'The accesses were successfully removed.' });
-            })
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 

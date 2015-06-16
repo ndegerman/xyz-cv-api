@@ -3,6 +3,9 @@
 var q = require('q');
 var errorHandler = require('./error.handler');
 
+
+// PARSING
+// ============================================================================
 exports.parsePolyQuery = function(body) {
     return q.promise(function(resolve) {
         var items = JSON.parse(body) || [];
@@ -77,6 +80,8 @@ exports.parseGet = function(response) {
     });
 };
 
+// SENDING
+// ============================================================================
 exports.sendErrorResponse = function(response) {
     return function(error) {
         response.status(error.status || 500).send(error.message);
@@ -93,4 +98,8 @@ exports.sendJsonResponse = function(response) {
     return function(object) {
         return response.json(object);
     };
+};
+
+exports.sendSuccessfulDeleteJsonResponse = function(response) {
+    return response.json({ message: 'The item was successfully removed.' });
 };
