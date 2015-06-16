@@ -34,7 +34,7 @@ describe('/api/access', function() {
         .get('/access')
         .reply(200, resultAllGet);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when making a GET request to /api/access', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all accesses', function(done) {
         request(url)
             .get('/api/access')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -70,7 +70,7 @@ describe('/api/access', function() {
     })
     .reply(200, resultPost);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when making a POST request to /api/access', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting an access', function(done) {
         request(url)
             .post('/api/access')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -106,7 +106,7 @@ describe('/api/access', function() {
     .get('/access?role_id=789')
     .reply(200, resultGetByRoleId);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when making a GET request to /api/access/role/789', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting an access by role id', function(done) {
         request(url)
             .get('/api/access/role/789')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
@@ -139,7 +139,7 @@ describe('/api/access', function() {
     .get('/access?attribute_id=456')
     .reply(200, resultGetByAttributeId);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when making a GET request to /api/access/attribute/456', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting an access by attribute id', function(done) {
         request(url)
             .get('/api/access/attribute/456')
             .set('x-forwarded-email', 'anton.lundin2@softhouse.se')
