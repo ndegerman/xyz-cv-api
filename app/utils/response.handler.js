@@ -101,5 +101,7 @@ exports.sendJsonResponse = function(response) {
 };
 
 exports.sendSuccessfulDeleteJsonResponse = function(response) {
-    return response.json({ message: 'The item was successfully removed.' });
+    return function() {
+        return response.json({ message: 'The item was successfully removed.' });
+    };
 };
