@@ -30,10 +30,12 @@ exports.parseResponse = function(response) {
             return errorHandler.getHttpError(406)
                 .then(reject);
         }
+
         if (response[1].error) {
             return errorHandler.getDREAMSHttpError(response)
                 .then(reject);
         }
+
         return resolve(response);
     });
 };
@@ -43,6 +45,7 @@ exports.parseDelete = function(response) {
         if (response[0].statusCode === 204) {
             return resolve(response[1]);
         }
+
         return errorHandler.getHttpError(response[0].statusCode)
             .then(reject);
     });
@@ -53,6 +56,7 @@ exports.parsePost = function(response) {
         if (response[0].statusCode === 200) {
             return resolve(response[1]);
         }
+
         return errorHandler.getHttpError(response[0].statusCode)
             .then(reject);
     });
@@ -63,6 +67,7 @@ exports.parsePut = function(response) {
         if (response[0].statusCode === 204) {
             return resolve(response[1]);
         }
+
         return errorHandler.getHttpError(response[0].statusCode)
             .then(reject);
     });
@@ -73,6 +78,7 @@ exports.parseGet = function(response) {
         if (response[0].statusCode === 200) {
             return resolve(response[1]);
         }
+
         return errorHandler.getHttpError(response[0].statusCode)
             .then(reject);
     });

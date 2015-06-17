@@ -5,7 +5,7 @@ var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.api_url_dev + 'access';
+var url = config.API_URL_DEV + 'access';
 
 exports.createAccess = function(access) {
     var options = {

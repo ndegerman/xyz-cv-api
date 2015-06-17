@@ -5,7 +5,7 @@ var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.api_url_dev + 'user';
+var url = config.API_URL_DEV + 'user';
 
 exports.createNewUser = function(user) {
     var options = {
@@ -22,7 +22,7 @@ exports.createNewUser = function(user) {
 exports.getUserByEmail = function(email) {
     var options = {
         uri: url + '?email=' + email,
-        method: 'GET',
+        method: 'GET'
     };
 
     return q.nfcall(request, options)
@@ -34,7 +34,7 @@ exports.getUserByEmail = function(email) {
 exports.getAllUsers = function() {
     var options = {
         uri: url,
-        method: 'GET',
+        method: 'GET'
     };
 
     return q.nfcall(request, options)
