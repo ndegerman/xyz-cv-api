@@ -3,7 +3,6 @@
 var q = require('q');
 var errorHandler = require('./error.handler');
 
-
 // PARSING
 // ============================================================================
 exports.parsePolyQuery = function(body) {
@@ -25,16 +24,15 @@ exports.parseMonoQuery = function(body) {
 
 // response[0]: the response
 // response[1]: the body
-// response[2]: the error
 exports.parseResponse = function(response) {
     return q.promise(function(resolve, reject) {
         if (!response) {
             return errorHandler.getHttpError(406)
                 .then(reject);
         }
-        if (response[2]) {
-            //TODO: does this ever get called?
-            return reject(response[2]);
+        if (response[1].error) {
+            return errorHandler.getDREAMSHttpError(response)
+                .then(reject);
         }
         return resolve(response);
     });
