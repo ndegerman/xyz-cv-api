@@ -10,6 +10,7 @@ function validateAttribute(attribute) {
         if (attribute && attribute.name) {
             return resolve(attribute);
         }
+
         return errorHandler.getHttpError(400)
             .then(reject);
     });

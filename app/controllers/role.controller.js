@@ -10,6 +10,7 @@ function validateRole(role) {
         if (role && role.name) {
             return resolve(role);
         }
+
         return errorHandler.getHttpError(400)
             .then(reject);
     });

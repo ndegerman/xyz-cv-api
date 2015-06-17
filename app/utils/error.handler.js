@@ -6,7 +6,7 @@ exports.getHttpError = function(statusCode) {
     return q.promise(function(resolve) {
         var error = new Error();
         error.status = statusCode;
-        switch(statusCode) {
+        switch (statusCode) {
             case 400:
                 error.message = 'Invalid JSON object.';
                 break;

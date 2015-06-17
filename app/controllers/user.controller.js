@@ -10,6 +10,7 @@ function validateUser(user) {
         if (user && user.name && user.email) {
             return resolve(user);
         }
+
         return errorHandler.getHttpError(400)
             .then(reject);
     });
@@ -26,6 +27,7 @@ exports.createNewUser = function(user) {
     return validateUser(user)
         .then(userDao.createNewUser);
 };
+
 exports.createUserIfNonexistent = function(name, email) {
     return exports.getUserByEmail(email)
         .then(function(user) {
