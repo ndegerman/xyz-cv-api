@@ -3,13 +3,16 @@
   "dependencies": {
     "body-parser": "~1.12.4",
     "express": "~4.12.4",
-    "jsonwebtoken": "~5.0.1",
     "morgan": "~1.5.3",
     "request": "~2.57.0",
     "q": "~1.4.1",
     "expect.js": "~0.3.1",
     "supertest": "~1.0.1",
-    "mocha": "~2.2.5"
+    "mocha": "~2.2.5",
+    "nock": "~2.5.0"
   },
-  "repository": {}
+  "repository": {},
+  "devDependencies": {
+    "jshint": "^2.8.0"
+  }
 }

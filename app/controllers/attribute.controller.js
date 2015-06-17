@@ -1,3 +1,5 @@
+'use strict';
+
 var attributeDao = require('../dao/attribute.dao');
 var q = require('q');
 var errorHandler = require('../utils/error.handler');
@@ -10,7 +12,7 @@ function validateAttribute(attribute) {
         }
         return errorHandler.getHttpError(400)
             .then(reject);
-    })
+    });
 }
 
 exports.getAttributeTemplate = function() {
