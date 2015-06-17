@@ -6,9 +6,10 @@ var errorHandler = require('../utils/error.handler');
 
 function validateAccess(access) {
     return q.promise(function(resolve, reject) {
-        if (access && access.role_id && access.attribute_id) {
+        if (access && access.roleId && access.attributeId) {
             return resolve(access);
         }
+
         return errorHandler.getHttpError(400)
             .then(reject);
     });
@@ -18,11 +19,12 @@ exports.assignAttributesToRole = function(attributes, roleId) {
     var promises = [];
     attributes.forEach(function(attributeId) {
         var access = {
-            role_id: roleId,
-            attribute_id: attributeId
+            roleId: roleId,
+            attributeId: attributeId
         };
         promises.push(exports.createAccess(access));
     });
+
     return q.all(promises);
 };
 
@@ -52,6 +54,7 @@ exports.deleteAccesses = function(accesses) {
     accesses.forEach(function(access) {
         promises.push(exports.deleteAccessById(access._id));
     });
+
     return q.all(promises);
 };
 

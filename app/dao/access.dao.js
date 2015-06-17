@@ -5,7 +5,7 @@ var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.api_url_dev + 'access';
+var url = config.API_URL_DEV + 'access';
 
 exports.createAccess = function(access) {
     var options = {
@@ -21,7 +21,7 @@ exports.createAccess = function(access) {
 
 exports.getAccessesByAttributeId = function(id) {
     var options = {
-        uri: url + '?attribute_id=' + id,
+        uri: url + '?attributeId=' + id,
         method: 'GET'
     };
 
@@ -33,7 +33,7 @@ exports.getAccessesByAttributeId = function(id) {
 
 exports.getAccessesByRoleId = function(id) {
     var options = {
-        uri: url + '?role_id=' + id,
+        uri: url + '?roleId=' + id,
         method: 'GET'
     };
 

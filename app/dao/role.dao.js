@@ -5,7 +5,7 @@ var config = require('../config/config');
 var q = require('q');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.api_url_dev + 'role';
+var url = config.API_URL_DEV + 'role';
 
 exports.createNewRole = function(role) {
     var options = {
@@ -22,7 +22,7 @@ exports.createNewRole = function(role) {
 exports.getRoleByName = function(name) {
     var options = {
         uri: url + '?name=' + name,
-        method: 'GET',
+        method: 'GET'
     };
 
     return q.nfcall(request, options)
@@ -46,7 +46,7 @@ exports.getRoleById = function(id) {
 exports.getAllRoles = function() {
     var options = {
         uri: url,
-        method: 'GET',
+        method: 'GET'
     };
 
     return q.nfcall(request, options)

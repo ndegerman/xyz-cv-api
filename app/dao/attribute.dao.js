@@ -5,7 +5,7 @@ var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.api_url_dev + 'attribute';
+var url = config.API_URL_DEV + 'attribute';
 
 exports.createNewAttribute = function(attribute) {
     var options = {
@@ -34,7 +34,7 @@ exports.getAttributeById = function(id) {
 exports.getAttributeByName = function(name) {
     var options = {
         uri: url + '?name=' + name,
-        method: 'GET',
+        method: 'GET'
     };
 
     return q.nfcall(request, options)
@@ -46,7 +46,7 @@ exports.getAttributeByName = function(name) {
 exports.getAllAttributes = function() {
     var options = {
         uri: url,
-        method: 'GET',
+        method: 'GET'
     };
 
     return q.nfcall(request, options)
