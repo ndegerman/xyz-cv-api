@@ -1,3 +1,5 @@
+'use strict';
+
 var server = require('../app/server');
 var request = require('supertest');
 var expect = require('expect.js');

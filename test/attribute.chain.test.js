@@ -1,3 +1,5 @@
+'use strict';
+
 var server = require('../app/server');
 var request = require('supertest');
 var expect = require('expect.js');
@@ -60,7 +62,7 @@ describe('/api/attribute', function() {
 
     var resultNoArg = 'Invalid JSON object.';
 
-    badResultPost = {
+    var badResultPost = {
         name: '',
         createdAt: '2015-06-16T07:33:14.385Z',
         updatedAt: '2015-06-16T07:33:14.385Z',
@@ -126,7 +128,7 @@ describe('/api/attribute', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
+    resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
         name: '123',
@@ -162,7 +164,7 @@ describe('/api/attribute', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
+    resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
         name2: '123',
@@ -225,7 +227,7 @@ describe('/api/attribute', function() {
                 expect(res.status).to.equal(400);
                 expect(res.error.text).to.equal(resultNotJson);
                 done();
-            })
+            });
     });
 
     //===============================================================================
@@ -321,7 +323,7 @@ describe('/api/attribute', function() {
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultNotInDb.message);
                 done();
-            })
+            });
     });
 
     //===============================================================================
@@ -378,6 +380,6 @@ describe('/api/attribute', function() {
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultRoleNotInDb);
                 done();
-            })
+            });
     });
 });

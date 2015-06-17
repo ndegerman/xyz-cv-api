@@ -1,3 +1,5 @@
+'use strict';
+
 var server = require('../app/server');
 var request = require('supertest');
 var expect = require('expect.js');
@@ -264,7 +266,7 @@ describe('/api/role', function() {
                 expect(res.status).to.equal(400);
                 expect(res.error.text).to.equal(resultNotJson);
                 done();
-            })
+            });
     });
 
     //===============================================================================
@@ -358,7 +360,7 @@ describe('/api/role', function() {
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultRoleNotInDb);
                 done();
-            })
+            });
     });
 
     //===============================================================================
@@ -394,7 +396,7 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultRoleNotInDb = 'No item with the given id was found.';
+    resultRoleNotInDb = 'No item with the given id was found.';
 
     nock(mockedUrl, {allowUnmocked: true})
         .delete('/role/123')
@@ -415,6 +417,6 @@ describe('/api/role', function() {
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultRoleNotInDb);
                 done();
-            })
+            });
     });
 });

@@ -1,3 +1,5 @@
+'use strict';
+
 var server = require('../app/server');
 var request = require('supertest');
 var expect = require('expect.js');
@@ -67,7 +69,7 @@ describe('/api/authentication', function() {
 
             // end handles the response
             .end(function(err, res) {
-                expect(err).to.exist
+                expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(401);
                 expect(res.text).to.equal(unauthorized);
@@ -90,7 +92,7 @@ describe('/api/authentication', function() {
 
             // end handles the response
             .end(function(err, res) {
-                expect(err).to.exist
+                expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(401);
                 expect(res.text).to.equal(unauthorized);
@@ -114,7 +116,7 @@ describe('/api/authentication', function() {
 
             // end handles the response
             .end(function(err, res) {
-                expect(err).to.exist
+                expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(401);
                 expect(res.text).to.equal(unauthorized);

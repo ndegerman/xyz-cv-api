@@ -1,3 +1,5 @@
+'use strict';
+
 var server = require('../app/server');
 var request = require('supertest');
 var expect = require('expect.js');
@@ -63,7 +65,7 @@ describe('/api/access', function() {
 
     var resultNoArg = 'Invalid JSON object.';
 
-    badResultPost = {
+    var badResultPost = {
         attributeId: '123',
         roleId: '456',
         createdAt: '2015-06-16T13:46:07.589Z',
@@ -95,7 +97,7 @@ describe('/api/access', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
+    resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
         attributeId: '123',
@@ -132,7 +134,7 @@ describe('/api/access', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
+    resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
         attributeId: '123',
@@ -169,7 +171,7 @@ describe('/api/access', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
+    resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
         attributeId: '123',
@@ -207,7 +209,7 @@ describe('/api/access', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
+    resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
         attributeId: '123',
@@ -244,7 +246,7 @@ describe('/api/access', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
+    resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
         attributeId: '123',
@@ -309,7 +311,7 @@ describe('/api/access', function() {
                 expect(res.status).to.equal(400);
                 expect(res.error.text).to.equal(resultNotJson);
                 done();
-            })
+            });
     });
 
     //===============================================================================
@@ -419,7 +421,7 @@ describe('/api/access', function() {
 
     //===============================================================================
 
-    resultNotInDb = {
+    var resultNotInDb = {
         message: 'No item with the given id was found.'
     };
 
@@ -442,7 +444,7 @@ describe('/api/access', function() {
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultNotInDb.message);
                 done();
-            })
+            });
     });
 
     //===============================================================================
@@ -470,7 +472,7 @@ describe('/api/access', function() {
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultNotInDb.message);
                 done();
-            })
+            });
     });
 
     //===============================================================================
@@ -527,6 +529,6 @@ describe('/api/access', function() {
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultRoleNotInDb);
                 done();
-            })
+            });
     });
 });
