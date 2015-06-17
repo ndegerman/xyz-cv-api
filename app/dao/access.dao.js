@@ -21,7 +21,7 @@ exports.createAccess = function(access) {
 
 exports.getAccessesByAttributeId = function(id) {
     var options = {
-        uri: url + '?attribute_id=' + id,
+        uri: url + '?attributeId=' + id,
         method: 'GET'
     };
 
@@ -33,7 +33,7 @@ exports.getAccessesByAttributeId = function(id) {
 
 exports.getAccessesByRoleId = function(id) {
     var options = {
-        uri: url + '?role_id=' + id,
+        uri: url + '?roleId=' + id,
         method: 'GET'
     };
 
