@@ -5,12 +5,12 @@ var url = 'http://localhost:9000';
 var nock = require('nock');
 var mockedUrl = 'http://localhost:3232/';
 
-describe('server', function () {
-    before(function (done) {
+describe('server', function() {
+    before(function(done) {
         done();
     });
 
-    after(function (done) {
+    after(function(done) {
         server.close();
         done();
     });
@@ -18,16 +18,16 @@ describe('server', function () {
 
 describe('/api/authentication', function() {
 
-//===============================================================================
+    //===============================================================================
 
     var resultAllGet = [{
-        "_id": "557d7cbc9a81250f00194d46",
-        "name": "test1",
-        "createdAt": "2015-06-14T13:08:12.348Z",
-        "updatedAt": "2015-06-14T13:08:12.348Z"
+        _id: '557d7cbc9a81250f00194d46',
+        name: 'test1',
+        createAt: '2015-06-14T13:08:12.348Z',
+        updatedAt: '2015-06-14T13:08:12.348Z'
     }];
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .get('/role')
         .reply(200, resultAllGet);
 
@@ -38,23 +38,25 @@ describe('/api/authentication', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
+
             // end handles the response
             .end(function(err, res) {
                 if (err) {
                     throw err;
                 }
-                expect(res).to.exist;                
+
+                expect(res).to.exist;
                 expect(res.status).to.equal(200);
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultAllGet));
                 done();
             });
     });
 
-//===============================================================================
+    //===============================================================================
 
     var unauthorized = 'Unauthorized access.';
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .get('/role')
         .reply(200, resultAllGet);
 
@@ -62,19 +64,20 @@ describe('/api/authentication', function() {
         request(url)
             .get('/api/role')
             .send()
+
             // end handles the response
             .end(function(err, res) {
                 expect(err).to.exist
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(401);
                 expect(res.text).to.equal(unauthorized);
                 done();
             });
     });
 
-//===============================================================================
+    //===============================================================================
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .get('/role')
         .reply(200, resultAllGet);
 
@@ -84,20 +87,20 @@ describe('/api/authentication', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
+
             // end handles the response
             .end(function(err, res) {
                 expect(err).to.exist
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(401);
                 expect(res.text).to.equal(unauthorized);
                 done();
             });
     });
 
+    //===============================================================================
 
-//===============================================================================
-
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .get('/role')
         .reply(200, resultAllGet);
 
@@ -108,10 +111,11 @@ describe('/api/authentication', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
+
             // end handles the response
             .end(function(err, res) {
                 expect(err).to.exist
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(401);
                 expect(res.text).to.equal(unauthorized);
                 done();

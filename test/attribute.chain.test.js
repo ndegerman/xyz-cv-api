@@ -5,12 +5,12 @@ var url = 'http://localhost:9000';
 var nock = require('nock');
 var mockedUrl = 'http://localhost:3232/';
 
-describe('server', function () {
-    before(function (done) {
+describe('server', function() {
+    before(function(done) {
         done();
     });
 
-    after(function (done) {
+    after(function(done) {
         server.close();
         done();
     });
@@ -18,16 +18,16 @@ describe('server', function () {
 
 describe('/api/attribute', function() {
 
-//===============================================================================    
+    //===============================================================================
 
     var resultPost = {
-        "name": "CanCreateUser",
-        "createdAt": "2015-06-16T07:33:14.385Z",
-        "updatedAt": "2015-06-16T07:33:14.385Z",
-        "_id": "557fd13a9a81250f00194d58"
+        name: 'CanCreateUser',
+        createdAt: '2015-06-16T07:33:14.385Z',
+        updatedAt: '2015-06-16T07:33:14.385Z',
+        _id: '557fd13a9a81250f00194d58'
     };
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .post('/attribute', {
             name: 'test1'
         })
@@ -41,31 +41,33 @@ describe('/api/attribute', function() {
             .set('Content-Type', 'application/json')
             .send({
                 name: 'test1'
-                })
+            })
+
             // end handles the response
             .end(function(err, res) {
                 if (err) {
                     throw err;
                 }
-                expect(res).to.exist;                
+
+                expect(res).to.exist;
                 expect(res.status).to.equal(200);
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
                 done();
             });
-    }); 
+    });
 
-//=============================================================================== 
+    //===============================================================================
 
     var resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        "name": "",
-        "createdAt": "2015-06-16T07:33:14.385Z",
-        "updatedAt": "2015-06-16T07:33:14.385Z",
-        "_id": "557fd13a9a81250f00194d58"
+        name: '',
+        createdAt: '2015-06-16T07:33:14.385Z',
+        updatedAt: '2015-06-16T07:33:14.385Z',
+        _id: '557fd13a9a81250f00194d58'
     };
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .post('/attribute')
         .reply(200, badResultPost);
 
@@ -76,28 +78,29 @@ describe('/api/attribute', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
+
             // end handles the response
-            .end(function(err, res) {               
+            .end(function(err, res) {
                 expect(err).to.exist;
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(400);
                 expect(res.error.text).to.equal(resultNoArg);
                 done();
             });
     });
 
-//=============================================================================== 
+    //===============================================================================
 
     var resultNoPost = 'Invalid JSON object.';
 
     badResultPost = {
-        "name": "",
-        "createdAt": "2015-06-16T07:33:14.385Z",
-        "updatedAt": "2015-06-16T07:33:14.385Z",
-        "_id": "557fd13a9a81250f00194d58"
+        name: '',
+        createdAt: '2015-06-16T07:33:14.385Z',
+        updatedAt: '2015-06-16T07:33:14.385Z',
+        _id: '557fd13a9a81250f00194d58'
     };
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .post('/attribute')
         .reply(200, badResultPost);
 
@@ -108,30 +111,31 @@ describe('/api/attribute', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                "name": ""
+                name: ''
             })
+
             // end handles the response
-            .end(function(err, res) {               
+            .end(function(err, res) {
                 expect(err).to.exist;
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(400);
                 expect(res.error.text).to.equal(resultNoArg);
                 done();
             });
     });
 
-//=============================================================================== 
+    //===============================================================================
 
     var resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        "name": "123",
-        "createdAt": "2015-06-16T07:33:14.385Z",
-        "updatedAt": "2015-06-16T07:33:14.385Z",
-        "_id": "557fd13a9a81250f00194d58"
+        name: '123',
+        createdAt: '2015-06-16T07:33:14.385Z',
+        updatedAt: '2015-06-16T07:33:14.385Z',
+        _id: '557fd13a9a81250f00194d58'
     };
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .post('/attribute')
         .reply(200, badResultPost);
 
@@ -142,31 +146,32 @@ describe('/api/attribute', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                "name": "123",
-                "id": "456"
+                name: '123',
+                id: '456'
             })
+
             // end handles the response
-            .end(function(err, res) {               
+            .end(function(err, res) {
                 expect(err).to.exist;
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(400);
                 expect(res.error.text).to.equal(resultNoArg);
                 done();
             });
     });
 
-//=============================================================================== 
+    //===============================================================================
 
     var resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        "name2": "123",
-        "createdAt": "2015-06-16T07:33:14.385Z",
-        "updatedAt": "2015-06-16T07:33:14.385Z",
-        "_id": "557fd13a9a81250f00194d58"
+        name2: '123',
+        createdAt: '2015-06-16T07:33:14.385Z',
+        updatedAt: '2015-06-16T07:33:14.385Z',
+        _id: '557fd13a9a81250f00194d58'
     };
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .post('/attribute')
         .reply(200, badResultPost);
 
@@ -177,30 +182,31 @@ describe('/api/attribute', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                "name2": "123"
+                name2: '123'
             })
+
             // end handles the response
-            .end(function(err, res) {               
+            .end(function(err, res) {
                 expect(err).to.exist;
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(400);
                 expect(res.error.text).to.equal(resultNoArg);
                 done();
             });
     });
 
-//===============================================================================
+    //===============================================================================
 
     var resultNotJson = 'invalid json';
 
     badResultPost = {
-        "name": "test1",
-        "createdAt": "2015-06-16T07:33:14.385Z",
-        "updatedAt": "2015-06-16T07:33:14.385Z",
-        "_id": "1234"
+        name: 'test1',
+        createdAt: '2015-06-16T07:33:14.385Z',
+        updatedAt: '2015-06-16T07:33:14.385Z',
+        _id: '1234'
     };
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .post('/attribute')
         .reply(200, badResultPost);
 
@@ -210,27 +216,28 @@ describe('/api/attribute', function() {
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
-            .send('"name": "1234"')
+            .send('name: 1234')
+
             // end handles the response
-            .end(function(err, res) {               
+            .end(function(err, res) {
                 expect(err).to.exist;
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(400);
                 expect(res.error.text).to.equal(resultNotJson);
                 done();
             })
     });
 
-//===============================================================================
+    //===============================================================================
 
     var resultAllGet = [{
-        "_id": "557d7cbc9a81250f00194d46",
-        "name": "test1",
-        "createdAt": "2015-06-14T13:08:12.348Z",
-        "updatedAt": "2015-06-14T13:08:12.348Z"
+        _id: '557d7cbc9a81250f00194d46',
+        name: 'test1',
+        createdAt: '2015-06-14T13:08:12.348Z',
+        updatedAt: '2015-06-14T13:08:12.348Z'
     }];
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .get('/attribute')
         .reply(200, resultAllGet);
 
@@ -241,28 +248,30 @@ describe('/api/attribute', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
+
             // end handles the response
             .end(function(err, res) {
                 if (err) {
                     throw err;
                 }
-                expect(res).to.exist;                
+
+                expect(res).to.exist;
                 expect(res.status).to.equal(200);
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultAllGet));
                 done();
             });
     });
 
-//===============================================================================
+    //===============================================================================
 
     var resultGet = {
-        "_id": "123",
-        "name": "456",
-        "createdAt": "2015-06-14T13:08:12.348Z",
-        "updatedAt": "2015-06-14T13:08:12.348Z"
+        _id: '123',
+        name: '456',
+        createdAt: '2015-06-14T13:08:12.348Z',
+        updatedAt: '2015-06-14T13:08:12.348Z'
     };
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .get('/attribute/123')
         .reply(200, resultGet);
 
@@ -273,25 +282,27 @@ describe('/api/attribute', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
+
             // end handles the response
             .end(function(err, res) {
                 if (err) {
                     throw err;
                 }
-                expect(res).to.exist;                
+
+                expect(res).to.exist;
                 expect(res.status).to.equal(200);
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultGet));
                 done();
             });
     });
 
-//===============================================================================  
-    
+    //===============================================================================
+
     var resultNotInDb = {
         message: 'No item with the given id was found.'
     };
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .get('/attribute/123')
         .reply(404, resultNotInDb);
 
@@ -302,23 +313,24 @@ describe('/api/attribute', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
+
             // end handles the response
-            .end(function(err, res) {               
+            .end(function(err, res) {
                 expect(err).to.exist;
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultNotInDb.message);
                 done();
             })
     });
 
-//===============================================================================
+    //===============================================================================
 
     var resultDelete = {
         message: 'The item was successfully removed.'
     };
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .delete('/attribute/1234')
         .reply(204, {});
 
@@ -329,23 +341,25 @@ describe('/api/attribute', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
+
             // end handles the response
             .end(function(err, res) {
                 if (err) {
                     throw err;
                 }
-                expect(res).to.exist;                
+
+                expect(res).to.exist;
                 expect(res.status).to.equal(200);
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultDelete));
                 done();
             });
     });
 
-//=============================================================================== 
+    //===============================================================================
 
     var resultRoleNotInDb = 'No item with the given id was found.';
 
-    var couchdb = nock(mockedUrl, {allowUnmocked: true})
+    nock(mockedUrl, {allowUnmocked: true})
         .delete('/attribute/123')
         .reply(404, resultRoleNotInDb);
 
@@ -356,10 +370,11 @@ describe('/api/attribute', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
+
             // end handles the response
-            .end(function(err, res) {               
+            .end(function(err, res) {
                 expect(err).to.exist;
-                expect(res).to.exist;                
+                expect(res).to.exist;
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultRoleNotInDb);
                 done();
