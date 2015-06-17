@@ -1,3 +1,5 @@
+'use strict';
+
 var attributeDao = require('../dao/attribute.dao');
 var q = require('q');
 var errorHandler = require('../utils/error.handler');
@@ -10,7 +12,7 @@ function validateAttribute(attribute) {
         }
         return errorHandler.getHttpError(400)
             .then(reject);
-    })
+    });
 }
 
 exports.getAttributeTemplate = function() {
@@ -24,10 +26,18 @@ exports.createNewAttribute = function(attributeObject) {
         .then(attributeDao.createNewAttribute);
 };
 
+exports.getAttributeById = function(id) {
+    return attributeDao.getAttributeById(id);
+};
+
 exports.getAttributeByName = function(name) {
     return attributeDao.getAttributeByName(name);
 };
 
 exports.getAllAttributes = function() {
     return attributeDao.getAllAttributes();
+};
+
+exports.deleteAttributeById = function(id) {
+    return attributeDao.deleteAttributeById(id);
 };

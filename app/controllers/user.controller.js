@@ -1,3 +1,5 @@
+'use strict';
+
 var userDao = require('../dao/user.dao');
 var q = require('q');
 var errorHandler = require('../utils/error.handler');

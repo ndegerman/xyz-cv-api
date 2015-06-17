@@ -1,9 +1,11 @@
+'use strict';
+
 var q = require('q');
 var accessDao = require('../dao/access.dao');
 var errorHandler = require('../utils/error.handler');
 
 function validateAccess(access) {
-    return q.promise(function(resolve) {
+    return q.promise(function(resolve, reject) {
         if (access && access.role_id && access.attribute_id) {
             return resolve(access);
         }
@@ -13,13 +15,13 @@ function validateAccess(access) {
 }
 
 exports.assignAttributesToRole = function(attributes, roleId) {
-    promises = [];
+    var promises = [];
     attributes.forEach(function(attributeId) {
         var access = {
             role_id: roleId,
             attribute_id: attributeId
         };
-        promises.push(createAccess(access));
+        promises.push(exports.createAccess(access));
     });
     return q.all(promises);
 };

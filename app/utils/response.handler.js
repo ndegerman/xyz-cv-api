@@ -1,6 +1,10 @@
+'use strict';
+
 var q = require('q');
 var errorHandler = require('./error.handler');
 
+// PARSING
+// ============================================================================
 exports.parsePolyQuery = function(body) {
     return q.promise(function(resolve) {
         var items = JSON.parse(body) || [];
@@ -20,16 +24,15 @@ exports.parseMonoQuery = function(body) {
 
 // response[0]: the response
 // response[1]: the body
-// response[2]: the error
 exports.parseResponse = function(response) {
     return q.promise(function(resolve, reject) {
         if (!response) {
             return errorHandler.getHttpError(406)
                 .then(reject);
         }
-        if (response[2]) {
-            //TODO: does this ever get called?
-            return reject(response[2]);
+        if (response[1].error) {
+            return errorHandler.getDREAMSHttpError(response)
+                .then(reject);
         }
         return resolve(response);
     });
@@ -75,6 +78,8 @@ exports.parseGet = function(response) {
     });
 };
 
+// SENDING
+// ============================================================================
 exports.sendErrorResponse = function(response) {
     return function(error) {
         response.status(error.status || 500).send(error.message);
@@ -90,5 +95,11 @@ exports.sendToNext = function(next) {
 exports.sendJsonResponse = function(response) {
     return function(object) {
         return response.json(object);
-    }
+    };
+};
+
+exports.sendSuccessfulDeleteJsonResponse = function(response) {
+    return function() {
+        return response.json({ message: 'The item was successfully removed.' });
+    };
 };
