@@ -23,8 +23,8 @@ describe('/api/access', function() {
 //===============================================================================    
 
     var resultPost = {
-        "attribute_id": "123",
-        "role_id": "456",
+        "attributeId": "123",
+        "roleId": "456",
         "createdAt": "2015-06-16T10:33:27.803Z",
         "updatedAt": "2015-06-16T10:33:27.803Z",
         "_id": "557ffb779a81250f00194d60"
@@ -32,8 +32,8 @@ describe('/api/access', function() {
 
     var couchdb = nock(mockedUrl, {allowUnmocked: true})
         .post('/access', {
-            attribute_id: "123",
-            role_id: "456"
+            attributeId: "123",
+            roleId: "456"
         })
         .reply(200, resultPost);
 
@@ -44,8 +44,8 @@ describe('/api/access', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                attribute_id: "123",
-                role_id: "456"
+                attributeId: "123",
+                roleId: "456"
             })
             // end handles the response
             .end(function(err, res) {
@@ -64,8 +64,8 @@ describe('/api/access', function() {
     var resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        "attribute_id": "123",
-        "role_id": "456",
+        "attributeId": "123",
+        "roleId": "456",
         "createdAt": "2015-06-16T13:46:07.589Z",
         "updatedAt": "2015-06-16T13:46:07.589Z",
         "_id": "5580289f9a81250f00194d61"
@@ -97,8 +97,8 @@ describe('/api/access', function() {
     var resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        "attribute_id": "123",
-        "role_id": "456",
+        "attributeId": "123",
+        "roleId": "456",
         "createdAt": "2015-06-16T13:46:07.589Z",
         "updatedAt": "2015-06-16T13:46:07.589Z",
         "_id": "5580289f9a81250f00194d61"
@@ -115,8 +115,8 @@ describe('/api/access', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                "attribute_id": "",
-                "role_id": "123"
+                "attributeId": "",
+                "roleId": "123"
             })
             // end handles the response
             .end(function(err, res) {               
@@ -133,8 +133,8 @@ describe('/api/access', function() {
     var resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        "attribute_id": "123",
-        "role_id": "456",
+        "attributeId": "123",
+        "roleId": "456",
         "createdAt": "2015-06-16T13:46:07.589Z",
         "updatedAt": "2015-06-16T13:46:07.589Z",
         "_id": "5580289f9a81250f00194d61"
@@ -151,8 +151,8 @@ describe('/api/access', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                "attribute_id": "123",
-                "role_id": ""
+                "attributeId": "123",
+                "roleId": ""
             })
             // end handles the response
             .end(function(err, res) {               
@@ -169,8 +169,8 @@ describe('/api/access', function() {
     var resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        "attribute_id": "123",
-        "role_id": "456",
+        "attributeId": "123",
+        "roleId": "456",
         "createdAt": "2015-06-16T13:46:07.589Z",
         "updatedAt": "2015-06-16T13:46:07.589Z",
         "_id": "5580289f9a81250f00194d61"
@@ -187,8 +187,8 @@ describe('/api/access', function() {
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                "attribute_id": "123",
-                "role_id": "456",
+                "attributeId": "123",
+                "roleId": "456",
                 "id": "789"
             })
             // end handles the response
@@ -206,8 +206,8 @@ describe('/api/access', function() {
     var resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        "attribute_id": "123",
-        "role_id": "456",
+        "attributeId": "123",
+        "roleId": "456",
         "createdAt": "2015-06-16T13:46:07.589Z",
         "updatedAt": "2015-06-16T13:46:07.589Z",
         "_id": "5580289f9a81250f00194d61"
@@ -217,7 +217,7 @@ describe('/api/access', function() {
         .post('/access')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with no attribute_id field', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with no attributeId field', function(done) {
         request(url)
             .post('/api/access')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -225,7 +225,7 @@ describe('/api/access', function() {
             .set('Content-Type', 'application/json')
             .send({
                 "attribut2e_id": "123",
-                "role_id": "456"
+                "roleId": "456"
             })
             // end handles the response
             .end(function(err, res) {               
@@ -242,8 +242,8 @@ describe('/api/access', function() {
     var resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        "attribute_id": "123",
-        "role_id": "456",
+        "attributeId": "123",
+        "roleId": "456",
         "createdAt": "2015-06-16T13:46:07.589Z",
         "updatedAt": "2015-06-16T13:46:07.589Z",
         "_id": "5580289f9a81250f00194d61"
@@ -253,14 +253,14 @@ describe('/api/access', function() {
         .post('/access')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with no role_id field', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with no roleId field', function(done) {
         request(url)
             .post('/api/access')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                "attribute_id": "123",
+                "attributeId": "123",
                 "rol2e_id": "456"
             })
             // end handles the response
@@ -309,8 +309,8 @@ describe('/api/access', function() {
 
     var resultAllGet = [{
         "_id": "557eb8a89a81250f00194d52",
-        "attribute_id": "557d7cbc9a81250f00194d46",
-        "role_id": "557eb7199a81250f00194d50",
+        "attributeId": "557d7cbc9a81250f00194d46",
+        "roleId": "557eb7199a81250f00194d50",
         "createdAt": "2015-06-15T11:36:08.114Z",
         "updatedAt": "2015-06-15T11:36:08.114Z"
     }];
@@ -342,14 +342,14 @@ describe('/api/access', function() {
 
     var resultGetByRoleId = [{
         "_id": "123",
-        "attribute_id": "456",
-        "role_id": "789",
+        "attributeId": "456",
+        "roleId": "789",
         "createdAt": "2015-06-15T11:36:08.114Z",
         "updatedAt": "2015-06-15T11:36:08.114Z"
     }];
 
     var couchdb = nock(mockedUrl, {allowUnmocked: true})
-        .get('/access?role_id=789')
+        .get('/access?roleId=789')
         .reply(200, resultGetByRoleId);
 
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting an access by role id', function(done) {
@@ -375,14 +375,14 @@ describe('/api/access', function() {
 
     var resultGetByAttributeId = [{
         "_id": "123",
-        "attribute_id": "456",
-        "role_id": "789",
+        "attributeId": "456",
+        "roleId": "789",
         "createdAt": "2015-06-15T11:36:08.114Z",
         "updatedAt": "2015-06-15T11:36:08.114Z"
     }];
 
     var couchdb = nock(mockedUrl, {allowUnmocked: true})
-        .get('/access?attribute_id=456')
+        .get('/access?attributeId=456')
         .reply(200, resultGetByAttributeId);
 
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting an access by attribute id', function(done) {
@@ -411,7 +411,7 @@ describe('/api/access', function() {
     };
 
     var couchdb = nock(mockedUrl, {allowUnmocked: true})
-        .get('/access?role_id=123')
+        .get('/access?roleId=123')
         .reply(404, resultNotInDb);
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting accesses by role id not in the database', function(done) {
@@ -438,7 +438,7 @@ describe('/api/access', function() {
     };
 
     var couchdb = nock(mockedUrl, {allowUnmocked: true})
-        .get('/access?attribute_id=123')
+        .get('/access?attributeId=123')
         .reply(404, resultNotInDb);
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting accesses by attribute id not in the database', function(done) {
