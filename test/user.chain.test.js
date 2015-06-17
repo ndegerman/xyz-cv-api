@@ -1,6 +1,4 @@
 var server = require('../app/server');
-var assert = require('assert');
-var http = require('http');
 var request = require('supertest');
 var expect = require('expect.js');
 var url = 'http://localhost:9000';
