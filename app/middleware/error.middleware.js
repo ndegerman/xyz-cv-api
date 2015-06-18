@@ -2,6 +2,6 @@
 
 // middleware
 exports.errorFilter = function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Internal server error.');
+    //console.error(err.stack);
+    res.status(err.status || 500).send(err.message || '');
 };
