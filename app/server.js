@@ -10,6 +10,9 @@ var attributeRoutes = require('./routes/attribute.routes')(express.Router());
 var userRoutes = require('./routes/user.routes')(express.Router());
 var roleRoutes = require('./routes/role.routes')(express.Router());
 var accessRoutes = require('./routes/access.routes')(express.Router());
+var skillRoutes = require('./routes/skill.routes')(express.Router());
+var skillGroupRoutes = require('./routes/skillGroup.routes')(express.Router());
+var userSkillConnectorRoutes = require('./routes/userSkillConnector.routes.js')(express.Router());
 
 var errorMiddleware = require('./middleware/error.middleware');
 var authenticationMiddleware = require('./middleware/authentication.middleware');
@@ -40,6 +43,9 @@ app.use('/api/attribute', attributeRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/role', roleRoutes);
 app.use('/api/access', accessRoutes);
+app.use('/api/skill', skillRoutes);
+app.use('/api/skillGroup', skillGroupRoutes);
+app.use('/api/userSkillConnector', userSkillConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
 
