@@ -5,13 +5,13 @@ var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.API_URL_DEV + 'skillSkillGroupConnector';
+var url = config.API_URL_DEV + 'userToSkillConnector';
 
-exports.createSkillSkillGroupConnector = function(skillSkillGroupConnector) {
+exports.createUserToSkillConnector = function(userToSkillConnector) {
     var options = {
         uri: url,
         method: 'POST',
-        json: skillSkillGroupConnector
+        json: userToSkillConnector
     };
 
     return q.nfcall(request, options)
@@ -19,7 +19,7 @@ exports.createSkillSkillGroupConnector = function(skillSkillGroupConnector) {
         .then(responseHandler.parsePost);
 };
 
-exports.getSkillSkillGroupConnectorsBySkillId = function(id) {
+exports.getUserToSkillConnectorsBySkillId = function(id) {
     var options = {
         uri: url + '?skillId=' + id,
         method: 'GET'
@@ -31,9 +31,9 @@ exports.getSkillSkillGroupConnectorsBySkillId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getSkillSkillGroupConnectorsBySkillGroupId = function(id) {
+exports.getUserToSkillConnectorsByUserId = function(id) {
     var options = {
-        uri: url + '?skillGroupId=' + id,
+        uri: url + '?userId=' + id,
         method: 'GET'
     };
 
@@ -43,7 +43,7 @@ exports.getSkillSkillGroupConnectorsBySkillGroupId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getAllSkillSkillGroupConnectors = function() {
+exports.getAllUserToSkillConnectors = function() {
     var options = {
         uri: url,
         method: 'GET'
@@ -55,9 +55,9 @@ exports.getAllSkillSkillGroupConnectors = function() {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.deleteSkillSkillGroupConnector = function(skillSkillGroupConnectorId) {
+exports.deleteUserToSkillConnector = function(userToSkillConnectorId) {
     var options = {
-        uri: url + '/' + skillSkillGroupConnectorId,
+        uri: url + '/' + userToSkillConnectorId,
         method: 'DELETE'
     };
 

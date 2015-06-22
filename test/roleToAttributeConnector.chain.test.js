@@ -18,34 +18,34 @@ describe('server', function() {
     });
 });
 
-describe('/api/skillSkillGroupConnector', function() {
+describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
     var resultPost = {
-        skillId: '123',
-        skillGroupId: '456',
+        attributeId: '123',
+        roleId: '456',
         createdAt: '2015-06-16T10:33:27.803Z',
         updatedAt: '2015-06-16T10:33:27.803Z',
         _id: '557ffb779a81250f00194d60'
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/skillSkillGroupConnector', {
-            skillId: '123',
-            skillGroupId: '456'
+        .post('/roleToAttributeConnector', {
+            attributeId: '123',
+            roleId: '456'
         })
         .reply(200, resultPost);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting a skillSkillGroupConnector', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting a roleToAttributeConnector', function(done) {
         request(url)
-            .post('/api/skillSkillGroupConnector')
+            .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                skillId: '123',
-                skillGroupId: '456'
+                attributeId: '123',
+                roleId: '456'
             })
 
             // end handles the response
@@ -66,20 +66,20 @@ describe('/api/skillSkillGroupConnector', function() {
     var resultNoArg = 'Invalid JSON object.';
 
     var badResultPost = {
-        skillId: '123',
-        skillGroupId: '456',
+        attributeId: '123',
+        roleId: '456',
         createdAt: '2015-06-16T13:46:07.589Z',
         updatedAt: '2015-06-16T13:46:07.589Z',
         _id: '5580289f9a81250f00194d61'
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/skillSkillGroupConnector')
+        .post('/roleToAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillSkillGroupConnector with no body', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with no body', function(done) {
         request(url)
-            .post('/api/skillSkillGroupConnector')
+            .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -100,26 +100,26 @@ describe('/api/skillSkillGroupConnector', function() {
     resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        skillId: '123',
-        skillGroupId: '456',
+        attributeId: '123',
+        roleId: '456',
         createdAt: '2015-06-16T13:46:07.589Z',
         updatedAt: '2015-06-16T13:46:07.589Z',
         _id: '5580289f9a81250f00194d61'
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/skillSkillGroupConnector')
+        .post('/roleToAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillSkillGroupConnector with the field for skill id empty', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with the field for attribute id empty', function(done) {
         request(url)
-            .post('/api/skillSkillGroupConnector')
+            .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                skillId: '',
-                skillGroupId: '123'
+                attributeId: '',
+                roleId: '123'
             })
 
             // end handles the response
@@ -137,26 +137,26 @@ describe('/api/skillSkillGroupConnector', function() {
     resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        skillId: '123',
-        skillGroupId: '456',
+        attributeId: '123',
+        roleId: '456',
         createdAt: '2015-06-16T13:46:07.589Z',
         updatedAt: '2015-06-16T13:46:07.589Z',
         _id: '5580289f9a81250f00194d61'
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/skillSkillGroupConnector')
+        .post('/roleToAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillSkillGroupConnector with the field for skillGroup id empty', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with the field for role id empty', function(done) {
         request(url)
-            .post('/api/skillSkillGroupConnector')
+            .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                skillId: '123',
-                skillGroupId: ''
+                attributeId: '123',
+                roleId: ''
             })
 
             // end handles the response
@@ -174,26 +174,26 @@ describe('/api/skillSkillGroupConnector', function() {
     resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        skillId: '123',
-        skillGroupId: '456',
+        attributeId: '123',
+        roleId: '456',
         createdAt: '2015-06-16T13:46:07.589Z',
         updatedAt: '2015-06-16T13:46:07.589Z',
         _id: '5580289f9a81250f00194d61'
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/skillSkillGroupConnector')
+        .post('/roleToAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillSkillGroupConnector with too many fields in the body', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with too many fields in the body', function(done) {
         request(url)
-            .post('/api/skillSkillGroupConnector')
+            .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                skillId: '123',
-                skillGroupId: '456',
+                attributeId: '123',
+                roleId: '456',
                 id: '789'
             })
 
@@ -212,26 +212,26 @@ describe('/api/skillSkillGroupConnector', function() {
     resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        skillId: '123',
-        skillGroupId: '456',
+        attributeId: '123',
+        roleId: '456',
         createdAt: '2015-06-16T13:46:07.589Z',
         updatedAt: '2015-06-16T13:46:07.589Z',
         _id: '5580289f9a81250f00194d61'
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/skillSkillGroupConnector')
+        .post('/roleToAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillSkillGroupConnector with no skillId field', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with no attributeId field', function(done) {
         request(url)
-            .post('/api/skillSkillGroupConnector')
+            .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
                 attribut2eId: '123',
-                skillGroupId: '456'
+                roleId: '456'
             })
 
             // end handles the response
@@ -249,25 +249,25 @@ describe('/api/skillSkillGroupConnector', function() {
     resultNoArg = 'Invalid JSON object.';
 
     badResultPost = {
-        skillId: '123',
-        skillGroupId: '456',
+        attributeId: '123',
+        roleId: '456',
         createdAt: '2015-06-16T13:46:07.589Z',
         updatedAt: '2015-06-16T13:46:07.589Z',
         _id: '5580289f9a81250f00194d61'
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/skillSkillGroupConnector')
+        .post('/roleToAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillSkillGroupConnector with no skillGroupId field', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with no roleId field', function(done) {
         request(url)
-            .post('/api/skillSkillGroupConnector')
+            .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send({
-                skillId: '123',
+                attributeId: '123',
                 rol2eId: '456'
             })
 
@@ -293,12 +293,12 @@ describe('/api/skillSkillGroupConnector', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/skillSkillGroupConnector')
+        .post('/roleToAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillSkillGroupConnector not correctly formatted as Json', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector not correctly formatted as Json', function(done) {
         request(url)
-            .post('/api/skillSkillGroupConnector')
+            .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -318,19 +318,19 @@ describe('/api/skillSkillGroupConnector', function() {
 
     var resultAllGet = [{
         _id: '557eb8a89a81250f00194d52',
-        skillId: '557d7cbc9a81250f00194d46',
-        skillGroupId: '557eb7199a81250f00194d50',
+        attributeId: '557d7cbc9a81250f00194d46',
+        roleId: '557eb7199a81250f00194d50',
         createdAt: '2015-06-15T11:36:08.114Z',
         updatedAt: '2015-06-15T11:36:08.114Z'
     }];
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/skillSkillGroupConnector')
+        .get('/roleToAttributeConnector')
         .reply(200, resultAllGet);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all skillSkillGroupConnectors', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all roleToAttributeConnectors', function(done) {
         request(url)
-            .get('/api/skillSkillGroupConnector')
+            .get('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -351,21 +351,21 @@ describe('/api/skillSkillGroupConnector', function() {
 
     //===============================================================================
 
-    var resultGetBySkillGroupId = [{
+    var resultGetByRoleId = [{
         _id: '123',
-        skillId: '456',
-        skillGroupId: '789',
+        attributeId: '456',
+        roleId: '789',
         createdAt: '2015-06-15T11:36:08.114Z',
         updatedAt: '2015-06-15T11:36:08.114Z'
     }];
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/skillSkillGroupConnector?skillGroupId=789')
-        .reply(200, resultGetBySkillGroupId);
+        .get('/roleToAttributeConnector?roleId=789')
+        .reply(200, resultGetByRoleId);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a skillSkillGroupConnector by skillGroup id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a roleToAttributeConnector by role id', function(done) {
         request(url)
-            .get('/api/skillSkillGroupConnector/skillGroup/789')
+            .get('/api/roleToAttributeConnector/role/789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -379,28 +379,28 @@ describe('/api/skillSkillGroupConnector', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultGetBySkillGroupId));
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultGetByRoleId));
                 done();
             });
     });
 
     //===============================================================================
 
-    var resultGetBySkillId = [{
+    var resultGetByAttributeId = [{
         _id: '123',
-        skillId: '456',
-        skillGroupId: '789',
+        attributeId: '456',
+        roleId: '789',
         createdAt: '2015-06-15T11:36:08.114Z',
         updatedAt: '2015-06-15T11:36:08.114Z'
     }];
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/skillSkillGroupConnector?skillId=456')
-        .reply(200, resultGetBySkillId);
+        .get('/roleToAttributeConnector?attributeId=456')
+        .reply(200, resultGetByAttributeId);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a skillSkillGroupConnector by skill id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a roleToAttributeConnector by attribute id', function(done) {
         request(url)
-            .get('/api/skillSkillGroupConnector/skill/456')
+            .get('/api/roleToAttributeConnector/attribute/456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -414,7 +414,7 @@ describe('/api/skillSkillGroupConnector', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultGetBySkillId));
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultGetByAttributeId));
                 done();
             });
     });
@@ -426,12 +426,12 @@ describe('/api/skillSkillGroupConnector', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/skillSkillGroupConnector?skillGroupId=123')
+        .get('/roleToAttributeConnector?roleId=123')
         .reply(404, resultNotInDb);
 
-    it('should reply with HTTP status code 404 and a correctly formatted string when getting skillSkillGroupConnectors by skillGroup id not in the database', function(done) {
+    it('should reply with HTTP status code 404 and a correctly formatted string when getting roleToAttributeConnectors by role id not in the database', function(done) {
         request(url)
-            .get('/api/skillSkillGroupConnector/skillGroup/123')
+            .get('/api/roleToAttributeConnector/role/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -454,12 +454,12 @@ describe('/api/skillSkillGroupConnector', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/skillSkillGroupConnector?skillId=123')
+        .get('/roleToAttributeConnector?attributeId=123')
         .reply(404, resultNotInDb);
 
-    it('should reply with HTTP status code 404 and a correctly formatted string when getting skillSkillGroupConnectors by skill id not in the database', function(done) {
+    it('should reply with HTTP status code 404 and a correctly formatted string when getting roleToAttributeConnectors by attribute id not in the database', function(done) {
         request(url)
-            .get('/api/skillSkillGroupConnector/skill/123')
+            .get('/api/roleToAttributeConnector/attribute/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -482,12 +482,12 @@ describe('/api/skillSkillGroupConnector', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .delete('/skillSkillGroupConnector/123')
+        .delete('/roleToAttributeConnector/123')
         .reply(204, {});
 
-    it('should reply with HTTP status code 200 and a correctly formatted string when deleting a skillSkillGroupConnector by its id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted string when deleting a roleToAttributeConnector by its id', function(done) {
         request(url)
-            .delete('/api/skillSkillGroupConnector/123')
+            .delete('/api/roleToAttributeConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -508,15 +508,15 @@ describe('/api/skillSkillGroupConnector', function() {
 
     //===============================================================================
 
-    var resultSkillGroupNotInDb = 'No item with the given id was found.';
+    var resultRoleNotInDb = 'No item with the given id was found.';
 
     nock(mockedUrl, {allowUnmocked: true})
-        .delete('/skillSkillGroupConnector/123')
-        .reply(404, resultSkillGroupNotInDb);
+        .delete('/roleToAttributeConnector/123')
+        .reply(404, resultRoleNotInDb);
 
-    it('should reply with HTTP status code 404 and a correctly formatted string when deleting a skillSkillGroupConnector not in the database', function(done) {
+    it('should reply with HTTP status code 404 and a correctly formatted string when deleting a roleToAttributeConnector not in the database', function(done) {
         request(url)
-            .delete('/api/skillSkillGroupConnector/123')
+            .delete('/api/roleToAttributeConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -527,7 +527,7 @@ describe('/api/skillSkillGroupConnector', function() {
                 expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
-                expect(res.error.text).to.equal(resultSkillGroupNotInDb);
+                expect(res.error.text).to.equal(resultRoleNotInDb);
                 done();
             });
     });

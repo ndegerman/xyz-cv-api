@@ -5,13 +5,13 @@ var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.API_URL_DEV + 'roleAttributeConnector';
+var url = config.API_URL_DEV + 'skillToSkillGroupConnector';
 
-exports.createRoleAttributeConnector = function(roleAttributeConnector) {
+exports.createSkillToSkillGroupConnector = function(skillToSkillGroupConnector) {
     var options = {
         uri: url,
         method: 'POST',
-        json: roleAttributeConnector
+        json: skillToSkillGroupConnector
     };
 
     return q.nfcall(request, options)
@@ -19,9 +19,9 @@ exports.createRoleAttributeConnector = function(roleAttributeConnector) {
         .then(responseHandler.parsePost);
 };
 
-exports.getRoleAttributeConnectorsByAttributeId = function(id) {
+exports.getSkillToSkillGroupConnectorsBySkillId = function(id) {
     var options = {
-        uri: url + '?attributeId=' + id,
+        uri: url + '?skillId=' + id,
         method: 'GET'
     };
 
@@ -31,9 +31,9 @@ exports.getRoleAttributeConnectorsByAttributeId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getRoleAttributeConnectorsByRoleId = function(id) {
+exports.getSkillToSkillGroupConnectorsBySkillGroupId = function(id) {
     var options = {
-        uri: url + '?roleId=' + id,
+        uri: url + '?skillGroupId=' + id,
         method: 'GET'
     };
 
@@ -43,7 +43,7 @@ exports.getRoleAttributeConnectorsByRoleId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getAllRoleAttributeConnectors = function() {
+exports.getAllSkillToSkillGroupConnectors = function() {
     var options = {
         uri: url,
         method: 'GET'
@@ -55,9 +55,9 @@ exports.getAllRoleAttributeConnectors = function() {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.deleteRoleAttributeConnector = function(roleAttributeConnectorId) {
+exports.deleteSkillToSkillGroupConnector = function(skillToSkillGroupConnectorId) {
     var options = {
-        uri: url + '/' + roleAttributeConnectorId,
+        uri: url + '/' + skillToSkillGroupConnectorId,
         method: 'DELETE'
     };
 

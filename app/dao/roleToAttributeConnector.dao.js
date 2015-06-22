@@ -5,13 +5,13 @@ var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.API_URL_DEV + 'userSkillConnector';
+var url = config.API_URL_DEV + 'roleToAttributeConnector';
 
-exports.createUserSkillConnector = function(userSkillConnector) {
+exports.createRoleToAttributeConnector = function(roleToAttributeConnector) {
     var options = {
         uri: url,
         method: 'POST',
-        json: userSkillConnector
+        json: roleToAttributeConnector
     };
 
     return q.nfcall(request, options)
@@ -19,9 +19,9 @@ exports.createUserSkillConnector = function(userSkillConnector) {
         .then(responseHandler.parsePost);
 };
 
-exports.getUserSkillConnectorsBySkillId = function(id) {
+exports.getRoleToAttributeConnectorsByAttributeId = function(id) {
     var options = {
-        uri: url + '?skillId=' + id,
+        uri: url + '?attributeId=' + id,
         method: 'GET'
     };
 
@@ -31,9 +31,9 @@ exports.getUserSkillConnectorsBySkillId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getUserSkillConnectorsByUserId = function(id) {
+exports.getRoleToAttributeConnectorsByRoleId = function(id) {
     var options = {
-        uri: url + '?userId=' + id,
+        uri: url + '?roleId=' + id,
         method: 'GET'
     };
 
@@ -43,7 +43,7 @@ exports.getUserSkillConnectorsByUserId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getAllUserSkillConnectors = function() {
+exports.getAllRoleToAttributeConnectors = function() {
     var options = {
         uri: url,
         method: 'GET'
@@ -55,9 +55,9 @@ exports.getAllUserSkillConnectors = function() {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.deleteUserSkillConnector = function(userSkillConnectorId) {
+exports.deleteRoleToAttributeConnector = function(roleToAttributeConnectorId) {
     var options = {
-        uri: url + '/' + userSkillConnectorId,
+        uri: url + '/' + roleToAttributeConnectorId,
         method: 'DELETE'
     };
 

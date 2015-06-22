@@ -3,57 +3,57 @@
 /**
  * Module dependencies.
  */
-var roleAttributeConnectorController = require('../controllers/roleAttributeConnector.controller');
+var roleToAttributeConnectorController = require('../controllers/roleToAttributeConnector.controller');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {
 
-    // create a roleAttributeConnector
+    // create a roleToAttributeConnector
     routes.post('/', function(request, response) {
-        roleAttributeConnectorController.createRoleAttributeConnector(request.body)
+        roleToAttributeConnectorController.createRoleToAttributeConnector(request.body)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get all roleAttributeConnectors
+    // get all roleToAttributeConnectors
     routes.get('/', function(request, response) {
-        roleAttributeConnectorController.getAllRoleAttributeConnectors()
+        roleToAttributeConnectorController.getAllRoleToAttributeConnectors()
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete the roleAttributeConnector with the given id
+    // delete the roleToAttributeConnector with the given id
     routes.delete('/:id', function(request, response) {
-        roleAttributeConnectorController.deleteRoleAttributeConnectorById(request.params.id)
+        roleToAttributeConnectorController.deleteRoleToAttributeConnectorById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get roleAttributeConnectors for role
+    // get roleToAttributeConnectors for role
     routes.get('/role/:id', function(request, response) {
-        roleAttributeConnectorController.getRoleAttributeConnectorsByRoleId(request.params.id)
+        roleToAttributeConnectorController.getRoleToAttributeConnectorsByRoleId(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get roleAttributeConnectors for attribute
+    // get roleToAttributeConnectors for attribute
     routes.get('/attribute/:id', function(request, response) {
-        roleAttributeConnectorController.getRoleAttributeConnectorsByAttributeId(request.params.id)
+        roleToAttributeConnectorController.getRoleToAttributeConnectorsByAttributeId(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete roleAttributeConnectors containing the given role id
+    // delete roleToAttributeConnectors containing the given role id
     routes.delete('/role/:id', function(request, response) {
-        roleAttributeConnectorController.deleteRoleAttributeConnectorsByRoleId(request.params.id)
+        roleToAttributeConnectorController.deleteRoleToAttributeConnectorsByRoleId(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete roleAttributeConnectors containing the given attribute id
+    // delete roleToAttributeConnectors containing the given attribute id
     routes.delete('/attribute/:id', function(request, response) {
-        roleAttributeConnectorController.deleteRoleAttributeConnectorsByAttributeId(request.params.id)
+        roleToAttributeConnectorController.deleteRoleToAttributeConnectorsByAttributeId(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

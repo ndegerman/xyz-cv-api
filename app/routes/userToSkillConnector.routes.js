@@ -3,57 +3,57 @@
 /**
  * Module dependencies.
  */
-var userSkillConnectorController = require('../controllers/userSkillConnector.controller');
+var userToSkillConnectorController = require('../controllers/userToSkillConnector.controller');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {
 
-    // create an userSkillConnector
+    // create an userToSkillConnector
     routes.post('/', function(request, response) {
-        userSkillConnectorController.createUserSkillConnector(request.body)
+        userToSkillConnectorController.createUserToSkillConnector(request.body)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get all userSkillConnectors
+    // get all userToSkillConnectors
     routes.get('/', function(request, response) {
-        userSkillConnectorController.getAllUserSkillConnectors()
+        userToSkillConnectorController.getAllUserToSkillConnectors()
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete the userSkillConnector with the given id
+    // delete the userToSkillConnector with the given id
     routes.delete('/:id', function(request, response) {
-        userSkillConnectorController.deleteUserSkillConnectorById(request.params.id)
+        userToSkillConnectorController.deleteUserToSkillConnectorById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get userSkillConnectors for user
+    // get userToSkillConnectors for user
     routes.get('/user/:id', function(request, response) {
-        userSkillConnectorController.getUserSkillConnectorsByUserId(request.params.id)
+        userToSkillConnectorController.getUserToSkillConnectorsByUserId(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get userSkillConnectors for skill
+    // get userToSkillConnectors for skill
     routes.get('/skill/:id', function(request, response) {
-        userSkillConnectorController.getUserSkillConnectorsBySkillId(request.params.id)
+        userToSkillConnectorController.getUserToSkillConnectorsBySkillId(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete userSkillConnectors containing the given user id
+    // delete userToSkillConnectors containing the given user id
     routes.delete('/user/:id', function(request, response) {
-        userSkillConnectorController.deleteUserSkillConnectorsByUserId(request.params.id)
+        userToSkillConnectorController.deleteUserToSkillConnectorsByUserId(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete userSkillConnectors containing the given skill id
+    // delete userToSkillConnectors containing the given skill id
     routes.delete('/skill/:id', function(request, response) {
-        userSkillConnectorController.deleteUserSkillConnectorsBySkillId(request.params.id)
+        userToSkillConnectorController.deleteUserToSkillConnectorsBySkillId(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
