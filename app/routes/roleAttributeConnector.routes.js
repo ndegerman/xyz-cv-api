@@ -3,57 +3,57 @@
 /**
  * Module dependencies.
  */
-var accessController = require('../controllers/access.controller');
+var roleAttributeConnectorController = require('../controllers/roleAttributeConnector.controller');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {
 
-    // create an access
+    // create a roleAttributeConnector
     routes.post('/', function(request, response) {
-        accessController.createAccess(request.body)
+        roleAttributeConnectorController.createRoleAttributeConnector(request.body)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get all accesses
+    // get all roleAttributeConnectors
     routes.get('/', function(request, response) {
-        accessController.getAllAccesses()
+        roleAttributeConnectorController.getAllRoleAttributeConnectors()
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete the access with the given id
+    // delete the roleAttributeConnector with the given id
     routes.delete('/:id', function(request, response) {
-        accessController.deleteAccessById(request.params.id)
+        roleAttributeConnectorController.deleteRoleAttributeConnectorById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get accesses for role
+    // get roleAttributeConnectors for role
     routes.get('/role/:id', function(request, response) {
-        accessController.getAccessesByRoleId(request.params.id)
+        roleAttributeConnectorController.getRoleAttributeConnectorsByRoleId(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get accesses for attribute
+    // get roleAttributeConnectors for attribute
     routes.get('/attribute/:id', function(request, response) {
-        accessController.getAccessesByAttributeId(request.params.id)
+        roleAttributeConnectorController.getRoleAttributeConnectorsByAttributeId(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete accesses containing the given role id
+    // delete roleAttributeConnectors containing the given role id
     routes.delete('/role/:id', function(request, response) {
-        accessController.deleteAccessesByRoleId(request.params.id)
+        roleAttributeConnectorController.deleteRoleAttributeConnectorsByRoleId(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete accesses containing the given attribute id
+    // delete roleAttributeConnectors containing the given attribute id
     routes.delete('/attribute/:id', function(request, response) {
-        accessController.deleteAccessesByAttributeId(request.params.id)
+        roleAttributeConnectorController.deleteRoleAttributeConnectorsByAttributeId(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

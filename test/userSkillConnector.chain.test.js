@@ -37,7 +37,7 @@ describe('/api/userSkillConnector', function() {
         })
         .reply(200, resultPost);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting an userSkillConnector', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting a userSkillConnector', function(done) {
         request(url)
             .post('/api/userSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -77,7 +77,7 @@ describe('/api/userSkillConnector', function() {
         .post('/userSkillConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an userSkillConnector with no body', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a userSkillConnector with no body', function(done) {
         request(url)
             .post('/api/userSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -111,7 +111,7 @@ describe('/api/userSkillConnector', function() {
         .post('/userSkillConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an userSkillConnector with the field for skill id empty', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a userSkillConnector with the field for skill id empty', function(done) {
         request(url)
             .post('/api/userSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -148,7 +148,7 @@ describe('/api/userSkillConnector', function() {
         .post('/userSkillConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an userSkillConnector with the field for user id empty', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a userSkillConnector with the field for user id empty', function(done) {
         request(url)
             .post('/api/userSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -185,7 +185,7 @@ describe('/api/userSkillConnector', function() {
         .post('/userSkillConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an userSkillConnector with too many fields in the body', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a userSkillConnector with too many fields in the body', function(done) {
         request(url)
             .post('/api/userSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -223,7 +223,7 @@ describe('/api/userSkillConnector', function() {
         .post('/userSkillConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an userSkillConnector with no skillId field', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a userSkillConnector with no skillId field', function(done) {
         request(url)
             .post('/api/userSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -260,7 +260,7 @@ describe('/api/userSkillConnector', function() {
         .post('/userSkillConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an userSkillConnector with no userId field', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a userSkillConnector with no userId field', function(done) {
         request(url)
             .post('/api/userSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -296,7 +296,7 @@ describe('/api/userSkillConnector', function() {
         .post('/userSkillConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an userSkillConnector not correctly formatted as Json', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a userSkillConnector not correctly formatted as Json', function(done) {
         request(url)
             .post('/api/userSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -363,7 +363,7 @@ describe('/api/userSkillConnector', function() {
         .get('/userSkillConnector?userId=789')
         .reply(200, resultGetByUserId);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting an userSkillConnector by user id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a userSkillConnector by user id', function(done) {
         request(url)
             .get('/api/userSkillConnector/user/789')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -398,7 +398,7 @@ describe('/api/userSkillConnector', function() {
         .get('/userSkillConnector?skillId=456')
         .reply(200, resultGetBySkillId);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting an userSkillConnector by skill id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a userSkillConnector by skill id', function(done) {
         request(url)
             .get('/api/userSkillConnector/skill/456')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -485,7 +485,7 @@ describe('/api/userSkillConnector', function() {
         .delete('/userSkillConnector/123')
         .reply(204, {});
 
-    it('should reply with HTTP status code 200 and a correctly formatted string when deleting an userSkillConnector by its id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted string when deleting a userSkillConnector by its id', function(done) {
         request(url)
             .delete('/api/userSkillConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -514,7 +514,7 @@ describe('/api/userSkillConnector', function() {
         .delete('/userSkillConnector/123')
         .reply(404, resultUserNotInDb);
 
-    it('should reply with HTTP status code 404 and a correctly formatted string when deleting an userSkillConnector not in the database', function(done) {
+    it('should reply with HTTP status code 404 and a correctly formatted string when deleting a userSkillConnector not in the database', function(done) {
         request(url)
             .delete('/api/userSkillConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')

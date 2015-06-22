@@ -18,7 +18,7 @@ describe('server', function() {
     });
 });
 
-describe('/api/access', function() {
+describe('/api/roleAttributeConnector', function() {
 
     //===============================================================================
 
@@ -31,15 +31,15 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/access', {
+        .post('/roleAttributeConnector', {
             attributeId: '123',
             roleId: '456'
         })
         .reply(200, resultPost);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting an access', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting a roleAttributeConnector', function(done) {
         request(url)
-            .post('/api/access')
+            .post('/api/roleAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -74,12 +74,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/access')
+        .post('/roleAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with no body', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleAttributeConnector with no body', function(done) {
         request(url)
-            .post('/api/access')
+            .post('/api/roleAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -108,12 +108,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/access')
+        .post('/roleAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with the field for attribute id empty', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleAttributeConnector with the field for attribute id empty', function(done) {
         request(url)
-            .post('/api/access')
+            .post('/api/roleAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -145,12 +145,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/access')
+        .post('/roleAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with the field for role id empty', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleAttributeConnector with the field for role id empty', function(done) {
         request(url)
-            .post('/api/access')
+            .post('/api/roleAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -182,12 +182,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/access')
+        .post('/roleAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with too many fields in the body', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleAttributeConnector with too many fields in the body', function(done) {
         request(url)
-            .post('/api/access')
+            .post('/api/roleAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -220,12 +220,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/access')
+        .post('/roleAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with no attributeId field', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleAttributeConnector with no attributeId field', function(done) {
         request(url)
-            .post('/api/access')
+            .post('/api/roleAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -257,12 +257,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/access')
+        .post('/roleAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access with no roleId field', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleAttributeConnector with no roleId field', function(done) {
         request(url)
-            .post('/api/access')
+            .post('/api/roleAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -293,12 +293,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .post('/access')
+        .post('/roleAttributeConnector')
         .reply(200, badResultPost);
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an access not correctly formatted as Json', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleAttributeConnector not correctly formatted as Json', function(done) {
         request(url)
-            .post('/api/access')
+            .post('/api/roleAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -325,12 +325,12 @@ describe('/api/access', function() {
     }];
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/access')
+        .get('/roleAttributeConnector')
         .reply(200, resultAllGet);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all accesses', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all roleAttributeConnectors', function(done) {
         request(url)
-            .get('/api/access')
+            .get('/api/roleAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -360,12 +360,12 @@ describe('/api/access', function() {
     }];
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/access?roleId=789')
+        .get('/roleAttributeConnector?roleId=789')
         .reply(200, resultGetByRoleId);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting an access by role id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a roleAttributeConnector by role id', function(done) {
         request(url)
-            .get('/api/access/role/789')
+            .get('/api/roleAttributeConnector/role/789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -395,12 +395,12 @@ describe('/api/access', function() {
     }];
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/access?attributeId=456')
+        .get('/roleAttributeConnector?attributeId=456')
         .reply(200, resultGetByAttributeId);
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting an access by attribute id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a roleAttributeConnector by attribute id', function(done) {
         request(url)
-            .get('/api/access/attribute/456')
+            .get('/api/roleAttributeConnector/attribute/456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -426,12 +426,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/access?roleId=123')
+        .get('/roleAttributeConnector?roleId=123')
         .reply(404, resultNotInDb);
 
-    it('should reply with HTTP status code 404 and a correctly formatted string when getting accesses by role id not in the database', function(done) {
+    it('should reply with HTTP status code 404 and a correctly formatted string when getting roleAttributeConnectors by role id not in the database', function(done) {
         request(url)
-            .get('/api/access/role/123')
+            .get('/api/roleAttributeConnector/role/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -454,12 +454,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .get('/access?attributeId=123')
+        .get('/roleAttributeConnector?attributeId=123')
         .reply(404, resultNotInDb);
 
-    it('should reply with HTTP status code 404 and a correctly formatted string when getting accesses by attribute id not in the database', function(done) {
+    it('should reply with HTTP status code 404 and a correctly formatted string when getting roleAttributeConnectors by attribute id not in the database', function(done) {
         request(url)
-            .get('/api/access/attribute/123')
+            .get('/api/roleAttributeConnector/attribute/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -482,12 +482,12 @@ describe('/api/access', function() {
     };
 
     nock(mockedUrl, {allowUnmocked: true})
-        .delete('/access/123')
+        .delete('/roleAttributeConnector/123')
         .reply(204, {});
 
-    it('should reply with HTTP status code 200 and a correctly formatted string when deleting an access by its id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted string when deleting a roleAttributeConnector by its id', function(done) {
         request(url)
-            .delete('/api/access/123')
+            .delete('/api/roleAttributeConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -511,12 +511,12 @@ describe('/api/access', function() {
     var resultRoleNotInDb = 'No item with the given id was found.';
 
     nock(mockedUrl, {allowUnmocked: true})
-        .delete('/access/123')
+        .delete('/roleAttributeConnector/123')
         .reply(404, resultRoleNotInDb);
 
-    it('should reply with HTTP status code 404 and a correctly formatted string when deleting an access not in the database', function(done) {
+    it('should reply with HTTP status code 404 and a correctly formatted string when deleting a roleAttributeConnector not in the database', function(done) {
         request(url)
-            .delete('/api/access/123')
+            .delete('/api/roleAttributeConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')

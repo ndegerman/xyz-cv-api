@@ -5,13 +5,13 @@ var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.API_URL_DEV + 'access';
+var url = config.API_URL_DEV + 'roleAttributeConnector';
 
-exports.createAccess = function(access) {
+exports.createRoleAttributeConnector = function(roleAttributeConnector) {
     var options = {
         uri: url,
         method: 'POST',
-        json: access
+        json: roleAttributeConnector
     };
 
     return q.nfcall(request, options)
@@ -19,7 +19,7 @@ exports.createAccess = function(access) {
         .then(responseHandler.parsePost);
 };
 
-exports.getAccessesByAttributeId = function(id) {
+exports.getRoleAttributeConnectorsByAttributeId = function(id) {
     var options = {
         uri: url + '?attributeId=' + id,
         method: 'GET'
@@ -31,7 +31,7 @@ exports.getAccessesByAttributeId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getAccessesByRoleId = function(id) {
+exports.getRoleAttributeConnectorsByRoleId = function(id) {
     var options = {
         uri: url + '?roleId=' + id,
         method: 'GET'
@@ -43,7 +43,7 @@ exports.getAccessesByRoleId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getAllAccesses = function() {
+exports.getAllRoleAttributeConnectors = function() {
     var options = {
         uri: url,
         method: 'GET'
@@ -55,9 +55,9 @@ exports.getAllAccesses = function() {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.deleteAccess = function(accessId) {
+exports.deleteRoleAttributeConnector = function(roleAttributeConnectorId) {
     var options = {
-        uri: url + '/' + accessId,
+        uri: url + '/' + roleAttributeConnectorId,
         method: 'DELETE'
     };
 
