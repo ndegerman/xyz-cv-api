@@ -40,5 +40,5 @@ exports.getAllUsers = function() {
     return q.nfcall(request, options)
         .then(responseHandler.parseResponse)
         .then(responseHandler.parseGet)
-        .then(responseHandler.parseMonoQuery);
+        .then(responseHandler.parsePolyQuery);
 };

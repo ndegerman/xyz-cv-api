@@ -5,13 +5,13 @@ var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.API_URL_DEV + 'userSkillConnector';
+var url = config.API_URL_DEV + 'skillToSkillGroupConnector';
 
-exports.createUserSkillConnector = function(userSkillConnector) {
+exports.createSkillToSkillGroupConnector = function(skillToSkillGroupConnector) {
     var options = {
         uri: url,
         method: 'POST',
-        json: userSkillConnector
+        json: skillToSkillGroupConnector
     };
 
     return q.nfcall(request, options)
@@ -19,7 +19,7 @@ exports.createUserSkillConnector = function(userSkillConnector) {
         .then(responseHandler.parsePost);
 };
 
-exports.getUserSkillConnectorsBySkillId = function(id) {
+exports.getSkillToSkillGroupConnectorsBySkillId = function(id) {
     var options = {
         uri: url + '?skillId=' + id,
         method: 'GET'
@@ -31,9 +31,9 @@ exports.getUserSkillConnectorsBySkillId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getUserSkillConnectorsByUserId = function(id) {
+exports.getSkillToSkillGroupConnectorsBySkillGroupId = function(id) {
     var options = {
-        uri: url + '?userId=' + id,
+        uri: url + '?skillGroupId=' + id,
         method: 'GET'
     };
 
@@ -43,7 +43,7 @@ exports.getUserSkillConnectorsByUserId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getAllUserSkillConnectors = function() {
+exports.getAllSkillToSkillGroupConnectors = function() {
     var options = {
         uri: url,
         method: 'GET'
@@ -55,9 +55,9 @@ exports.getAllUserSkillConnectors = function() {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.deleteUserSkillConnector = function(userSkillConnectorId) {
+exports.deleteSkillToSkillGroupConnector = function(skillToSkillGroupConnectorId) {
     var options = {
-        uri: url + '/' + userSkillConnectorId,
+        uri: url + '/' + skillToSkillGroupConnectorId,
         method: 'DELETE'
     };
 
