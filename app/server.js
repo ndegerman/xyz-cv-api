@@ -9,10 +9,12 @@ var morgan = require('morgan');
 var attributeRoutes = require('./routes/attribute.routes')(express.Router());
 var userRoutes = require('./routes/user.routes')(express.Router());
 var roleRoutes = require('./routes/role.routes')(express.Router());
-var roleAttributeConnectorRoutes = require('./routes/roleAttributeConnector.routes')(express.Router());
 var skillRoutes = require('./routes/skill.routes')(express.Router());
 var skillGroupRoutes = require('./routes/skillGroup.routes')(express.Router());
+
+var roleAttributeConnectorRoutes = require('./routes/roleAttributeConnector.routes')(express.Router());
 var userSkillConnectorRoutes = require('./routes/userSkillConnector.routes.js')(express.Router());
+var skillSkillGroupConnectorRoutes = require('./routes/skillSkillGroupConnector.routes.js')(express.Router());
 
 var errorMiddleware = require('./middleware/error.middleware');
 var authenticationMiddleware = require('./middleware/authentication.middleware');
@@ -42,10 +44,12 @@ app.use(authenticationMiddleware.authentication);
 app.use('/api/attribute', attributeRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/role', roleRoutes);
-app.use('/api/roleAttributeConnector', roleAttributeConnectorRoutes);
 app.use('/api/skill', skillRoutes);
 app.use('/api/skillGroup', skillGroupRoutes);
+
+app.use('/api/roleAttributeConnector', roleAttributeConnectorRoutes);
 app.use('/api/userSkillConnector', userSkillConnectorRoutes);
+app.use('/api/skillSkillGroupConnector', skillSkillGroupConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
 
