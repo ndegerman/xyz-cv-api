@@ -4,7 +4,6 @@ var request = require('request');
 var q = require('q');
 var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
-var errorHandler = require('../utils/error.handler');
 
 var url = config.API_URL_DEV + 'user';
 
