@@ -16,5 +16,28 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    //get user by id
+    routes.get('/:id', function(request, response) {
+        userController.getUserById(request.params.id)
+            .then(responseHandler.sendJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+
+    });
+
+    // delete a user given an id
+    routes.delete('/:id', function(request, response) {
+        userController.deleteUserById(request.params.id)
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    // change role for a user given an id
+    routes.put('/:id', function(request, response) {
+        userController.changeRoleForUser(request)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+
+    });
+
     return routes;
 };

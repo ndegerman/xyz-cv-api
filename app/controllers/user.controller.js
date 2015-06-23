@@ -7,7 +7,7 @@ var errorHandler = require('../utils/error.handler');
 // TODO: Make the validation more covering
 function validateUser(user) {
     return q.promise(function(resolve, reject) {
-        if (user && user.name && user.email) {
+        if (user && user.name && user.email && user.role) {
             return resolve(user);
         }
 
@@ -19,8 +19,29 @@ function validateUser(user) {
 exports.getUserTemplate = function(name, email) {
     return {
         email: email,
-        name: name
+        name: name,
+        role: 'user'
     };
+};
+
+function validateBodyForPut(request) {
+    return q.promise(function(resolve, reject) {
+        if (request.body.role) {
+            return resolve(request);
+        }
+
+        return errorHandler.getHttpError(400)
+            .then(reject);
+    });
+}
+
+exports.changeRoleForUser = function(request) {
+    return validateBodyForPut(request)
+        .then(userDao.updateUser);
+};
+
+exports.getUserById = function(id) {
+    return userDao.getUserById(id);
 };
 
 exports.createNewUser = function(user) {
@@ -47,4 +68,8 @@ exports.getUserByEmail = function(email) {
 
 exports.getAllUsers = function() {
     return userDao.getAllUsers();
+};
+
+exports.deleteUserById = function(id) {
+    return userDao.deleteUserById(id);
 };
