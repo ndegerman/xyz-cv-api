@@ -31,9 +31,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // change role for a user given an id
+    // change field for a user given an id
     routes.put('/:id', function(request, response) {
-        userController.changeRoleForUser(request)
+        userController.changeFieldForUser(request)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 

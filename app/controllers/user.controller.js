@@ -35,9 +35,44 @@ function validateBodyForPut(request) {
     });
 }
 
-exports.changeRoleForUser = function(request) {
+function updateUserObject(body) {
+    function extend(object, props) {
+        for (var prop in props) {
+            if (props.hasOwnProperty(prop)) {
+                object[prop] = props[prop];
+            }
+        }
+    }
+
+    return function(user) {
+        extend(user, body);
+        return user;
+    };
+}
+
+function getUserByIdFunction(id) {
+    return function() {
+        return exports.getUserById(id);
+    };
+}
+
+exports.changeFieldForUser = function(request) {
+
+    //validate request body
     return validateBodyForPut(request)
-        .then(userDao.updateUser);
+
+        //get user to update
+        .then(getUserByIdFunction(request.params.id))
+
+        //get current user
+
+        //check if authorized
+
+        //update user object
+        .then(updateUserObject(request.body))
+
+        //update user in database
+        .then(userDao.changeFieldForUser);
 };
 
 exports.getUserById = function(id) {

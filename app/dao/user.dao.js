@@ -19,7 +19,7 @@ exports.createNewUser = function(user) {
         .then(responseHandler.parsePost);
 };
 
-exports.changeRoleForUser = function(user) {
+exports.changeFieldForUser = function(user) {
     var options = {
         uri: url + '/' + user._id,
         method: 'PUT',
@@ -28,32 +28,6 @@ exports.changeRoleForUser = function(user) {
 
     return q.nfcall(request, options)
         .then(responseHandler.parsePut);
-};
-
-exports.directToChangeFunction = function(body) {
-    return function(user) {
-        if (body.role) {
-            user.role = body.role;
-            return exports.changeRoleForUser(user);
-        } else {
-            return errorHandler.getHttpError(400);
-        }
-    };
-};
-
-exports.updateUser = function(requested) {
-
-    //get current user
-    //exports.getUserByEmail(requested.rawHeaders[17])
-
-    //get user to update
-    return exports.getUserById(requested.params.id)
-
-    //check if authorized
-     //   .then(checkIfUserIsAuthorized)
-
-    //update user in database
-        .then(exports.directToChangeFunction(requested.body));
 };
 
 exports.getUserById = function(id) {
