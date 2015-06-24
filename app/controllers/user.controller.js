@@ -16,32 +16,31 @@ function validateUser(user) {
     });
 }
 
-function validateBodyForPut(request) {
-    var allowed = [
-        'role'
-        ];
-
-    var body = request.body;
-
-    return q.promise(function(resolve, reject) {
-        for (var field in body) {
-            if (allowed.indexOf(field) < 0) {
-                return errorHandler.getHttpError(400)
-                    .then(reject);
-            }
-        }
-
-        return resolve(request);
-    });
-}
-
-exports.getUserTemplate = function(name, email) {
+function getUserTemplate(name, email) {
     return {
         email: email,
         name: name,
         role: 'user'
     };
-};
+}
+
+function validateBodyForPut(body) {
+    //won't check for values, so use 'a' and 'b' as placeholders
+    var allowed = getUserTemplate('a', 'b');
+
+    return q.promise(function(resolve, reject) {
+        for (var field in body) {
+            if (body.hasOwnProperty(field)) {
+                if (!allowed.hasOwnProperty(field)) {
+                    return errorHandler.getHttpError(400)
+                        .then(reject);
+                }
+            }
+        }
+
+        return resolve(body);
+    });
+}
 
 function updateUserObject(body) {
     function extend(object, props) {
@@ -64,23 +63,23 @@ function getUserByIdFunction(id) {
     };
 }
 
-exports.changeFieldForUser = function(request) {
+exports.updateUser = function(body, id, email) {
 
     //validate request body
-    return validateBodyForPut(request)
+    return validateBodyForPut(body)
 
         //get user to update
-        .then(getUserByIdFunction(request.params.id))
+        .then(getUserByIdFunction(id))
 
         //get current user
 
         //check if authorized
 
         //update user object
-        .then(updateUserObject(request.body))
+        .then(updateUserObject(body))
 
         //update user in database
-        .then(userDao.changeFieldForUser);
+        .then(userDao.updateUser);
 };
 
 exports.getUserById = function(id) {
@@ -97,7 +96,7 @@ exports.createUserIfNonexistent = function(name, email) {
         .then(function(user) {
             return q.promise(function(resolve, reject) {
                 if (!user) {
-                    return exports.createNewUser(exports.getUserTemplate(name, email));
+                    return exports.createNewUser(getUserTemplate(name, email));
                 } else {
                     return resolve(user);
                 }

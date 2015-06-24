@@ -33,7 +33,7 @@ module.exports = function(routes) {
 
     // change field for a user given an id
     routes.put('/:id', function(request, response) {
-        userController.changeFieldForUser(request)
+        userController.updateUser(request.body, request.params.id, request.header.email)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 

@@ -22,15 +22,6 @@ exports.parseMonoQuery = function(body) {
     });
 };
 
-exports.parseNotListMonoQuery = function(body) {
-    return q.promise(function(resolve) {
-        exports.parsePolyQuery(body)
-            .then(function(items) {
-                return resolve(items);
-            });
-    });
-};
-
 // response[0]: the response
 // response[1]: the body
 exports.parseResponse = function(response) {

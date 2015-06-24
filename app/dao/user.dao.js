@@ -19,7 +19,7 @@ exports.createNewUser = function(user) {
         .then(responseHandler.parsePost);
 };
 
-exports.changeFieldForUser = function(user) {
+exports.updateUser = function(user) {
     var options = {
         uri: url + '/' + user._id,
         method: 'PUT',
@@ -33,13 +33,13 @@ exports.changeFieldForUser = function(user) {
 exports.getUserById = function(id) {
     var options = {
         uri: url + '/' + id,
-        method: 'GET'
+        method: 'GET',
+        json: true
     };
 
     return q.nfcall(request, options)
         .then(responseHandler.parseResponse)
-        .then(responseHandler.parseGet)
-        .then(responseHandler.parseNotListMonoQuery);
+        .then(responseHandler.parseGet);
 };
 
 exports.getUserByEmail = function(email) {
