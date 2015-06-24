@@ -16,6 +16,25 @@ function validateUser(user) {
     });
 }
 
+function validateBodyForPut(request) {
+    var allowed = [
+        'role'
+        ];
+
+    var body = request.body;
+
+    return q.promise(function(resolve, reject) {
+        for (var field in body) {
+            if (allowed.indexOf(field) < 0) {
+                return errorHandler.getHttpError(400)
+                    .then(reject);
+            }
+        }
+
+        return resolve(request);
+    });
+}
+
 exports.getUserTemplate = function(name, email) {
     return {
         email: email,
@@ -23,17 +42,6 @@ exports.getUserTemplate = function(name, email) {
         role: 'user'
     };
 };
-
-function validateBodyForPut(request) {
-    return q.promise(function(resolve, reject) {
-        if (request.body.role) {
-            return resolve(request);
-        }
-
-        return errorHandler.getHttpError(400)
-            .then(reject);
-    });
-}
 
 function updateUserObject(body) {
     function extend(object, props) {
