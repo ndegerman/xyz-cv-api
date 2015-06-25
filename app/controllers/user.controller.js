@@ -24,29 +24,11 @@ function getUserTemplate(name, email) {
     };
 }
 
-function validateBodyForPut(body) {
-    //won't check for values, so use 'a' and 'b' as placeholders
-    var allowed = getUserTemplate('a', 'b');
-
-    return q.promise(function(resolve, reject) {
-        for (var field in body) {
-            if (body.hasOwnProperty(field)) {
-                if (!allowed.hasOwnProperty(field)) {
-                    return errorHandler.getHttpError(400)
-                        .then(reject);
-                }
-            }
-        }
-
-        return resolve(body);
-    });
-}
-
-function updateUserObject(body) {
-    function extend(object, props) {
-        for (var prop in props) {
-            if (props.hasOwnProperty(prop)) {
-                object[prop] = props[prop];
+function setUserProperties(body) {
+    function extend(user, props) {
+        for (var prop in user) {
+            if (user.hasOwnProperty(prop) && props.hasOwnProperty(prop)) {
+                user[prop] = props[prop];
             }
         }
     }
@@ -57,28 +39,9 @@ function updateUserObject(body) {
     };
 }
 
-function getUserByIdFunction(id) {
-    return function() {
-        return exports.getUserById(id);
-    };
-}
-
-exports.updateUser = function(body, id, email) {
-
-    //validate request body
-    return validateBodyForPut(body)
-
-        //get user to update
-        .then(getUserByIdFunction(id))
-
-        //get current user
-
-        //check if authorized
-
-        //update user object
-        .then(updateUserObject(body))
-
-        //update user in database
+exports.updateUser = function(id, body, email) {
+    return exports.getUserById(id)
+        .then(setUserProperties(body))
         .then(userDao.updateUser);
 };
 

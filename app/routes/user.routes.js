@@ -31,9 +31,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // change field for a user given an id
+    // update a user given an id and an object
     routes.put('/:id', function(request, response) {
-        userController.updateUser(request.body, request.params.id, request.header.email)
+        userController.updateUser(request.params.id, request.body, request.header.email)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 
