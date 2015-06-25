@@ -7,7 +7,7 @@ var errorHandler = require('../utils/error.handler');
 // TODO: Make the validation more covering
 function validateUser(user) {
     return q.promise(function(resolve, reject) {
-        if (user && user.name && user.email) {
+        if (user && user.name && user.email && user.role) {
             return resolve(user);
         }
 
@@ -16,11 +16,37 @@ function validateUser(user) {
     });
 }
 
-exports.getUserTemplate = function(name, email) {
+function getUserTemplate(name, email) {
     return {
         email: email,
-        name: name
+        name: name,
+        role: 'user'
     };
+}
+
+function setUserProperties(body) {
+    function extend(user, props) {
+        for (var prop in user) {
+            if (user.hasOwnProperty(prop) && props.hasOwnProperty(prop)) {
+                user[prop] = props[prop];
+            }
+        }
+    }
+
+    return function(user) {
+        extend(user, body);
+        return user;
+    };
+}
+
+exports.updateUser = function(id, body, email) {
+    return exports.getUserById(id)
+        .then(setUserProperties(body))
+        .then(userDao.updateUser);
+};
+
+exports.getUserById = function(id) {
+    return userDao.getUserById(id);
 };
 
 exports.createNewUser = function(user) {
@@ -33,7 +59,7 @@ exports.createUserIfNonexistent = function(name, email) {
         .then(function(user) {
             return q.promise(function(resolve, reject) {
                 if (!user) {
-                    return exports.createNewUser(exports.getUserTemplate(name, email));
+                    return exports.createNewUser(getUserTemplate(name, email));
                 } else {
                     return resolve(user);
                 }
@@ -47,4 +73,8 @@ exports.getUserByEmail = function(email) {
 
 exports.getAllUsers = function() {
     return userDao.getAllUsers();
+};
+
+exports.deleteUserById = function(id) {
+    return userDao.deleteUserById(id);
 };

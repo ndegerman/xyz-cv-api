@@ -64,8 +64,13 @@ exports.parsePost = function(response) {
 
 exports.parsePut = function(response) {
     return q.promise(function(resolve, reject) {
+        if (!response) {
+            return errorHandler.getHttpError(406)
+                .then(reject);
+        }
+
         if (response[0].statusCode === 204) {
-            return resolve(response[1]);
+            return resolve();
         }
 
         return errorHandler.getHttpError(response[0].statusCode)
@@ -107,5 +112,11 @@ exports.sendJsonResponse = function(response) {
 exports.sendSuccessfulDeleteJsonResponse = function(response) {
     return function() {
         return response.json({ message: 'The item was successfully removed.' });
+    };
+};
+
+exports.sendSuccessfulPutJsonResponse = function(response) {
+    return function() {
+        return response.json({ message: 'The user was updated successfully.'});
     };
 };

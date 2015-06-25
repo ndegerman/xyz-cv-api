@@ -18,6 +18,7 @@ var skillToSkillGroupConnectorRoutes = require('./routes/skillToSkillGroupConnec
 
 var errorMiddleware = require('./middleware/error.middleware');
 var authenticationMiddleware = require('./middleware/authentication.middleware');
+var responseMiddleware = require('./middleware/response.middleware');
 
 var config = require('./config/config');
 
@@ -40,6 +41,8 @@ app.use(morgan('dev'));
 // ROUTES & MIDDLEWARE
 // ============================================================================
 app.use(authenticationMiddleware.authentication);
+app.use(responseMiddleware.nocache);
+app.use(responseMiddleware.accessControl);
 
 app.use('/api/attribute', attributeRoutes);
 app.use('/api/user', userRoutes);
