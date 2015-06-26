@@ -59,7 +59,8 @@ exports.createUserIfNonexistent = function(name, email) {
         .then(function(user) {
             return q.promise(function(resolve, reject) {
                 if (!user) {
-                    return exports.createNewUser(getUserTemplate(name, email));
+                    exports.createNewUser(getUserTemplate(name, email))
+                    .then(resolve);
                 } else {
                     return resolve(user);
                 }
