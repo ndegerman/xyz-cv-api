@@ -5,7 +5,6 @@
  */
 var q = require('q');
 var userController = require('../controllers/user.controller');
-var config = require('../config/config');
 var errorHandler = require('../utils/error.handler');
 var responseHandler = require('../utils/response.handler');
 

@@ -20,13 +20,14 @@ var errorMiddleware = require('./middleware/error.middleware');
 var authenticationMiddleware = require('./middleware/authentication.middleware');
 var responseMiddleware = require('./middleware/response.middleware');
 
-var config = require('./config/config');
+var config = require('config');
 
 var app = express();
 
 // CONFIG
 // ============================================================================
-var port = process.env.PORT || 9000;
+var port = process.env.PORT || 9001;
+
 app.set('superSecret', config.SECRET);
 
 // json

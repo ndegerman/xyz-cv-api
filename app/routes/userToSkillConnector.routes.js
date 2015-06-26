@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 var userToSkillConnectorController = require('../controllers/userToSkillConnector.controller');
-var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {

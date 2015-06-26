@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 var skillController = require('../controllers/skill.controller');
-var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {

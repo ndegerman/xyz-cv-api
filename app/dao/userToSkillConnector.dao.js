@@ -2,10 +2,10 @@
 
 var request = require('request');
 var q = require('q');
-var config = require('../config/config');
+var config = require('config');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.API_URL_DEV + 'userToSkillConnector';
+var url = config.API_URL + 'userToSkillConnector';
 
 exports.createUserToSkillConnector = function(userToSkillConnector) {
     var options = {

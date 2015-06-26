@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 var userController = require('../controllers/user.controller');
-var q = require('q');
 var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {

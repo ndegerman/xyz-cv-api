@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 var roleToAttributeConnectorController = require('../controllers/roleToAttributeConnector.controller');
-var config = require('../config/config');
 var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {

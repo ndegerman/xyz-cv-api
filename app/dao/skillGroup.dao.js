@@ -1,11 +1,11 @@
 'use strict';
 
 var request = require('request');
-var config = require('../config/config');
+var config = require('config');
 var q = require('q');
 var responseHandler = require('../utils/response.handler');
 
-var url = config.API_URL_DEV + 'skillGroup';
+var url = config.API_URL + 'skillGroup';
 
 exports.createNewSkillGroup = function(skillGroup) {
     var options = {
