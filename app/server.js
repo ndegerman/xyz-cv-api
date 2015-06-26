@@ -59,8 +59,6 @@ app.use(errorMiddleware.errorFilter);
 
 // for debugging
 app.get('/kalle', function(req, res) {
-    console.log('ASD');
-
     res.send('Your email is: ' + req.headers['x-forwarded-email'] + ' and your accname: ' + req.headers['x-forwarded-user']);
 });
 
