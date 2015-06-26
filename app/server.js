@@ -26,7 +26,7 @@ var app = express();
 
 // CONFIG
 // ============================================================================
-var port = process.env.PORT || 9001;
+var port = process.env.PORT || 9000;
 
 app.set('superSecret', config.SECRET);
 
