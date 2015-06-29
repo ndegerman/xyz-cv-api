@@ -1,5 +1,6 @@
 {
     "SECRET": "turbohipster",
     "API_URL": "http://localhost:3232/",
-    "PREFIX": "cv"
+    "PREFIX": "cv",
+    "UI_URL": "http://localhost:3000"
 }
