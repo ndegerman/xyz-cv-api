@@ -1,5 +1,7 @@
 'use strict';
 
+var config = require('config');
+
 // middleware
 exports.nocache = function(req, res, next) {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -10,7 +12,7 @@ exports.nocache = function(req, res, next) {
 
 exports.accessControl = function(req, res, next) {
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', config.UI_URL);
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
