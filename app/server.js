@@ -45,15 +45,15 @@ app.use(authenticationMiddleware.authentication);
 app.use(responseMiddleware.nocache);
 app.use(responseMiddleware.accessControl);
 
-app.use('/api/attribute', attributeRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/role', roleRoutes);
-app.use('/api/skill', skillRoutes);
-app.use('/api/skillGroup', skillGroupRoutes);
+app.use('/attribute', attributeRoutes);
+app.use('/user', userRoutes);
+app.use('/role', roleRoutes);
+app.use('/skill', skillRoutes);
+app.use('/skillGroup', skillGroupRoutes);
 
-app.use('/api/roleToAttributeConnector', roleToAttributeConnectorRoutes);
-app.use('/api/userToSkillConnector', userToSkillConnectorRoutes);
-app.use('/api/skillToSkillGroupConnector', skillToSkillGroupConnectorRoutes);
+app.use('/roleToAttributeConnector', roleToAttributeConnectorRoutes);
+app.use('/userToSkillConnector', userToSkillConnectorRoutes);
+app.use('/skillToSkillGroupConnector', skillToSkillGroupConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
 
