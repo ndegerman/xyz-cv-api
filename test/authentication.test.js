@@ -5,35 +5,41 @@ var request = require('supertest');
 var expect = require('expect.js');
 var url = 'http://localhost:9000';
 var nock = require('nock');
-var mockedUrl = 'http://localhost:3232/';
-
-describe('server', function() {
-    before(function(done) {
-        done();
-    });
-
-    after(function(done) {
-        server.close();
-        done();
-    });
-});
+var config = require('config');
+var mockedUrl = config.API_URL;
 
 describe('/api/authentication', function() {
 
-    //===============================================================================
+    afterEach(function(done) {
+        nock.cleanAll();
+        done();
+    });
 
-    var resultAllGet = [{
-        _id: '557d7cbc9a81250f00194d46',
-        name: 'test1',
-        createAt: '2015-06-14T13:08:12.348Z',
-        updatedAt: '2015-06-14T13:08:12.348Z'
+    var getUserByEmailResponse = [{
+        _id:'558bacd8ed289d0f00d2c5f3',
+        email:'a@softhouse.se',
+        name:'A',
+        createdAt:'2015-06-25T07:25:12.523Z',
+        updatedAt:'2015-06-25T07:25:12.523Z'
     }];
 
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/role')
-        .reply(200, resultAllGet);
+    //===============================================================================
 
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all roles with the correct headers set', function(done) {
+        var resultAllGet = [{
+            _id: '557d7cbc9a81250f00194d46',
+            name: 'test1',
+            createAt: '2015-06-14T13:08:12.348Z',
+            updatedAt: '2015-06-14T13:08:12.348Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/role')
+            .reply(200, resultAllGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/role')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -56,13 +62,23 @@ describe('/api/authentication', function() {
 
     //===============================================================================
 
-    var unauthorized = 'Unauthorized access.';
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/role')
-        .reply(200, resultAllGet);
-
     it('should reply with HTTP status code 401 when getting all roles with no headers set', function(done) {
+        var unauthorized = 'Unauthorized access.';
+
+        var resultAllGet = [{
+            _id: '557d7cbc9a81250f00194d46',
+            name: 'test1',
+            createAt: '2015-06-14T13:08:12.348Z',
+            updatedAt: '2015-06-14T13:08:12.348Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/role')
+            .reply(200, resultAllGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/role')
             .send()
@@ -79,11 +95,23 @@ describe('/api/authentication', function() {
 
     //===============================================================================
 
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/role')
-        .reply(200, resultAllGet);
-
     it('should reply with HTTP status code 401 when getting all roles with no email header set', function(done) {
+        var unauthorized = 'Unauthorized access.';
+
+        var resultAllGet = [{
+            _id: '557d7cbc9a81250f00194d46',
+            name: 'test1',
+            createAt: '2015-06-14T13:08:12.348Z',
+            updatedAt: '2015-06-14T13:08:12.348Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/role')
+            .reply(200, resultAllGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/role')
             .set('x-forwarded-user', 'A')
@@ -102,11 +130,23 @@ describe('/api/authentication', function() {
 
     //===============================================================================
 
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/role')
-        .reply(200, resultAllGet);
-
     it('should reply with HTTP status code 401 when getting all roles with an incorrent email header set', function(done) {
+        var unauthorized = 'Unauthorized access.';
+
+        var resultAllGet = [{
+            _id: '557d7cbc9a81250f00194d46',
+            name: 'test1',
+            createAt: '2015-06-14T13:08:12.348Z',
+            updatedAt: '2015-06-14T13:08:12.348Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/role')
+            .reply(200, resultAllGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/role')
             .set('x-forwarded-email', 'a@google.se')

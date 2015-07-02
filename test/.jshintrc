@@ -114,8 +114,7 @@
         "require",
         "it",
         "describe",
-        "before",
-        "after"
+        "afterEach"
     ],
     "indent"        : 4         // Specify indentation spacing
 }

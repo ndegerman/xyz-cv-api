@@ -5,39 +5,45 @@ var request = require('supertest');
 var expect = require('expect.js');
 var url = 'http://localhost:9000';
 var nock = require('nock');
-var mockedUrl = 'http://localhost:3232/';
-
-describe('server', function() {
-    before(function(done) {
-        done();
-    });
-
-    after(function(done) {
-        server.close();
-        done();
-    });
-});
+var config = require('config');
+var mockedUrl = config.API_URL;
 
 describe('/api/roleToAttributeConnector', function() {
 
+    afterEach(function(done) {
+        nock.cleanAll();
+        done();
+    });
+
+    var getUserByEmailResponse = [{
+        _id:'558bacd8ed289d0f00d2c5f3',
+        email:'a@softhouse.se',
+        name:'A',
+        createdAt:'2015-06-25T07:25:12.523Z',
+        updatedAt:'2015-06-25T07:25:12.523Z'
+    }];
+
     //===============================================================================
 
-    var resultPost = {
-        attributeId: '123',
-        roleId: '456',
-        createdAt: '2015-06-16T10:33:27.803Z',
-        updatedAt: '2015-06-16T10:33:27.803Z',
-        _id: '557ffb779a81250f00194d60'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/roleToAttributeConnector', {
-            attributeId: '123',
-            roleId: '456'
-        })
-        .reply(200, resultPost);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting a roleToAttributeConnector', function(done) {
+        var resultPost = {
+            attributeId: '123',
+            roleId: '456',
+            createdAt: '2015-06-16T10:33:27.803Z',
+            updatedAt: '2015-06-16T10:33:27.803Z',
+            _id: '557ffb779a81250f00194d60'
+        };
+
+        nock(mockedUrl)
+            .post('/roleToAttributeConnector', {
+                attributeId: '123',
+                roleId: '456'
+            })
+            .reply(200, resultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -63,21 +69,24 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
-
-    var badResultPost = {
-        attributeId: '123',
-        roleId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/roleToAttributeConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with no body', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            attributeId: '123',
+            roleId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/roleToAttributeConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -97,21 +106,24 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        attributeId: '123',
-        roleId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/roleToAttributeConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with the field for attribute id empty', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            attributeId: '123',
+            roleId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/roleToAttributeConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -134,21 +146,25 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        attributeId: '123',
-        roleId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/roleToAttributeConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with the field for role id empty', function(done) {
+
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            attributeId: '123',
+            roleId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/roleToAttributeConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -171,21 +187,24 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        attributeId: '123',
-        roleId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/roleToAttributeConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with too many fields in the body', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            attributeId: '123',
+            roleId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/roleToAttributeConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -209,21 +228,24 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        attributeId: '123',
-        roleId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/roleToAttributeConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with no attributeId field', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            attributeId: '123',
+            roleId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/roleToAttributeConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -246,21 +268,24 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        attributeId: '123',
-        roleId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/roleToAttributeConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with no roleId field', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            attributeId: '123',
+            roleId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/roleToAttributeConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -283,20 +308,23 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    var resultNotJson = 'invalid json';
-
-    badResultPost = {
-        name: 'test1',
-        createdAt: '2015-06-16T07:33:14.385Z',
-        updatedAt: '2015-06-16T07:33:14.385Z',
-        _id: '1234'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/roleToAttributeConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector not correctly formatted as Json', function(done) {
+        var resultNotJson = 'invalid json';
+
+        var badResultPost = {
+            name: 'test1',
+            createdAt: '2015-06-16T07:33:14.385Z',
+            updatedAt: '2015-06-16T07:33:14.385Z',
+            _id: '1234'
+        };
+
+        nock(mockedUrl)
+            .post('/roleToAttributeConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -316,19 +344,22 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    var resultAllGet = [{
-        _id: '557eb8a89a81250f00194d52',
-        attributeId: '557d7cbc9a81250f00194d46',
-        roleId: '557eb7199a81250f00194d50',
-        createdAt: '2015-06-15T11:36:08.114Z',
-        updatedAt: '2015-06-15T11:36:08.114Z'
-    }];
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/roleToAttributeConnector')
-        .reply(200, resultAllGet);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all roleToAttributeConnectors', function(done) {
+        var resultAllGet = [{
+            _id: '557eb8a89a81250f00194d52',
+            attributeId: '557d7cbc9a81250f00194d46',
+            roleId: '557eb7199a81250f00194d50',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/roleToAttributeConnector')
+            .reply(200, resultAllGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -351,19 +382,22 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    var resultGetByRoleId = [{
-        _id: '123',
-        attributeId: '456',
-        roleId: '789',
-        createdAt: '2015-06-15T11:36:08.114Z',
-        updatedAt: '2015-06-15T11:36:08.114Z'
-    }];
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/roleToAttributeConnector?roleId=789')
-        .reply(200, resultGetByRoleId);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a roleToAttributeConnector by role id', function(done) {
+        var resultGetByRoleId = [{
+            _id: '123',
+            attributeId: '456',
+            roleId: '789',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/roleToAttributeConnector?roleId=789')
+            .reply(200, resultGetByRoleId)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/roleToAttributeConnector/role/789')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -386,19 +420,22 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    var resultGetByAttributeId = [{
-        _id: '123',
-        attributeId: '456',
-        roleId: '789',
-        createdAt: '2015-06-15T11:36:08.114Z',
-        updatedAt: '2015-06-15T11:36:08.114Z'
-    }];
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/roleToAttributeConnector?attributeId=456')
-        .reply(200, resultGetByAttributeId);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a roleToAttributeConnector by attribute id', function(done) {
+        var resultGetByAttributeId = [{
+            _id: '123',
+            attributeId: '456',
+            roleId: '789',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/roleToAttributeConnector?attributeId=456')
+            .reply(200, resultGetByAttributeId)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/roleToAttributeConnector/attribute/456')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -419,17 +456,20 @@ describe('/api/roleToAttributeConnector', function() {
             });
     });
 
-    //===============================================================================
-
-    var resultNotInDb = {
-        message: 'No item with the given id was found.'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/roleToAttributeConnector?roleId=123')
-        .reply(404, resultNotInDb);
+    //==============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting roleToAttributeConnectors by role id not in the database', function(done) {
+        var resultNotInDb = {
+            message: 'No item with the given id was found.'
+        };
+
+        nock(mockedUrl)
+            .get('/roleToAttributeConnector?roleId=123')
+            .reply(404, resultNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/roleToAttributeConnector/role/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -449,15 +489,18 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    resultNotInDb = {
-        message: 'No item with the given id was found.'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/roleToAttributeConnector?attributeId=123')
-        .reply(404, resultNotInDb);
-
     it('should reply with HTTP status code 404 and a correctly formatted string when getting roleToAttributeConnectors by attribute id not in the database', function(done) {
+        var resultNotInDb = {
+            message: 'No item with the given id was found.'
+        };
+
+        nock(mockedUrl)
+            .get('/roleToAttributeConnector?attributeId=123')
+            .reply(404, resultNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/roleToAttributeConnector/attribute/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -477,15 +520,18 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    var resultDelete = {
-        message: 'The item was successfully removed.'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .delete('/roleToAttributeConnector/123')
-        .reply(204, {});
-
     it('should reply with HTTP status code 200 and a correctly formatted string when deleting a roleToAttributeConnector by its id', function(done) {
+        var resultDelete = {
+            message: 'The item was successfully removed.'
+        };
+
+        nock(mockedUrl)
+            .delete('/roleToAttributeConnector/123')
+            .reply(204, {})
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .delete('/api/roleToAttributeConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -508,13 +554,16 @@ describe('/api/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    var resultRoleNotInDb = 'No item with the given id was found.';
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .delete('/roleToAttributeConnector/123')
-        .reply(404, resultRoleNotInDb);
-
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a roleToAttributeConnector not in the database', function(done) {
+        var resultRoleNotInDb = 'No item with the given id was found.';
+
+        nock(mockedUrl)
+            .delete('/roleToAttributeConnector/123')
+            .reply(404, resultRoleNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .delete('/api/roleToAttributeConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')

@@ -5,39 +5,45 @@ var request = require('supertest');
 var expect = require('expect.js');
 var url = 'http://localhost:9000';
 var nock = require('nock');
-var mockedUrl = 'http://localhost:3232/';
-
-describe('server', function() {
-    before(function(done) {
-        done();
-    });
-
-    after(function(done) {
-        server.close();
-        done();
-    });
-});
+var config = require('config');
+var mockedUrl = config.API_URL;
 
 describe('/api/userToSkillConnector', function() {
 
+    afterEach(function(done) {
+        nock.cleanAll();
+        done();
+    });
+
+    var getUserByEmailResponse = [{
+        _id:'558bacd8ed289d0f00d2c5f3',
+        email:'a@softhouse.se',
+        name:'A',
+        createdAt:'2015-06-25T07:25:12.523Z',
+        updatedAt:'2015-06-25T07:25:12.523Z'
+    }];
+
     //===============================================================================
 
-    var resultPost = {
-        skillId: '123',
-        userId: '456',
-        createdAt: '2015-06-16T10:33:27.803Z',
-        updatedAt: '2015-06-16T10:33:27.803Z',
-        _id: '557ffb779a81250f00194d60'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/userToSkillConnector', {
-            skillId: '123',
-            userId: '456'
-        })
-        .reply(200, resultPost);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting a userToSkillConnector', function(done) {
+        var resultPost = {
+            skillId: '123',
+            userId: '456',
+            createdAt: '2015-06-16T10:33:27.803Z',
+            updatedAt: '2015-06-16T10:33:27.803Z',
+            _id: '557ffb779a81250f00194d60'
+        };
+
+        nock(mockedUrl)
+            .post('/userToSkillConnector', {
+                skillId: '123',
+                userId: '456'
+            })
+            .reply(200, resultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -63,21 +69,24 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
-
-    var badResultPost = {
-        skillId: '123',
-        userId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/userToSkillConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToSkillConnector with no body', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            skillId: '123',
+            userId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/userToSkillConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -97,21 +106,24 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        skillId: '123',
-        userId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/userToSkillConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToSkillConnector with the field for skill id empty', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            skillId: '123',
+            userId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/userToSkillConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -134,21 +146,24 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        skillId: '123',
-        userId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/userToSkillConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToSkillConnector with the field for user id empty', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            skillId: '123',
+            userId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/userToSkillConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -171,21 +186,24 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        skillId: '123',
-        userId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/userToSkillConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToSkillConnector with too many fields in the body', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            skillId: '123',
+            userId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/userToSkillConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -209,21 +227,24 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        skillId: '123',
-        userId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/userToSkillConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToSkillConnector with no skillId field', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            skillId: '123',
+            userId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/userToSkillConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -246,21 +267,24 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    resultNoArg = 'Invalid JSON object.';
-
-    badResultPost = {
-        skillId: '123',
-        userId: '456',
-        createdAt: '2015-06-16T13:46:07.589Z',
-        updatedAt: '2015-06-16T13:46:07.589Z',
-        _id: '5580289f9a81250f00194d61'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/userToSkillConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToSkillConnector with no userId field', function(done) {
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            skillId: '123',
+            userId: '456',
+            createdAt: '2015-06-16T13:46:07.589Z',
+            updatedAt: '2015-06-16T13:46:07.589Z',
+            _id: '5580289f9a81250f00194d61'
+        };
+
+        nock(mockedUrl)
+            .post('/userToSkillConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -283,20 +307,24 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    var resultNotJson = 'invalid json';
-
-    badResultPost = {
-        name: 'test1',
-        createdAt: '2015-06-16T07:33:14.385Z',
-        updatedAt: '2015-06-16T07:33:14.385Z',
-        _id: '1234'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/userToSkillConnector')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToSkillConnector not correctly formatted as Json', function(done) {
+
+        var resultNotJson = 'invalid json';
+
+        var badResultPost = {
+            name: 'test1',
+            createdAt: '2015-06-16T07:33:14.385Z',
+            updatedAt: '2015-06-16T07:33:14.385Z',
+            _id: '1234'
+        };
+
+        nock(mockedUrl)
+            .post('/userToSkillConnector')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -316,19 +344,22 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    var resultAllGet = [{
-        _id: '557eb8a89a81250f00194d52',
-        skillId: '557d7cbc9a81250f00194d46',
-        userId: '557eb7199a81250f00194d50',
-        createdAt: '2015-06-15T11:36:08.114Z',
-        updatedAt: '2015-06-15T11:36:08.114Z'
-    }];
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/userToSkillConnector')
-        .reply(200, resultAllGet);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all userToSkillConnectors', function(done) {
+        var resultAllGet = [{
+            _id: '557eb8a89a81250f00194d52',
+            skillId: '557d7cbc9a81250f00194d46',
+            userId: '557eb7199a81250f00194d50',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/userToSkillConnector')
+            .reply(200, resultAllGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -351,19 +382,22 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    var resultGetByUserId = [{
-        _id: '123',
-        skillId: '456',
-        userId: '789',
-        createdAt: '2015-06-15T11:36:08.114Z',
-        updatedAt: '2015-06-15T11:36:08.114Z'
-    }];
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/userToSkillConnector?userId=789')
-        .reply(200, resultGetByUserId);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a userToSkillConnector by user id', function(done) {
+        var resultGetByUserId = [{
+            _id: '123',
+            skillId: '456',
+            userId: '789',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/userToSkillConnector?userId=789')
+            .reply(200, resultGetByUserId)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/userToSkillConnector/user/789')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -386,19 +420,23 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    var resultGetBySkillId = [{
-        _id: '123',
-        skillId: '456',
-        userId: '789',
-        createdAt: '2015-06-15T11:36:08.114Z',
-        updatedAt: '2015-06-15T11:36:08.114Z'
-    }];
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/userToSkillConnector?skillId=456')
-        .reply(200, resultGetBySkillId);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a userToSkillConnector by skill id', function(done) {
+
+        var resultGetBySkillId = [{
+            _id: '123',
+            skillId: '456',
+            userId: '789',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/userToSkillConnector?skillId=456')
+            .reply(200, resultGetBySkillId)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/userToSkillConnector/skill/456')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -421,15 +459,18 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    var resultNotInDb = {
-        message: 'No item with the given id was found.'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/userToSkillConnector?userId=123')
-        .reply(404, resultNotInDb);
-
     it('should reply with HTTP status code 404 and a correctly formatted string when getting userToSkillConnectors by user id not in the database', function(done) {
+        var resultNotInDb = {
+            message: 'No item with the given id was found.'
+        };
+
+        nock(mockedUrl)
+            .get('/userToSkillConnector?userId=123')
+            .reply(404, resultNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/userToSkillConnector/user/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -449,15 +490,18 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    resultNotInDb = {
-        message: 'No item with the given id was found.'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/userToSkillConnector?skillId=123')
-        .reply(404, resultNotInDb);
-
     it('should reply with HTTP status code 404 and a correctly formatted string when getting userToSkillConnectors by skill id not in the database', function(done) {
+        var resultNotInDb = {
+            message: 'No item with the given id was found.'
+        };
+
+        nock(mockedUrl)
+            .get('/userToSkillConnector?skillId=123')
+            .reply(404, resultNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/userToSkillConnector/skill/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -477,15 +521,18 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    var resultDelete = {
-        message: 'The item was successfully removed.'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .delete('/userToSkillConnector/123')
-        .reply(204, {});
-
     it('should reply with HTTP status code 200 and a correctly formatted string when deleting a userToSkillConnector by its id', function(done) {
+        var resultDelete = {
+            message: 'The item was successfully removed.'
+        };
+
+        nock(mockedUrl)
+            .delete('/userToSkillConnector/123')
+            .reply(204, {})
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .delete('/api/userToSkillConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -508,13 +555,16 @@ describe('/api/userToSkillConnector', function() {
 
     //===============================================================================
 
-    var resultUserNotInDb = 'No item with the given id was found.';
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .delete('/userToSkillConnector/123')
-        .reply(404, resultUserNotInDb);
-
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a userToSkillConnector not in the database', function(done) {
+        var resultUserNotInDb = 'No item with the given id was found.';
+
+        nock(mockedUrl)
+            .delete('/userToSkillConnector/123')
+            .reply(404, resultUserNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .delete('/api/userToSkillConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
