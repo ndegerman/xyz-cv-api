@@ -8,7 +8,7 @@ var responseHandler = require('../utils/response.handler');
 
 module.exports = function(routes) {
 
-    // create a office
+    // create an office
     routes.post('/', function(request, response) {
         officeController.createNewOffice(request.body)
             .then(responseHandler.sendJsonResponse(response))
@@ -22,14 +22,14 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get a office by the given id
+    // get an office by the given id
     routes.get('/:id', function(request, response) {
         officeController.getOfficeById(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete a office given an id
+    // delete an office given an id
     routes.delete('/:id', function(request, response) {
         officeController.deleteOfficeById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
