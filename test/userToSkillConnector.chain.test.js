@@ -8,7 +8,7 @@ var nock = require('nock');
 var config = require('config');
 var mockedUrl = config.API_URL;
 
-describe('/api/userToSkillConnector', function() {
+describe('/userToSkillConnector', function() {
 
     afterEach(function(done) {
         nock.cleanAll();
@@ -45,7 +45,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/userToSkillConnector')
+            .post('/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -88,7 +88,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/userToSkillConnector')
+            .post('/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -125,7 +125,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/userToSkillConnector')
+            .post('/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -165,7 +165,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/userToSkillConnector')
+            .post('/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -205,7 +205,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/userToSkillConnector')
+            .post('/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -246,7 +246,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/userToSkillConnector')
+            .post('/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -286,7 +286,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/userToSkillConnector')
+            .post('/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -326,7 +326,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/userToSkillConnector')
+            .post('/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -361,7 +361,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/userToSkillConnector')
+            .get('/userToSkillConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -399,7 +399,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/userToSkillConnector/user/789')
+            .get('/userToSkillConnector/user/789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -438,7 +438,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/userToSkillConnector/skill/456')
+            .get('/userToSkillConnector/skill/456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -472,7 +472,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/userToSkillConnector/user/123')
+            .get('/userToSkillConnector/user/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -503,7 +503,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/userToSkillConnector/skill/123')
+            .get('/userToSkillConnector/skill/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -534,7 +534,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/userToSkillConnector/123')
+            .delete('/userToSkillConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -566,7 +566,7 @@ describe('/api/userToSkillConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/userToSkillConnector/123')
+            .delete('/userToSkillConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')

@@ -8,7 +8,7 @@ var nock = require('nock');
 var config = require('config');
 var mockedUrl = config.API_URL;
 
-describe('/api/attribute', function() {
+describe('/attribute', function() {
 
     afterEach(function(done) {
         nock.cleanAll();
@@ -43,7 +43,7 @@ describe('/api/attribute', function() {
             .reply(200, resultPost);
 
         request(url)
-            .post('/api/attribute')
+            .post('/attribute')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -84,7 +84,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/attribute')
+            .post('/attribute')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -120,7 +120,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/attribute')
+            .post('/attribute')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -158,7 +158,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/attribute')
+            .post('/attribute')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -198,7 +198,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/attribute')
+            .post('/attribute')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -236,7 +236,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/attribute')
+            .post('/attribute')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -270,7 +270,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/attribute')
+            .get('/attribute')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -307,7 +307,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/attribute/123')
+            .get('/attribute/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -342,7 +342,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/attribute/123')
+            .get('/attribute/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -374,7 +374,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/attribute/1234')
+            .delete('/attribute/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -407,7 +407,7 @@ describe('/api/attribute', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/attribute/123')
+            .delete('/attribute/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')

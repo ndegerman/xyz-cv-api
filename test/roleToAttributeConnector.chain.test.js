@@ -8,7 +8,7 @@ var nock = require('nock');
 var config = require('config');
 var mockedUrl = config.API_URL;
 
-describe('/api/roleToAttributeConnector', function() {
+describe('/roleToAttributeConnector', function() {
 
     afterEach(function(done) {
         nock.cleanAll();
@@ -45,7 +45,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/roleToAttributeConnector')
+            .post('/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -88,7 +88,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/roleToAttributeConnector')
+            .post('/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -125,7 +125,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/roleToAttributeConnector')
+            .post('/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -166,7 +166,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/roleToAttributeConnector')
+            .post('/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -206,7 +206,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/roleToAttributeConnector')
+            .post('/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -247,7 +247,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/roleToAttributeConnector')
+            .post('/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -287,7 +287,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/roleToAttributeConnector')
+            .post('/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -326,7 +326,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/roleToAttributeConnector')
+            .post('/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -361,7 +361,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/roleToAttributeConnector')
+            .get('/roleToAttributeConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -399,7 +399,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/roleToAttributeConnector/role/789')
+            .get('/roleToAttributeConnector/role/789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -437,7 +437,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/roleToAttributeConnector/attribute/456')
+            .get('/roleToAttributeConnector/attribute/456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -471,7 +471,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/roleToAttributeConnector/role/123')
+            .get('/roleToAttributeConnector/role/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -502,7 +502,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/roleToAttributeConnector/attribute/123')
+            .get('/roleToAttributeConnector/attribute/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -533,7 +533,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/roleToAttributeConnector/123')
+            .delete('/roleToAttributeConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -565,7 +565,7 @@ describe('/api/roleToAttributeConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/roleToAttributeConnector/123')
+            .delete('/roleToAttributeConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')

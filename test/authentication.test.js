@@ -8,7 +8,7 @@ var nock = require('nock');
 var config = require('config');
 var mockedUrl = config.API_URL;
 
-describe('/api/authentication', function() {
+describe('/authentication', function() {
 
     afterEach(function(done) {
         nock.cleanAll();
@@ -41,7 +41,7 @@ describe('/api/authentication', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/role')
+            .get('/role')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -80,7 +80,7 @@ describe('/api/authentication', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/role')
+            .get('/role')
             .send()
 
             // end handles the response
@@ -113,7 +113,7 @@ describe('/api/authentication', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/role')
+            .get('/role')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
             .send()
@@ -148,7 +148,7 @@ describe('/api/authentication', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/role')
+            .get('/role')
             .set('x-forwarded-email', 'a@google.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
