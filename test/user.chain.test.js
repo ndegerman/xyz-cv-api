@@ -5,36 +5,44 @@ var request = require('supertest');
 var expect = require('expect.js');
 var url = 'http://localhost:9000';
 var nock = require('nock');
-var mockedUrl = 'http://localhost:3232/';
-
-describe('server', function() {
-    before(function(done) {
-        done();
-    });
-
-    after(function(done) {
-        server.close();
-        done();
-    });
-});
+var config = require('config');
+var mockedUrl = config.API_URL;
 
 //===============================================================================
 
 describe('/api/user', function() {
 
-    var resultAllGet = [{
-        _id: '557700a57b0f141400e8ceac',
-        email: 'a@softhouse.se',
-        name: 'A',
-        createdAt: '2015-06-09T15:05:09.352Z',
-        updatedAt: '2015-06-09T15:05:09.352Z'
+    afterEach(function(done) {
+        nock.cleanAll();
+        done();
+    });
+
+    var getUserByEmailResponse = [{
+        _id:'558bacd8ed289d0f00d2c5f3',
+        email:'a@softhouse.se',
+        name:'A',
+        createdAt:'2015-06-25T07:25:12.523Z',
+        updatedAt:'2015-06-25T07:25:12.523Z'
     }];
 
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/user')
-        .reply(200, resultAllGet);
+    //==============================================================================
 
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all users', function(done) {
+        var resultAllGet = [{
+            _id: '557700a57b0f141400e8ceac',
+            email: 'a@softhouse.se',
+            name: 'A',
+            createdAt: '2015-06-09T15:05:09.352Z',
+            updatedAt: '2015-06-09T15:05:09.352Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/user')
+            .reply(200, resultAllGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/user')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -57,18 +65,21 @@ describe('/api/user', function() {
 
     //===============================================================================
 
-    var resultGetOne = {
-        _id: '1234',
-        name: 'test3',
-        createAt: '2015-06-15T15:43:31.035Z',
-        updatedAt: '2015-06-15T15:43:31.035Z'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/user/1234')
-        .reply(200, resultGetOne);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a user by id', function(done) {
+        var resultGetOne = {
+            _id: '1234',
+            name: 'test3',
+            createAt: '2015-06-15T15:43:31.035Z',
+            updatedAt: '2015-06-15T15:43:31.035Z'
+        };
+
+        nock(mockedUrl)
+            .get('/user/1234')
+            .reply(200, resultGetOne)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/user/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -91,13 +102,16 @@ describe('/api/user', function() {
 
     //===============================================================================
 
-    var resultNotInDb = 'No item with the given id was found.';
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/user/123')
-        .reply(404, resultNotInDb);
-
     it('should reply with HTTP status code 404 and a correctly formatted string when getting a user not in the database by id', function(done) {
+        var resultNotInDb = 'No item with the given id was found.';
+
+        nock(mockedUrl)
+            .get('/user/123')
+            .reply(404, resultNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/user/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -117,15 +131,18 @@ describe('/api/user', function() {
 
     //===============================================================================
 
-    var resultDelete = {
-        message: 'The item was successfully removed.'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .delete('/user/1234')
-        .reply(204, {});
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when deleting an existing user', function(done) {
+        var resultDelete = {
+            message: 'The item was successfully removed.'
+        };
+
+        nock(mockedUrl)
+            .delete('/user/1234')
+            .reply(204, {})
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .delete('/api/user/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -148,13 +165,16 @@ describe('/api/user', function() {
 
     //===============================================================================
 
-    resultNotInDb = 'No item with the given id was found.';
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .delete('/user/123')
-        .reply(404, resultNotInDb);
-
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a user not in the database', function(done) {
+        var resultNotInDb = 'No item with the given id was found.';
+
+        nock(mockedUrl)
+            .delete('/user/123')
+            .reply(404, resultNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .delete('/api/user/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -174,110 +194,32 @@ describe('/api/user', function() {
 
     //===============================================================================
 
-    var resultPut = 'The user was updated successfully.';
+    it('5 should reply with HTTP status code 204 and a correctly formatted string when updating a user\'s role', function(done) {
+        var resultPut = {message:'The user was updated successfully.'};
 
-    var body1 = {
-        role: 'newRole'
-    };
+        var body = {
+            role: 'newRole'
+        };
 
-    var user = {
-        _id: '123',
-        email: 'A@softhouse.se',
-        name: 'A',
-        role: 'role1',
-        createdAt: '2015-06-22T13:28:23.982Z',
-        updatedAt: '2015-06-23T11:26:13.809Z'
-    };
+        var user = {
+            _id: '123',
+            email: 'A@softhouse.se',
+            name: 'A',
+            role: 'role1',
+            createdAt: '2015-06-22T13:28:23.982Z',
+            updatedAt: '2015-06-23T11:26:13.809Z'
+        };
 
-    nock(mockedUrl, {allowUnmocked: true})
-        .put('/user/123')
-        .reply(204)
-        .get('/user/123')
-        .reply(200, user);
+        nock(mockedUrl)
+            .put('/user/123')
+            .reply(204)
 
-    it('should reply with HTTP status code 204 and a correctly formatted string when updating a user\'s role', function(done) {
-        request(url)
-            .put('/api/user/123')
-            .set('x-forwarded-email', 'a@softhouse.se')
-            .set('x-forwarded-user', 'A')
-            .set('Content-Type', 'application/json')
-            .send(body1)
+            .get('/user/123')
+            .reply(200, user)
 
-            // end handles the response
-            .end(function(err, res) {
-                expect(err).to.exist;
-                expect(res).to.exist;
-                expect(res.status).to.equal(204);
-                expect(res.error.text).to.equal(resultPut);
-                done();
-            });
-    });
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
 
-    //===============================================================================
-
-    var resultPutNotInDb = 'No item with the given id was found.';
-
-    var body3 = {
-        role: 'newRole'
-    };
-
-    user = {
-        _id: '123',
-        email: 'A@softhouse.se',
-        name: 'A',
-        role: 'role1',
-        createdAt: '2015-06-22T13:28:23.982Z',
-        updatedAt: '2015-06-23T11:26:13.809Z'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .put('/user/123')
-        .reply(204, resultPut)
-        .get('/user/123')
-        .reply(400, resultPutNotInDb);
-
-    it('should reply with HTTP status code 404 and a correctly formatted string when updating a user\'s role not in database', function(done) {
-        request(url)
-            .put('/api/user/123')
-            .set('x-forwarded-email', 'a@softhouse.se')
-            .set('x-forwarded-user', 'A')
-            .set('Content-Type', 'application/json')
-            .send(body3)
-
-            // end handles the response
-            .end(function(err, res) {
-                expect(err).to.exist;
-                expect(res).to.exist;
-                expect(res.status).to.equal(404);
-                expect(res.error.text).to.equal(resultPutNotInDb);
-                done();
-            });
-    });
-
-    //===============================================================================
-
-    var resultPutBadFormat = 'Invalid JSON object.';
-
-    var body = {
-        rol2e: 'newRole'
-    };
-
-    user = {
-        _id: '123',
-        email: 'A@softhouse.se',
-        name: 'A',
-        role: 'role1',
-        createdAt: '2015-06-22T13:28:23.982Z',
-        updatedAt: '2015-06-23T11:26:13.809Z'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .put('/user/123')
-        .reply(204, resultPut)
-        .get('/user/123')
-        .reply(200, user);
-
-    it('should reply with HTTP status code 400 and a correctly formatted string when updating a user\'s role with an incorrectly formatted Json object', function(done) {
         request(url)
             .put('/api/user/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -289,10 +231,62 @@ describe('/api/user', function() {
             .end(function(err, res) {
                 expect(err).to.exist;
                 expect(res).to.exist;
-                expect(res.status).to.equal(400);
-                expect(res.error.text).to.equal(resultPutBadFormat);
+                expect(res.status).to.equal(200);
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPut));
                 done();
             });
     });
+
+    //===============================================================================
+
+    it('should reply with HTTP status code 400 and a correctly formatted string when updating a user\'s role not in database', function(done) {
+
+        var resultPutNotInDb = 'No item with the given id was found.';
+
+        var resultPut = {
+            message: 'The user was updated successfully.'
+        };
+
+        var body = {
+            role: 'newRole'
+        };
+
+        var user = {
+            _id: '123',
+            email: 'A@softhouse.se',
+            name: 'A',
+            role: 'role1',
+            createdAt: '2015-06-22T13:28:23.982Z',
+            updatedAt: '2015-06-23T11:26:13.809Z'
+        };
+
+        nock(mockedUrl)
+            .put('/user/123')
+            .reply(204, resultPut)
+
+            .get('/user/123')
+            .reply(404, resultPutNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .put('/api/user/123')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send(body)
+
+            // end handles the response
+            .end(function(err, res) {
+                expect(err).to.exist;
+                expect(res).to.exist;
+                expect(res.status).to.equal(404);
+                expect(res.error.text).to.equal(resultPutNotInDb);
+                done();
+            });
+    });
+
+    //==============================================================================
 
 });

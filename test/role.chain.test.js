@@ -5,37 +5,44 @@ var request = require('supertest');
 var expect = require('expect.js');
 var url = 'http://localhost:9000';
 var nock = require('nock');
-var mockedUrl = 'http://localhost:3232/';
-
-describe('server', function() {
-    before(function(done) {
-        done();
-    });
-
-    after(function(done) {
-        server.close();
-        done();
-    });
-});
+var config = require('config');
+var mockedUrl = config.API_URL;
 
 describe('/api/role', function() {
 
+    afterEach(function(done) {
+        nock.cleanAll();
+        done();
+    });
+
+    var getUserByEmailResponse = [{
+        _id:'558bacd8ed289d0f00d2c5f3',
+        email:'a@softhouse.se',
+        name:'A',
+        createdAt:'2015-06-25T07:25:12.523Z',
+        updatedAt:'2015-06-25T07:25:12.523Z'
+    }];
+
     //===============================================================================
 
-    var resultPost = {
-        name: 'test2',
-        createAt: '2015-06-16T07:33:14.385Z',
-        updatedAt: '2015-06-16T07:33:14.385Z',
-        _id: '557fd13a9a81250f00194d58'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/role', {
-            name: 'test2'
-        })
-        .reply(200, resultPost);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when creating a new role', function(done) {
+
+        var resultPost = {
+            name: 'test2',
+            createAt: '2015-06-16T07:33:14.385Z',
+            updatedAt: '2015-06-16T07:33:14.385Z',
+            _id: '557fd13a9a81250f00194d58'
+        };
+
+        nock(mockedUrl)
+            .post('/role', {
+                name: 'test2'
+            })
+            .reply(200, resultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -60,20 +67,24 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultNoArg = 'Invalid JSON object.';
-
-    var badResultPost = {
-        name: '',
-        createAt: '2015-06-16T07:33:14.385Z',
-        updatedAt: '2015-06-16T07:33:14.385Z',
-        _id: '557fd13a9a81250f00194d58'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/role')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an empty role', function(done) {
+
+        var resultNoArg = 'Invalid JSON object.';
+
+        var badResultPost = {
+            name: '',
+            createAt: '2015-06-16T07:33:14.385Z',
+            updatedAt: '2015-06-16T07:33:14.385Z',
+            _id: '557fd13a9a81250f00194d58'
+        };
+
+        nock(mockedUrl)
+            .post('/role')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -93,20 +104,24 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultEmptyName = 'Invalid JSON object.';
-
-    badResultPost = {
-        name: '',
-        createAt: '2015-06-16T07:33:14.385Z',
-        updatedAt: '2015-06-16T07:33:14.385Z',
-        _id: '557fd13a9a81250f00194d58'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/role')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a role with the name field empty', function(done) {
+
+        var resultEmptyName = 'Invalid JSON object.';
+
+        var badResultPost = {
+            name: '',
+            createAt: '2015-06-16T07:33:14.385Z',
+            updatedAt: '2015-06-16T07:33:14.385Z',
+            _id: '557fd13a9a81250f00194d58'
+        };
+
+        nock(mockedUrl)
+            .post('/role')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -128,20 +143,23 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultBadJson = 'Invalid JSON object.';
-
-    badResultPost = {
-        name: 'test1',
-        createAt: '2015-06-16T07:33:14.385Z',
-        updatedAt: '2015-06-16T07:33:14.385Z',
-        _id: '1234'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/role')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a role with too many fields in the body', function(done) {
+        var resultBadJson = 'Invalid JSON object.';
+
+        var badResultPost = {
+            name: 'test1',
+            createAt: '2015-06-16T07:33:14.385Z',
+            updatedAt: '2015-06-16T07:33:14.385Z',
+            _id: '1234'
+        };
+
+        nock(mockedUrl)
+            .post('/role')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -164,20 +182,23 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultNoNameField = 'Invalid JSON object.';
-
-    badResultPost = {
-        name: 'test1',
-        createAt: '2015-06-16T07:33:14.385Z',
-        updatedAt: '2015-06-16T07:33:14.385Z',
-        _id: '1234'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/role')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a role without a name field', function(done) {
+        var resultNoNameField = 'Invalid JSON object.';
+
+        var badResultPost = {
+            name: 'test1',
+            createAt: '2015-06-16T07:33:14.385Z',
+            updatedAt: '2015-06-16T07:33:14.385Z',
+            _id: '1234'
+        };
+
+        nock(mockedUrl)
+            .post('/role')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -197,22 +218,25 @@ describe('/api/role', function() {
             });
     });
 
-    //===============================================================================
-
-    var resultList = 'Invalid JSON object.';
-
-    badResultPost = {
-        name: 'test1',
-        createAt: '2015-06-16T07:33:14.385Z',
-        updatedAt: '2015-06-16T07:33:14.385Z',
-        _id: '1234'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/role')
-        .reply(200, badResultPost);
+    //==============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a role with a Json list', function(done) {
+        var resultList = 'Invalid JSON object.';
+
+        var badResultPost = {
+            name: 'test1',
+            createAt: '2015-06-16T07:33:14.385Z',
+            updatedAt: '2015-06-16T07:33:14.385Z',
+            _id: '1234'
+        };
+
+        nock(mockedUrl)
+            .post('/role')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -238,20 +262,24 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultNotJson = 'invalid json';
-
-    badResultPost = {
-        name: 'test1',
-        createAt: '2015-06-16T07:33:14.385Z',
-        updatedAt: '2015-06-16T07:33:14.385Z',
-        _id: '1234'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .post('/role')
-        .reply(200, badResultPost);
-
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a role not correctly formatted as Json', function(done) {
+
+        var resultNotJson = 'invalid json';
+
+        var badResultPost = {
+            name: 'test1',
+            createAt: '2015-06-16T07:33:14.385Z',
+            updatedAt: '2015-06-16T07:33:14.385Z',
+            _id: '1234'
+        };
+
+        nock(mockedUrl)
+            .post('/role')
+            .reply(200, badResultPost)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .post('/api/role')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -271,18 +299,21 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultAllGet = [{
-        _id: '557d7cbc9a81250f00194d46',
-        name: 'test1',
-        createAt: '2015-06-14T13:08:12.348Z',
-        updatedAt: '2015-06-14T13:08:12.348Z'
-    }];
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/role')
-        .reply(200, resultAllGet);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting all roles', function(done) {
+        var resultAllGet = [{
+            _id: '557d7cbc9a81250f00194d46',
+            name: 'test1',
+            createAt: '2015-06-14T13:08:12.348Z',
+            updatedAt: '2015-06-14T13:08:12.348Z'
+        }];
+
+        nock(mockedUrl)
+            .get('/role')
+            .reply(200, resultAllGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/role')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -305,18 +336,21 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultGetOne = {
-        _id: '1234',
-        name: 'test3',
-        createAt: '2015-06-15T15:43:31.035Z',
-        updatedAt: '2015-06-15T15:43:31.035Z'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/role/1234')
-        .reply(200, resultGetOne);
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a role by its id', function(done) {
+        var resultGetOne = {
+            _id: '1234',
+            name: 'test3',
+            createAt: '2015-06-15T15:43:31.035Z',
+            updatedAt: '2015-06-15T15:43:31.035Z'
+        };
+
+        nock(mockedUrl)
+            .get('/role/1234')
+            .reply(200, resultGetOne)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/role/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -339,13 +373,16 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultRoleNotInDb = 'No item with the given id was found.';
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .get('/role/123')
-        .reply(404, resultRoleNotInDb);
-
     it('should reply with HTTP status code 404 and a correctly formatted string when getting a role not in the database', function(done) {
+        var resultRoleNotInDb = 'No item with the given id was found.';
+
+        nock(mockedUrl)
+            .get('/role/123')
+            .reply(404, resultRoleNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .get('/api/role/123')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -365,15 +402,18 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    var resultDelete = {
-        message: 'The item was successfully removed.'
-    };
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .delete('/role/1234')
-        .reply(204, {});
-
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when deleting an existing role', function(done) {
+        var resultDelete = {
+            message: 'The item was successfully removed.'
+        };
+
+        nock(mockedUrl)
+            .delete('/role/1234')
+            .reply(204, {})
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .delete('/api/role/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
@@ -396,13 +436,16 @@ describe('/api/role', function() {
 
     //===============================================================================
 
-    resultRoleNotInDb = 'No item with the given id was found.';
-
-    nock(mockedUrl, {allowUnmocked: true})
-        .delete('/role/123')
-        .reply(404, resultRoleNotInDb);
-
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a role not in the database', function(done) {
+        var resultRoleNotInDb = 'No item with the given id was found.';
+
+        nock(mockedUrl)
+            .delete('/role/123')
+            .reply(404, resultRoleNotInDb)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
         request(url)
             .delete('/api/role/123')
             .set('x-forwarded-email', 'a@softhouse.se')
