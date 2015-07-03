@@ -8,7 +8,7 @@ var nock = require('nock');
 var config = require('config');
 var mockedUrl = config.API_URL;
 
-describe('/api/skillToSkillGroupConnector', function() {
+describe('/skillToSkillGroupConnector', function() {
 
     afterEach(function(done) {
         nock.cleanAll();
@@ -45,7 +45,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillToSkillGroupConnector')
+            .post('/skillToSkillGroupConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -88,7 +88,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillToSkillGroupConnector')
+            .post('/skillToSkillGroupConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -125,7 +125,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillToSkillGroupConnector')
+            .post('/skillToSkillGroupConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -165,7 +165,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillToSkillGroupConnector')
+            .post('/skillToSkillGroupConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -205,7 +205,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillToSkillGroupConnector')
+            .post('/skillToSkillGroupConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -246,7 +246,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillToSkillGroupConnector')
+            .post('/skillToSkillGroupConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -286,7 +286,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillToSkillGroupConnector')
+            .post('/skillToSkillGroupConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -325,7 +325,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillToSkillGroupConnector')
+            .post('/skillToSkillGroupConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -360,7 +360,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skillToSkillGroupConnector')
+            .get('/skillToSkillGroupConnector')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -399,7 +399,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skillToSkillGroupConnector/skillGroup/789')
+            .get('/skillToSkillGroupConnector/skillGroup/789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -437,7 +437,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skillToSkillGroupConnector/skill/456')
+            .get('/skillToSkillGroupConnector/skill/456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -471,7 +471,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skillToSkillGroupConnector/skillGroup/123')
+            .get('/skillToSkillGroupConnector/skillGroup/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -502,7 +502,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skillToSkillGroupConnector/skill/123')
+            .get('/skillToSkillGroupConnector/skill/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -533,7 +533,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/skillToSkillGroupConnector/123')
+            .delete('/skillToSkillGroupConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -565,7 +565,7 @@ describe('/api/skillToSkillGroupConnector', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/skillToSkillGroupConnector/123')
+            .delete('/skillToSkillGroupConnector/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')

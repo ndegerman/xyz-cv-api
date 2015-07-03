@@ -8,7 +8,7 @@ var nock = require('nock');
 var config = require('config');
 var mockedUrl = config.API_URL;
 
-describe('/api/role', function() {
+describe('/role', function() {
 
     afterEach(function(done) {
         nock.cleanAll();
@@ -44,7 +44,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/role')
+            .post('/role')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -86,7 +86,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/role')
+            .post('/role')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -123,7 +123,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/role')
+            .post('/role')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -161,7 +161,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/role')
+            .post('/role')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -200,7 +200,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/role')
+            .post('/role')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -238,7 +238,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/role')
+            .post('/role')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -281,7 +281,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/role')
+            .post('/role')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -315,7 +315,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/role')
+            .get('/role')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -352,7 +352,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/role/1234')
+            .get('/role/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -384,7 +384,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/role/123')
+            .get('/role/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -415,7 +415,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/role/1234')
+            .delete('/role/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -447,7 +447,7 @@ describe('/api/role', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/role/123')
+            .delete('/role/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')

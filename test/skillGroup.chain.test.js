@@ -8,7 +8,7 @@ var nock = require('nock');
 var config = require('config');
 var mockedUrl = config.API_URL;
 
-describe('/api/skillGroup', function() {
+describe('/skillGroup', function() {
 
     afterEach(function(done) {
         nock.cleanAll();
@@ -43,7 +43,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillGroup')
+            .post('/skillGroup')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -84,7 +84,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillGroup')
+            .post('/skillGroup')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -121,7 +121,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillGroup')
+            .post('/skillGroup')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -160,7 +160,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillGroup')
+            .post('/skillGroup')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -199,7 +199,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillGroup')
+            .post('/skillGroup')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -237,7 +237,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillGroup')
+            .post('/skillGroup')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -279,7 +279,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skillGroup')
+            .post('/skillGroup')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -313,7 +313,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skillGroup')
+            .get('/skillGroup')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -350,7 +350,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skillGroup/1234')
+            .get('/skillGroup/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -383,7 +383,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skillGroup/123')
+            .get('/skillGroup/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -414,7 +414,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/skillGroup/1234')
+            .delete('/skillGroup/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -446,7 +446,7 @@ describe('/api/skillGroup', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/skillGroup/123')
+            .delete('/skillGroup/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')

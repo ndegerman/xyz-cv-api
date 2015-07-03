@@ -45,7 +45,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skill')
+            .post('/skill')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -86,7 +86,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skill')
+            .post('/skill')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -122,7 +122,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skill')
+            .post('/skill')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -160,7 +160,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skill')
+            .post('/skill')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -199,7 +199,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skill')
+            .post('/skill')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -238,7 +238,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skill')
+            .post('/skill')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -280,7 +280,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .post('/api/skill')
+            .post('/skill')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -314,7 +314,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skill')
+            .get('/skill')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -352,7 +352,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skill/1234')
+            .get('/skill/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -384,7 +384,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/api/skill/123')
+            .get('/skill/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -415,7 +415,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/skill/1234')
+            .delete('/skill/1234')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -447,7 +447,7 @@ describe('api/skill', function() {
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .delete('/api/skill/123')
+            .delete('/skill/123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
