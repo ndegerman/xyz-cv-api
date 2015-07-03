@@ -11,6 +11,7 @@ var userRoutes = require('./routes/user.routes')(express.Router());
 var roleRoutes = require('./routes/role.routes')(express.Router());
 var skillRoutes = require('./routes/skill.routes')(express.Router());
 var skillGroupRoutes = require('./routes/skillGroup.routes')(express.Router());
+var officeRoutes = require('./routes/office.routes')(express.Router());
 
 var roleToAttributeConnectorRoutes = require('./routes/roleToAttributeConnector.routes')(express.Router());
 var userToSkillConnectorRoutes = require('./routes/userToSkillConnector.routes.js')(express.Router());
@@ -50,6 +51,7 @@ app.use('/user', userRoutes);
 app.use('/role', roleRoutes);
 app.use('/skill', skillRoutes);
 app.use('/skillGroup', skillGroupRoutes);
+app.use('/office', officeRoutes);
 
 app.use('/roleToAttributeConnector', roleToAttributeConnectorRoutes);
 app.use('/userToSkillConnector', userToSkillConnectorRoutes);
