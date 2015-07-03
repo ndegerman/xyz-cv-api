@@ -16,6 +16,7 @@ var officeRoutes = require('./routes/office.routes')(express.Router());
 var roleToAttributeConnectorRoutes = require('./routes/roleToAttributeConnector.routes')(express.Router());
 var userToSkillConnectorRoutes = require('./routes/userToSkillConnector.routes.js')(express.Router());
 var skillToSkillGroupConnectorRoutes = require('./routes/skillToSkillGroupConnector.routes.js')(express.Router());
+var userToOfficeConnectorRoutes = require('./routes/userToOfficeConnector.routes.js')(express.Router());
 
 var errorMiddleware = require('./middleware/error.middleware');
 var authenticationMiddleware = require('./middleware/authentication.middleware');
@@ -56,6 +57,7 @@ app.use('/office', officeRoutes);
 app.use('/roleToAttributeConnector', roleToAttributeConnectorRoutes);
 app.use('/userToSkillConnector', userToSkillConnectorRoutes);
 app.use('/skillToSkillGroupConnector', skillToSkillGroupConnectorRoutes);
+app.use('/userToOfficeConnector', userToOfficeConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
 
