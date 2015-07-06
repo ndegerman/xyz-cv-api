@@ -15,6 +15,13 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    //get current user
+    routes.get('/current', function(request, response) {
+        userController.getUserByEmail(request.headers['x-forwarded-email'])
+            .then(responseHandler.sendJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
     //get user by id
     routes.get('/:id', function(request, response) {
         userController.getUserById(request.params.id)
