@@ -30,7 +30,7 @@ var app = express();
 
 // CONFIG
 // ============================================================================
-var port = process.env.PORT || 9090;
+var port = process.env.PORT || config.PORT;
 
 app.set('superSecret', config.SECRET);
 
