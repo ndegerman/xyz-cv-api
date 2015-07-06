@@ -22,6 +22,13 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    // get role by the query
+    routes.get('/query', function(request, response) {
+        roleController.getRoleByName(request.query.name)
+            .then(responseHandler.sendJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
     // get a role by the given id
     routes.get('/:id', function(request, response) {
         roleController.getRoleById(request.params.id)
