@@ -39,7 +39,7 @@ module.exports = function(routes) {
 
     // update a user given an id and an object
     routes.put('/:id', function(request, response) {
-        userController.updateUser(request.params.id, request.body, request.header.email)
+        userController.updateUser(request.params.id, request.body, request.headers['x-forwarded-email'])
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 
