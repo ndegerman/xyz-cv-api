@@ -18,6 +18,8 @@ var userToSkillConnectorRoutes = require('./routes/userToSkillConnector.routes.j
 var skillToSkillGroupConnectorRoutes = require('./routes/skillToSkillGroupConnector.routes.js')(express.Router());
 var userToOfficeConnectorRoutes = require('./routes/userToOfficeConnector.routes.js')(express.Router());
 
+var demoDataRoutes = require('./routes/demoData.routes')(express.Router());
+
 var errorMiddleware = require('./middleware/error.middleware');
 var authenticationMiddleware = require('./middleware/authentication.middleware');
 var responseMiddleware = require('./middleware/response.middleware');
@@ -28,7 +30,7 @@ var app = express();
 
 // CONFIG
 // ============================================================================
-var port = process.env.PORT || 9000;
+var port = process.env.PORT || 9090;
 
 app.set('superSecret', config.SECRET);
 
@@ -60,6 +62,10 @@ app.use('/skillToSkillGroupConnector', skillToSkillGroupConnectorRoutes);
 app.use('/userToOfficeConnector', userToOfficeConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
+
+if (app.get('env') === 'development') {
+    app.use('/demo-data', demoDataRoutes);
+}
 
 // for debugging
 app.get('/kalle', function(req, res) {
