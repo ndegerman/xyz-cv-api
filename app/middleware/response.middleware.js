@@ -11,6 +11,7 @@ exports.nocache = function(req, res, next) {
 };
 
 exports.accessControl = function(req, res, next) {
+
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', config.UI_URL);
 
