@@ -3,9 +3,9 @@
 var server = require('../app/server');
 var request = require('supertest');
 var expect = require('expect.js');
-var url = 'http://localhost:9000';
 var nock = require('nock');
 var config = require('config');
+var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
 //===============================================================================
@@ -194,7 +194,7 @@ describe('/user', function() {
 
     //===============================================================================
 
-    it('5 should reply with HTTP status code 204 and a correctly formatted string when updating a user\'s role', function(done) {
+    it('should reply with HTTP status code 204 and a correctly formatted string when updating a user\'s role', function(done) {
         var resultPut = {message:'The user was updated successfully.'};
 
         var body = {
