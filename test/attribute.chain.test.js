@@ -3,9 +3,9 @@
 var server = require('../app/server');
 var request = require('supertest');
 var expect = require('expect.js');
-var url = 'http://localhost:9000';
 var nock = require('nock');
 var config = require('config');
+var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
 describe('/attribute', function() {
@@ -38,7 +38,7 @@ describe('/attribute', function() {
             .reply(200, getUserByEmailResponse)
 
             .post('/attribute', {
-                name: 'test1'
+                name: 'test'
             })
             .reply(200, resultPost);
 
