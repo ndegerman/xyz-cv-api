@@ -5,6 +5,7 @@ var request = require('supertest');
 var expect = require('expect.js');
 var nock = require('nock');
 var config = require('config');
+var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
@@ -69,7 +70,7 @@ describe('/office', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an empty office', function(done) {
 
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: '',
@@ -106,7 +107,7 @@ describe('/office', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an office with the name field empty', function(done) {
 
-        var resultEmptyName = 'Invalid JSON object.';
+        var resultEmptyName = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: '',
@@ -144,7 +145,7 @@ describe('/office', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an office with too many fields in the body', function(done) {
-        var resultBadJson = 'Invalid JSON object.';
+        var resultBadJson = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: 'test1',
@@ -183,7 +184,7 @@ describe('/office', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an office without a name field', function(done) {
-        var resultNoNameField = 'Invalid JSON object.';
+        var resultNoNameField = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: 'test1',
@@ -221,7 +222,7 @@ describe('/office', function() {
     //==============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an office with a Json list', function(done) {
-        var resultList = 'Invalid JSON object.';
+        var resultList = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: 'test1',
@@ -264,7 +265,7 @@ describe('/office', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an office not correctly formatted as Json', function(done) {
 
-        var resultNotJson = 'invalid json';
+        var resultNotJson = msg.INVALID_JSON;
 
         var badResultPost = {
             name: 'test1',
@@ -374,7 +375,7 @@ describe('/office', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting an office not in the database', function(done) {
-        var resultOfficeNotInDb = 'No item with the given id was found.';
+        var resultOfficeNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/office/123')
@@ -403,9 +404,7 @@ describe('/office', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when deleting an existing office', function(done) {
-        var resultDelete = {
-            message: 'The item was successfully removed.'
-        };
+        var resultDelete = msg.SUCCESS_DELETE;
 
         nock(mockedUrl)
             .delete('/office/1234')
@@ -429,7 +428,7 @@ describe('/office', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultDelete));
+                expect(res.text).to.equal(resultDelete);
                 done();
             });
     });
@@ -437,7 +436,7 @@ describe('/office', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting an office not in the database', function(done) {
-        var resultOfficeNotInDb = 'No item with the given id was found.';
+        var resultOfficeNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .delete('/office/123')

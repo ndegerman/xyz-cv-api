@@ -5,6 +5,7 @@ var request = require('supertest');
 var expect = require('expect.js');
 var nock = require('nock');
 var config = require('config');
+var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
@@ -70,7 +71,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillToSkillGroupConnector with no body', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             skillId: '123',
@@ -107,7 +108,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillToSkillGroupConnector with the field for skill id empty', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             skillId: '123',
@@ -147,7 +148,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillToSkillGroupConnector with the field for skillGroup id empty', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             skillId: '123',
@@ -187,7 +188,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillToSkillGroupConnector with too many fields in the body', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             skillId: '123',
@@ -228,7 +229,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillToSkillGroupConnector with no skillId field', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             skillId: '123',
@@ -268,7 +269,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillToSkillGroupConnector with no skillGroupId field', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             skillId: '123',
@@ -308,7 +309,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillToSkillGroupConnector not correctly formatted as Json', function(done) {
-        var resultNotJson = 'invalid json';
+        var resultNotJson = msg.INVALID_JSON;
 
         var badResultPost = {
             name: 'test1',
@@ -459,9 +460,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting skillToSkillGroupConnectors by skillGroup id not in the database', function(done) {
-        var resultNotInDb = {
-            message: 'No item with the given id was found.'
-        };
+        var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/skillToSkillGroupConnector?skillGroupId=123')
@@ -482,7 +481,7 @@ describe('/skillToSkillGroupConnector', function() {
                 expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
-                expect(res.error.text).to.equal(resultNotInDb.message);
+                expect(res.error.text).to.equal(resultNotInDb);
                 done();
             });
     });
@@ -490,9 +489,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting skillToSkillGroupConnectors by skill id not in the database', function(done) {
-        var resultNotInDb = {
-            message: 'No item with the given id was found.'
-        };
+        var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/skillToSkillGroupConnector?skillId=123')
@@ -513,7 +510,7 @@ describe('/skillToSkillGroupConnector', function() {
                 expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
-                expect(res.error.text).to.equal(resultNotInDb.message);
+                expect(res.error.text).to.equal(resultNotInDb);
                 done();
             });
     });
@@ -521,9 +518,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 200 and a correctly formatted string when deleting a skillToSkillGroupConnector by its id', function(done) {
-        var resultDelete = {
-            message: 'The item was successfully removed.'
-        };
+        var resultDelete = msg.SUCCESS_DELETE;
 
         nock(mockedUrl)
             .delete('/skillToSkillGroupConnector/123')
@@ -547,7 +542,7 @@ describe('/skillToSkillGroupConnector', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultDelete));
+                expect(res.text).to.equal(resultDelete);
                 done();
             });
     });
@@ -555,7 +550,7 @@ describe('/skillToSkillGroupConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a skillToSkillGroupConnector not in the database', function(done) {
-        var resultSkillGroupNotInDb = 'No item with the given id was found.';
+        var resultSkillGroupNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .delete('/skillToSkillGroupConnector/123')
