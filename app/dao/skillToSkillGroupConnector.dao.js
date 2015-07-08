@@ -1,67 +1,70 @@
 'use strict';
 
-var request = require('request');
+var request = require('request-promise');
 var q = require('q');
 var config = require('config');
 var responseHandler = require('../utils/response.handler');
+var errorHandler = require('../utils/error.handler');
 
 var url = config.API_URL + 'skillToSkillGroupConnector';
 
 exports.createSkillToSkillGroupConnector = function(skillToSkillGroupConnector) {
     var options = {
+        resolveWithFullResponse: true,
         uri: url,
         method: 'POST',
         json: skillToSkillGroupConnector
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parsePost);
+    return request(options)
+        .then(responseHandler.parsePost)
+        .catch(errorHandler.throwDREAMSHttpError);
 };
 
 exports.getSkillToSkillGroupConnectorsBySkillId = function(id) {
     var options = {
+        resolveWithFullResponse: true,
         uri: url + '?skillId=' + id,
         method: 'GET'
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parseGet)
-        .then(responseHandler.parsePolyQuery);
+    return request(options)
+        .then(responseHandler.parseGetPolyQuery)
+        .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getSkillToSkillGroupConnectorsBySkillGroupId = function(id) {
+exports.getSkillToSkillGroupConnectorsById = function(id) {
     var options = {
+        resolveWithFullResponse: true,
         uri: url + '?skillGroupId=' + id,
         method: 'GET'
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parseGet)
-        .then(responseHandler.parsePolyQuery);
+    return request(options)
+        .then(responseHandler.parseGetPolyQuery)
+        .catch(errorHandler.throwDREAMSHttpError);
 };
 
 exports.getAllSkillToSkillGroupConnectors = function() {
     var options = {
+        resolveWithFullResponse: true,
         uri: url,
         method: 'GET'
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parseGet)
-        .then(responseHandler.parsePolyQuery);
+    return request(options)
+        .then(responseHandler.parseGetPolyQuery)
+        .catch(errorHandler.throwDREAMSHttpError);
 };
 
 exports.deleteSkillToSkillGroupConnector = function(skillToSkillGroupConnectorId) {
     var options = {
+        resolveWithFullResponse: true,
         uri: url + '/' + skillToSkillGroupConnectorId,
         method: 'DELETE'
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parseDelete);
+    return request(options)
+        .then(responseHandler.parseDelete)
+        .catch(errorHandler.throwDREAMSHttpError);
 };

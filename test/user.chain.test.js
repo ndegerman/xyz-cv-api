@@ -5,6 +5,7 @@ var request = require('supertest');
 var expect = require('expect.js');
 var nock = require('nock');
 var config = require('config');
+var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
@@ -103,7 +104,7 @@ describe('/user', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting a user not in the database by id', function(done) {
-        var resultNotInDb = 'No item with the given id was found.';
+        var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/user/123')
@@ -132,9 +133,7 @@ describe('/user', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when deleting an existing user', function(done) {
-        var resultDelete = {
-            message: 'The item was successfully removed.'
-        };
+        var resultDelete = msg.SUCCESS_DELETE;
 
         nock(mockedUrl)
             .delete('/user/1234')
@@ -158,7 +157,7 @@ describe('/user', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultDelete));
+                expect(res.text).to.equal(resultDelete);
                 done();
             });
     });
@@ -166,7 +165,7 @@ describe('/user', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a user not in the database', function(done) {
-        var resultNotInDb = 'No item with the given id was found.';
+        var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .delete('/user/123')
@@ -195,7 +194,7 @@ describe('/user', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 204 and a correctly formatted string when updating a user\'s role', function(done) {
-        var resultPut = {message:'The user was updated successfully.'};
+        var resultPut = msg.SUCCESS_UPDATE;
 
         var body = {
             role: 'newRole'
@@ -232,7 +231,7 @@ describe('/user', function() {
                 expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPut));
+                expect(res.text).to.equal(resultPut);
                 done();
             });
     });
@@ -241,11 +240,9 @@ describe('/user', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when updating a user\'s role not in database', function(done) {
 
-        var resultPutNotInDb = 'No item with the given id was found.';
+        var resultPutNotInDb = msg.NO_SUCH_ITEM;
 
-        var resultPut = {
-            message: 'The user was updated successfully.'
-        };
+        var resultPut = msg.SUCCESS_UPDATE;
 
         var body = {
             role: 'newRole'

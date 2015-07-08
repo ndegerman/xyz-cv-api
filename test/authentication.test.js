@@ -5,6 +5,7 @@ var request = require('supertest');
 var expect = require('expect.js');
 var nock = require('nock');
 var config = require('config');
+var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
@@ -63,7 +64,7 @@ describe('/authentication', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 401 when getting all roles with no headers set', function(done) {
-        var unauthorized = 'Unauthorized access.';
+        var unauthorized = msg.UNAUTHORIZED;
 
         var resultAllGet = [{
             _id: '557d7cbc9a81250f00194d46',
@@ -96,7 +97,7 @@ describe('/authentication', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 401 when getting all roles with no email header set', function(done) {
-        var unauthorized = 'Unauthorized access.';
+        var unauthorized = msg.UNAUTHORIZED;
 
         var resultAllGet = [{
             _id: '557d7cbc9a81250f00194d46',
@@ -131,7 +132,7 @@ describe('/authentication', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 401 when getting all roles with an incorrent email header set', function(done) {
-        var unauthorized = 'Unauthorized access.';
+        var unauthorized = msg.UNAUTHORIZED;
 
         var resultAllGet = [{
             _id: '557d7cbc9a81250f00194d46',
