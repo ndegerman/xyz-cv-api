@@ -33,8 +33,8 @@ exports.createSkillToSkillGroupConnector = function(skillToSkillGroupConnector)
         .then(skillToSkillGroupConnectorDao.createSkillToSkillGroupConnector);
 };
 
-exports.getSkillToSkillGroupConnectorsBySkillGroupId = function(skillGroupId) {
-    return skillToSkillGroupConnectorDao.getSkillToSkillGroupConnectorsBySkillGroupId(skillGroupId);
+exports.getSkillToSkillGroupConnectorsById = function(skillGroupId) {
+    return skillToSkillGroupConnectorDao.getSkillToSkillGroupConnectorsById(skillGroupId);
 };
 
 exports.getSkillToSkillGroupConnectorsBySkillId = function(skillId) {
@@ -58,7 +58,8 @@ exports.deleteSkillToSkillGroupConnectors = function(skillToSkillGroupConnector)
     return q.all(promises);
 };
 
-exports.deleteSkillToSkillGroupConnectorsBySkillGroupId = function(skillGroupId) {
+exports.deleteSkillToSkillGroupConnectorsById = function(skillGroupId) {
+    console.log('a');
     return exports.getSkillToSkillGroupConnectorsBySkillGroupId(skillGroupId)
         .then(exports.deleteSkillToSkillGroupConnectors);
 };

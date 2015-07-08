@@ -5,14 +5,22 @@
  */
 
 var attributeController = require('../controllers/attribute.controller');
+var officeController = require('../controllers/office.controller');
 var roleController = require('../controllers/role.controller');
-var userController = require('../controllers/user.controller');
-var skillController = require('../controllers/skill.controller');
-var userToSkillConnectorController = require('../controllers/userToSkillConnector.controller');
 var roleToAttributeConnectorController = require('../controllers/roleToAttributeConnector.controller');
+var skillController = require('../controllers/skill.controller');
+var skillGroupController = require('../controllers/skillGroup.controller');
+var skillToSkillGroupConnectorController = require('../controllers/skillToSkillGroupConnector.controller');
+var userController = require('../controllers/user.controller');
+var userToOfficeConnectorController = require('../controllers/userToOfficeConnector.controller');
+var userToSkillConnectorController = require('../controllers/userToSkillConnector.controller');
 
 var responseHandler = require('../utils/response.handler');
 
+var faker = require('faker');
+var config = require('config');
+var userLimit = config.FAKER.USER_LIMIT;
+var skillLimit = config.FAKER.SKILL_LIMIT;
 var q = require('q');
 
 module.exports = function(routes) {
@@ -38,8 +46,13 @@ function purgeAll() {
     purge.push(purgeRoles());
     purge.push(purgeAttributes());
     purge.push(purgeSkills());
+    purge.push(purgeOffices());
+    purge.push(purgeSkillGroups());
+
     purge.push(purgeUserToSkillConnectors());
     purge.push(purgeRoleToAttributeConnectors());
+    purge.push(purgeSkillToSkillGroupConnectors());
+    purge.push(purgeUserToOfficeConnectors());
     return q.all(purge);
 }
 
@@ -83,6 +96,26 @@ function purgeSkills() {
     });
 }
 
+function purgeOffices() {
+    return q.promise(function(resolve) {
+        officeController.getAllOffices()
+            .then(function(offices) {
+                return q.all(applyDeleteOnItems(offices, officeController.deleteOfficeById))
+                    .then(resolve);
+            });
+    });
+}
+
+function purgeSkillGroups() {
+    return q.promise(function(resolve) {
+        skillGroupController.getAllSkillGroups()
+            .then(function(skillGroups) {
+                return q.all(applyDeleteOnItems(skillGroups, skillGroupController.deleteSkillGroupById))
+                    .then(resolve);
+            });
+    });
+}
+
 function purgeUserToSkillConnectors() {
     return q.promise(function(resolve) {
         userToSkillConnectorController.getAllUserToSkillConnectors()
@@ -103,6 +136,26 @@ function purgeRoleToAttributeConnectors() {
     });
 }
 
+function purgeSkillToSkillGroupConnectors() {
+    return q.promise(function(resolve) {
+        skillToSkillGroupConnectorController.getAllSkillToSkillGroupConnectors()
+            .then(function(skillToSkillGroupConnectors) {
+                return q.all(applyDeleteOnItems(skillToSkillGroupConnectors, skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorById))
+                    .then(resolve);
+            });
+    });
+}
+
+function purgeUserToOfficeConnectors() {
+    return q.promise(function(resolve) {
+        userToOfficeConnectorController.getAllUserToOfficeConnectors()
+            .then(function(userToOfficeConnectors) {
+                return q.all(applyDeleteOnItems(userToOfficeConnectors, userToOfficeConnectorController.deleteUserToOfficeConnectorById))
+                    .then(resolve);
+            });
+    });
+}
+
 // ADD ENTITIES
 // ============================================================================
 
@@ -112,38 +165,57 @@ function addAll() {
     added.push(addRoles());
     added.push(addAttributes());
     added.push(addSkills());
+    added.push(addOffices());
     return q.all(added);
 }
 
 function addUsers() {
-    var users = [
-        {
-            name: 'rasmus letterkrantz',
-            email: 'rasmus.letterkrantz@gmail.com',
-            role: 'admin'
-        },
-        {
-            name: 'sara thorman',
-            email: 'sara.thorman@gmail.com',
+    var users = [];
+    for (var i = 0; i < userLimit; i++) {
+        var firstName = faker.name.firstName();
+        var lastName = faker.name.lastName();
+        var fullName = firstName + ' ' + lastName;
+        var email = firstName + '.' + lastName + '@softhouse.se';
+        email = email.toLowerCase();
+
+        var user = {
+            name: fullName,
+            email: email,
             role: 'user'
-        }
-    ];
+        };
+        users.push(user);
+    }
+
     return q.all(applyAddOnItems(users, userController.createNewUser));
 }
 
 function addSkills() {
-    var skills = [
+    var skills = [];
+
+    for (var i = 0; i < skillLimit; i++) {
+        var name = faker.hacker.abbreviation();
+        var skill = {
+            name: name
+        };
+        skills.push(skill);
+    }
+
+    return q.all(applyAddOnItems(skills, skillController.createNewSkill));
+}
+
+function addOffices() {
+    var offices = [
         {
-            name: 'Java'
+            name: 'Karlskrona'
         },
         {
-            name: 'c++'
+            name: 'Växjö'
         },
         {
-            name: 'Haskell'
+            name: 'Stockholm'
         }
     ];
-    return q.all(applyAddOnItems(skills, skillController.createNewSkill));
+    return q.all(applyAddOnItems(offices, officeController.createNewOffice));
 }
 
 function addAttributes() {
@@ -175,26 +247,68 @@ function addRoles() {
 
 function addConnectors() {
     var promises = [];
-    promises.push(userController.getUserByEmail('rasmus.letterkrantz@gmail.com')
-        .then(connectUserAndSkills));
+
     promises.push(roleController.getRoleByName('admin')
         .then(connectRoleAndAttributes));
+
+    promises.push(userController.getAllUsers()
+        .then(connectUsersAndRandomOffice));
+
+    promises.push(userController.getAllUsers()
+        .then(connectUsersAndRandomSkills));
+
     return q.all(promises);
 }
 
-function connectUserAndSkills(user) {
-    return skillController.getAllSkills()
-        .then(function(skills) {
-            return q.promise(function(resolve) {
-                var promises = [];
-                skills.forEach(function(skill) {
-                    promises.push(userToSkillConnectorController.createUserToSkillConnector({userId: user._id, skillId: skill._id}));
-                });
-
-                return q.all(promises)
-                    .then(resolve);
-            });
+function connectUsersAndRandomSkills(users) {
+    return q.promise(function(resolve) {
+        var promises = [];
+        users.forEach(function(user) {
+            promises.push(skillController.getAllSkills()
+                .then(connectUserAndRandomSkills(user)));
         });
+
+        return q.all(promises)
+            .then(resolve);
+    });
+}
+
+function connectUserAndRandomSkills(user) {
+    return function(skills) {
+        return q.promise(function(resolve) {
+            var promises = [];
+            skills.forEach(function(skill) {
+                if (!faker.random.number(1 / config.FAKER.SKILL_ON_USER_PROBABILITY - 1)) {
+                    promises.push(userToSkillConnectorController.createUserToSkillConnector({userId: user._id, skillId: skill._id}));
+                }
+            });
+
+            return q.all(promises)
+                .then(resolve);
+        });
+
+    };
+}
+
+function connectUsersAndRandomOffice(users) {
+    return q.promise(function(resolve) {
+        var promises = [];
+        users.forEach(function(user) {
+            promises.push(officeController.getAllOffices()
+                .then(connectUserAndRandomOffice(user)));
+        });
+
+        return q.all(promises)
+            .then(resolve);
+    });
+}
+
+function connectUserAndRandomOffice(user) {
+    return function(offices) {
+        var officeNumber = faker.random.number(offices.length - 1);
+        var office = offices[officeNumber];
+        return userToOfficeConnectorController.createUserToOfficeConnector({userId: user._id, officeId: office._id});
+    };
 }
 
 function connectRoleAndAttributes(role) {

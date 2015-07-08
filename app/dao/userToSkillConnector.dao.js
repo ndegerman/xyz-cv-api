@@ -1,67 +1,70 @@
 'use strict';
 
-var request = require('request');
+var request = require('request-promise');
 var q = require('q');
 var config = require('config');
 var responseHandler = require('../utils/response.handler');
+var errorHandler = require('../utils/error.handler');
 
 var url = config.API_URL + 'userToSkillConnector';
 
 exports.createUserToSkillConnector = function(userToSkillConnector) {
     var options = {
+        resolveWithFullResponse: true,
         uri: url,
         method: 'POST',
         json: userToSkillConnector
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parsePost);
+    return request(options)
+        .then(responseHandler.parsePost)
+        .catch(errorHandler.throwDREAMSHttpError);
 };
 
 exports.getUserToSkillConnectorsBySkillId = function(id) {
     var options = {
+        resolveWithFullResponse: true,
         uri: url + '?skillId=' + id,
         method: 'GET'
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parseGet)
-        .then(responseHandler.parsePolyQuery);
+    return request(options)
+        .then(responseHandler.parseGetPolyQuery)
+        .catch(errorHandler.throwDREAMSHttpError);
 };
 
 exports.getUserToSkillConnectorsByUserId = function(id) {
     var options = {
+        resolveWithFullResponse: true,
         uri: url + '?userId=' + id,
         method: 'GET'
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parseGet)
-        .then(responseHandler.parsePolyQuery);
+    return request(options)
+        .then(responseHandler.parseGetPolyQuery)
+        .catch(errorHandler.throwDREAMSHttpError);
 };
 
 exports.getAllUserToSkillConnectors = function() {
     var options = {
+        resolveWithFullResponse: true,
         uri: url,
         method: 'GET'
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parseGet)
-        .then(responseHandler.parsePolyQuery);
+    return request(options)
+        .then(responseHandler.parseGetPolyQuery)
+        .catch(errorHandler.throwDREAMSHttpError);
 };
 
 exports.deleteUserToSkillConnector = function(userToSkillConnectorId) {
     var options = {
+        resolveWithFullResponse: true,
         uri: url + '/' + userToSkillConnectorId,
         method: 'DELETE'
     };
 
-    return q.nfcall(request, options)
-        .then(responseHandler.parseResponse)
-        .then(responseHandler.parseDelete);
+    return request(options)
+        .then(responseHandler.parseDelete)
+        .catch(errorHandler.throwDREAMSHttpError);
 };
