@@ -31,7 +31,7 @@ module.exports = function(routes) {
 
     // get skillToSkillGroupConnectors for skillGroup
     routes.get('/skillGroup/:id', function(request, response) {
-        skillToSkillGroupConnectorController.getSkillToSkillGroupConnectorsBySkillGroupId(request.params.id)
+        skillToSkillGroupConnectorController.getSkillToSkillGroupConnectorsById(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
@@ -45,7 +45,7 @@ module.exports = function(routes) {
 
     // delete skillToSkillGroupConnectors containing the given skillGroup id
     routes.delete('/skillGroup/:id', function(request, response) {
-        skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorsBySkillGroupId(request.params.id)
+        skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorsById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

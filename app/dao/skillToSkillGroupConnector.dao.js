@@ -31,7 +31,7 @@ exports.getSkillToSkillGroupConnectorsBySkillId = function(id) {
         .then(responseHandler.parsePolyQuery);
 };
 
-exports.getSkillToSkillGroupConnectorsBySkillGroupId = function(id) {
+exports.getSkillToSkillGroupConnectorsById = function(id) {
     var options = {
         uri: url + '?skillGroupId=' + id,
         method: 'GET'
