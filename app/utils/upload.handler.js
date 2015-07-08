@@ -2,9 +2,29 @@
 
 var multer = require('multer');
 var fs = require('fs');
+var errorHandler = require('../utils/error.handler');
+var responseHandler = require('../utils/response.handler');
+var q = require('q');
 
 exports.getHandler = function() {
     return multer(getConfig());
+};
+
+exports.checkIfSuccess = function(request, response) {
+    return q.promise(function(resolve, reject) {
+        if (!Object.keys(request.files).length) {
+            return errorHandler.getHttpError(415)
+                .then(reject);
+        }
+
+        var name = Object.getOwnPropertyNames(request.files)[0];
+        if (request.files[name].failed) {
+            return errorHandler.getHttpError(413)
+                .then(reject);
+        }
+
+        return resolve();
+    });
 };
 
 function getConfig() {
@@ -16,17 +36,9 @@ function getConfig() {
         },
 
         onFileUploadStart: function(file, request, response) {
-            console.log(file.fieldname + ' is uploading...');
+            file.failed = false;
             if (file.extension !== 'PNG') {
-                file.failed = true;
-                console.log('Failed: not a PNG file.');
                 return false;
-            }
-        },
-
-        onFileUploadComplete: function(file, request, response) {
-            if (!file.failed) {
-                console.log(file.fieldname + ' uploaded to ' + file.path);
             }
         },
 
@@ -36,13 +48,8 @@ function getConfig() {
         },
 
         onFileSizeLimit: function(file) {
-            console.log('Failed: reached max size when uploading ' + file.originalname);
             fs.unlink('./' + file.path);
             file.failed = true;
-        },
-
-        onFilesLimit: function() {
-            console.log('Crossed file limit!');
         }
     };
 }

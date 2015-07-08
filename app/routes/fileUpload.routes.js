@@ -5,13 +5,16 @@
  */
 
 var responseHandler = require('../utils/response.handler');
+var uploadHandler = require('../utils/upload.handler');
 
 module.exports = function(routes) {
 
     //post an image
     routes.post('/', function(request, response) {
-        response.status(204)
-            .end();
+        uploadHandler.checkIfSuccess(request, response)
+            .then(responseHandler.sendSuccessUploadJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+
     });
 
     return routes;

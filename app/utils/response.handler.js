@@ -126,3 +126,9 @@ exports.sendSuccessfulPutJsonResponse = function(response) {
         return response.send(msg.SUCCESS_UPDATE);
     };
 };
+
+exports.sendSuccessUploadJsonResponse = function(response) {
+    return function() {
+        return response.send(msg.SUCCESS_UPLOAD);
+    };
+};
