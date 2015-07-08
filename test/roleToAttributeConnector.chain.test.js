@@ -5,6 +5,7 @@ var request = require('supertest');
 var expect = require('expect.js');
 var nock = require('nock');
 var config = require('config');
+var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
@@ -70,7 +71,7 @@ describe('/roleToAttributeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with no body', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             attributeId: '123',
@@ -107,7 +108,7 @@ describe('/roleToAttributeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with the field for attribute id empty', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             attributeId: '123',
@@ -148,7 +149,7 @@ describe('/roleToAttributeConnector', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with the field for role id empty', function(done) {
 
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             attributeId: '123',
@@ -188,7 +189,7 @@ describe('/roleToAttributeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with too many fields in the body', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             attributeId: '123',
@@ -229,7 +230,7 @@ describe('/roleToAttributeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with no attributeId field', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             attributeId: '123',
@@ -269,7 +270,7 @@ describe('/roleToAttributeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with no roleId field', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             attributeId: '123',
@@ -309,7 +310,7 @@ describe('/roleToAttributeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector not correctly formatted as Json', function(done) {
-        var resultNotJson = 'invalid json';
+        var resultNotJson = msg.INVALID_JSON;
 
         var badResultPost = {
             name: 'test1',
@@ -459,9 +460,7 @@ describe('/roleToAttributeConnector', function() {
     //==============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting roleToAttributeConnectors by role id not in the database', function(done) {
-        var resultNotInDb = {
-            message: 'No item with the given id was found.'
-        };
+        var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/roleToAttributeConnector?roleId=123')
@@ -482,7 +481,7 @@ describe('/roleToAttributeConnector', function() {
                 expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
-                expect(res.error.text).to.equal(resultNotInDb.message);
+                expect(res.error.text).to.equal(resultNotInDb);
                 done();
             });
     });
@@ -490,9 +489,7 @@ describe('/roleToAttributeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting roleToAttributeConnectors by attribute id not in the database', function(done) {
-        var resultNotInDb = {
-            message: 'No item with the given id was found.'
-        };
+        var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/roleToAttributeConnector?attributeId=123')
@@ -513,7 +510,7 @@ describe('/roleToAttributeConnector', function() {
                 expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
-                expect(res.error.text).to.equal(resultNotInDb.message);
+                expect(res.error.text).to.equal(resultNotInDb);
                 done();
             });
     });
@@ -521,9 +518,7 @@ describe('/roleToAttributeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 200 and a correctly formatted string when deleting a roleToAttributeConnector by its id', function(done) {
-        var resultDelete = {
-            message: 'The item was successfully removed.'
-        };
+        var resultDelete = msg.SUCCESS_DELETE;
 
         nock(mockedUrl)
             .delete('/roleToAttributeConnector/123')
@@ -547,7 +542,7 @@ describe('/roleToAttributeConnector', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultDelete));
+                expect(res.text).to.equal(resultDelete);
                 done();
             });
     });
@@ -555,7 +550,7 @@ describe('/roleToAttributeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a roleToAttributeConnector not in the database', function(done) {
-        var resultRoleNotInDb = 'No item with the given id was found.';
+        var resultRoleNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .delete('/roleToAttributeConnector/123')

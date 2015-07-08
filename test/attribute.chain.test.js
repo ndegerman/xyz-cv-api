@@ -5,6 +5,7 @@ var request = require('supertest');
 var expect = require('expect.js');
 var nock = require('nock');
 var config = require('config');
+var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
@@ -67,7 +68,7 @@ describe('/attribute', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an attribute with no body', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: '',
@@ -103,7 +104,7 @@ describe('/attribute', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an attribute with the name field empty', function(done) {
-        var resultNoPost = 'Invalid JSON object.';
+        var resultNoPost = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: '',
@@ -141,7 +142,7 @@ describe('/attribute', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an attribute with too many fields in the body', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: '123',
@@ -181,7 +182,7 @@ describe('/attribute', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an attribute that is missing the name field in the body', function(done) {
 
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name2: '123',
@@ -219,7 +220,7 @@ describe('/attribute', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an attribute not correctly formatted as Json', function(done) {
-        var resultNotJson = 'invalid json';
+        var resultNotJson = msg.INVALID_JSON;
 
         var badResultPost = {
             name: 'test1',
@@ -330,9 +331,7 @@ describe('/attribute', function() {
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting an attribute by its id not in the database', function(done) {
 
-        var resultNotInDb = {
-            message: 'No item with the given id was found.'
-        };
+        var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/attribute/123')
@@ -353,7 +352,7 @@ describe('/attribute', function() {
                 expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
-                expect(res.error.text).to.equal(resultNotInDb.message);
+                expect(res.error.text).to.equal(resultNotInDb);
                 done();
             });
     });
@@ -362,10 +361,7 @@ describe('/attribute', function() {
 
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when deleting an existing attribute', function(done) {
 
-        var resultDelete = {
-            message: 'The item was successfully removed.'
-        };
-
+        var resultDelete = msg.SUCCESS_DELETE;
         nock(mockedUrl)
             .delete('/attribute/1234')
             .reply(204, {})
@@ -388,7 +384,7 @@ describe('/attribute', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultDelete));
+                expect(res.text).to.equal(resultDelete);
                 done();
             });
     });
@@ -397,7 +393,7 @@ describe('/attribute', function() {
 
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting an attribute not in the database', function(done) {
 
-        var resultRoleNotInDb = 'No item with the given id was found.';
+        var resultRoleNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .delete('/attribute/123')

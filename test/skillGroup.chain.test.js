@@ -5,6 +5,7 @@ var request = require('supertest');
 var expect = require('expect.js');
 var nock = require('nock');
 var config = require('config');
+var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
@@ -67,7 +68,7 @@ describe('/skillGroup', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an empty skillGroup', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: '',
@@ -104,7 +105,7 @@ describe('/skillGroup', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillGroup with the name field empty', function(done) {
 
-        var resultEmptyName = 'Invalid JSON object.';
+        var resultEmptyName = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: '',
@@ -143,7 +144,7 @@ describe('/skillGroup', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillGroup with too many fields in the body', function(done) {
 
-        var resultBadJson = 'Invalid JSON object.';
+        var resultBadJson = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: 'test1',
@@ -182,7 +183,7 @@ describe('/skillGroup', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillGroup without a name field', function(done) {
-        var resultNoNameField = 'Invalid JSON object.';
+        var resultNoNameField = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: 'test1',
@@ -220,7 +221,7 @@ describe('/skillGroup', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillGroup with a Json list', function(done) {
-        var resultList = 'Invalid JSON object.';
+        var resultList = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: 'test1',
@@ -262,7 +263,7 @@ describe('/skillGroup', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skillGroup not correctly formatted as Json', function(done) {
-        var resultNotJson = 'invalid json';
+        var resultNotJson = msg.INVALID_JSON;
 
         var badResultPost = {
             name: 'test1',
@@ -373,7 +374,7 @@ describe('/skillGroup', function() {
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting a skillGroup not in the database', function(done) {
 
-        var resultSkillGroupNotInDb = 'No item with the given id was found.';
+        var resultSkillGroupNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/skillGroup/123')
@@ -402,9 +403,7 @@ describe('/skillGroup', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when deleting an existing skillGroup', function(done) {
-        var resultDelete = {
-            message: 'The item was successfully removed.'
-        };
+        var resultDelete = msg.SUCCESS_DELETE;
 
         nock(mockedUrl)
             .delete('/skillGroup/1234')
@@ -428,7 +427,7 @@ describe('/skillGroup', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultDelete));
+                expect(res.text).to.equal(resultDelete);
                 done();
             });
     });
@@ -436,7 +435,7 @@ describe('/skillGroup', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a skillGroup not in the database', function(done) {
-        var resultSkillGroupNotInDb = 'No item with the given id was found.';
+        var resultSkillGroupNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .delete('/skillGroup/123')

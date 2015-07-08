@@ -2,92 +2,98 @@
 
 var q = require('q');
 var errorHandler = require('./error.handler');
+var msg = require('./message.handler');
 
 // PARSING
 // ============================================================================
-exports.parsePolyQuery = function(body) {
-    return q.promise(function(resolve) {
-        var items = JSON.parse(body) || [];
-        return resolve(items);
-    });
+
+exports.parseDelete = function(response) {
+    return checkResponse(response)
+        .then(checkStatusCode(204))
+        .then(parseBody);
 };
 
-exports.parseMonoQuery = function(body) {
-    return q.promise(function(resolve) {
-        exports.parsePolyQuery(body)
-            .then(function(items) {
-                var item = (items.length > 0) ? items[0] : null;
-                return resolve(item);
-            });
-    });
+exports.parsePost = function(response) {
+    return checkResponse(response)
+        .then(checkStatusCode(200))
+        .then(parseBody);
 };
 
-// response[0]: the response
-// response[1]: the body
-exports.parseResponse = function(response) {
+exports.parsePut = function(response) {
+    return checkResponse(response)
+        .then(checkStatusCode(204))
+        .then(parseBody);
+};
+
+exports.parseGet = function(response) {
+    return checkResponse(response)
+        .then(checkStatusCode(200))
+        .then(parseBody);
+};
+
+exports.parseGetPolyQuery = function(response) {
+    return checkResponse(response)
+        .then(checkStatusCode(200))
+        .then(parsePolyQuery);
+};
+
+exports.parseGetMonoQuery = function(response) {
+    return checkResponse(response)
+        .then(checkStatusCode(200))
+        .then(parseMonoQuery);
+};
+
+function checkResponse(response) {
     return q.promise(function(resolve, reject) {
         if (!response) {
             return errorHandler.getHttpError(406)
-                .then(reject);
-        }
-
-        if (response[1].error) {
-            return errorHandler.getDREAMSHttpError(response)
                 .then(reject);
         }
 
         return resolve(response);
     });
-};
+}
 
-exports.parseDelete = function(response) {
-    return q.promise(function(resolve, reject) {
-        if (response[0].statusCode === 204) {
-            return resolve(response[1]);
-        }
+function checkStatusCode(code) {
+    return function(response) {
+        return q.promise(function(resolve, reject) {
+            if (response.statusCode === code) {
+                return resolve(response);
+            }
 
-        return errorHandler.getHttpError(response[0].statusCode)
-            .then(reject);
-    });
-};
-
-exports.parsePost = function(response) {
-    return q.promise(function(resolve, reject) {
-        if (response[0].statusCode === 200) {
-            return resolve(response[1]);
-        }
-
-        return errorHandler.getHttpError(response[0].statusCode)
-            .then(reject);
-    });
-};
-
-exports.parsePut = function(response) {
-    return q.promise(function(resolve, reject) {
-        if (!response) {
-            return errorHandler.getHttpError(406)
+            return errorHandler.getHttpError(response.statusCode)
                 .then(reject);
-        }
+        });
+    };
+}
 
-        if (response[0].statusCode === 204) {
-            return resolve();
-        }
-
-        return errorHandler.getHttpError(response[0].statusCode)
-            .then(reject);
+function parsePolyQuery(response) {
+    return q.promise(function(resolve) {
+        var items = JSON.parse(response.body) || [];
+        return resolve(items);
     });
-};
+}
 
-exports.parseGet = function(response) {
-    return q.promise(function(resolve, reject) {
-        if (response[0].statusCode === 200) {
-            return resolve(response[1]);
+function parseMonoQuery(response) {
+    return q.promise(function(resolve) {
+        parsePolyQuery(response)
+            .then(function(items) {
+                var item = (items.length > 0) ? items[0] : null;
+                return resolve(item);
+            });
+    });
+}
+
+function parseBody(response) {
+    return q.promise(function(resolve) {
+        var body = response.body || {};
+        if (typeof body === 'string') {
+            body = JSON.parse(body) || null;
         }
 
-        return errorHandler.getHttpError(response[0].statusCode)
-            .then(reject);
+        return resolve(body);
     });
-};
+}
 
 // SENDING
 // ============================================================================
@@ -111,12 +117,12 @@ exports.sendJsonResponse = function(response) {
 
 exports.sendSuccessfulDeleteJsonResponse = function(response) {
     return function() {
-        return response.json({ message: 'The item was successfully removed.' });
+        return response.send(msg.SUCCESS_DELETE);
     };
 };
 
 exports.sendSuccessfulPutJsonResponse = function(response) {
     return function() {
-        return response.json({ message: 'The user was updated successfully.'});
+        return response.send(msg.SUCCESS_UPDATE);
     };
 };

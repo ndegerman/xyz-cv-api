@@ -5,6 +5,7 @@ var request = require('supertest');
 var expect = require('expect.js');
 var nock = require('nock');
 var config = require('config');
+var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
@@ -70,7 +71,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToOfficeConnector with no body', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             officeId: '123',
@@ -107,7 +108,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToOfficeConnector with the field for office id empty', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             officeId: '123',
@@ -147,7 +148,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToOfficeConnector with the field for user id empty', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             officeId: '123',
@@ -187,7 +188,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToOfficeConnector with too many fields in the body', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             officeId: '123',
@@ -228,7 +229,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToOfficeConnector with no officeId field', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             officeId: '123',
@@ -268,7 +269,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToOfficeConnector with no userId field', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             officeId: '123',
@@ -309,7 +310,7 @@ describe('/userToOfficeConnector', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToOfficeConnector not correctly formatted as Json', function(done) {
 
-        var resultNotJson = 'invalid json';
+        var resultNotJson = msg.INVALID_JSON;
 
         var badResultPost = {
             name: 'test1',
@@ -460,9 +461,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting userToOfficeConnectors by user id not in the database', function(done) {
-        var resultNotInDb = {
-            message: 'No item with the given id was found.'
-        };
+        var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/userToOfficeConnector?userId=123')
@@ -483,7 +482,7 @@ describe('/userToOfficeConnector', function() {
                 expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
-                expect(res.error.text).to.equal(resultNotInDb.message);
+                expect(res.error.text).to.equal(resultNotInDb);
                 done();
             });
     });
@@ -491,9 +490,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting userToOfficeConnectors by office id not in the database', function(done) {
-        var resultNotInDb = {
-            message: 'No item with the given id was found.'
-        };
+        var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/userToOfficeConnector?officeId=123')
@@ -514,7 +511,7 @@ describe('/userToOfficeConnector', function() {
                 expect(err).to.exist;
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
-                expect(res.error.text).to.equal(resultNotInDb.message);
+                expect(res.error.text).to.equal(resultNotInDb);
                 done();
             });
     });
@@ -522,9 +519,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 200 and a correctly formatted string when deleting a userToOfficeConnector by its id', function(done) {
-        var resultDelete = {
-            message: 'The item was successfully removed.'
-        };
+        var resultDelete = msg.SUCCESS_DELETE;
 
         nock(mockedUrl)
             .delete('/userToOfficeConnector/123')
@@ -548,7 +543,7 @@ describe('/userToOfficeConnector', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultDelete));
+                expect(res.text).to.equal(resultDelete);
                 done();
             });
     });
@@ -556,7 +551,7 @@ describe('/userToOfficeConnector', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a userToOfficeConnector not in the database', function(done) {
-        var resultUserNotInDb = 'No item with the given id was found.';
+        var resultUserNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .delete('/userToOfficeConnector/123')

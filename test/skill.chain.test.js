@@ -5,6 +5,7 @@ var request = require('supertest');
 var expect = require('expect.js');
 var nock = require('nock');
 var config = require('config');
+var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 
@@ -69,7 +70,7 @@ describe('api/skill', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting an empty skill', function(done) {
-        var resultNoArg = 'Invalid JSON object.';
+        var resultNoArg = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: '',
@@ -105,7 +106,7 @@ describe('api/skill', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skill with the name field empty', function(done) {
-        var resultEmptyName = 'Invalid JSON object.';
+        var resultEmptyName = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: '',
@@ -143,7 +144,7 @@ describe('api/skill', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skill with too many fields in the body', function(done) {
-        var resultBadJson = 'Invalid JSON object.';
+        var resultBadJson = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: 'test1',
@@ -182,7 +183,7 @@ describe('api/skill', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skill without a name field', function(done) {
-        var resultNoNameField = 'Invalid JSON object.';
+        var resultNoNameField = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: 'test1',
@@ -221,7 +222,7 @@ describe('api/skill', function() {
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skill with a Json list', function(done) {
 
-        var resultList = 'Invalid JSON object.';
+        var resultList = msg.INVALID_JSON_OBJECT;
 
         var badResultPost = {
             name: 'test1',
@@ -263,7 +264,7 @@ describe('api/skill', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 400 and a correctly formatted string when posting a skill not correctly formatted as Json', function(done) {
-        var resultNotJson = 'invalid json';
+        var resultNotJson = msg.INVALID_JSON;
 
         var badResultPost = {
             name: 'test1',
@@ -374,7 +375,7 @@ describe('api/skill', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when getting a skill not in the database', function(done) {
-        var resultSkillNotInDb = 'No item with the given id was found.';
+        var resultSkillNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .get('/skill/123')
@@ -403,9 +404,7 @@ describe('api/skill', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when deleting an existing skill', function(done) {
-        var resultDelete = {
-            message: 'The item was successfully removed.'
-        };
+        var resultDelete = msg.SUCCESS_DELETE;
 
         nock(mockedUrl)
             .delete('/skill/1234')
@@ -429,7 +428,7 @@ describe('api/skill', function() {
 
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
-                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultDelete));
+                expect(res.text).to.equal(resultDelete);
                 done();
             });
     });
@@ -437,7 +436,7 @@ describe('api/skill', function() {
     //===============================================================================
 
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a skill not in the database', function(done) {
-        var resultSkillNotInDb = 'No item with the given id was found.';
+        var resultSkillNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
             .delete('/skill/123')
