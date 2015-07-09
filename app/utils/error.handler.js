@@ -20,6 +20,12 @@ exports.getHttpError = function(statusCode) {
             case 406:
                 error.message = msg.INVALID_RESPONSE;
                 break;
+            case 413:
+                error.message = msg.FILE_TOO_LARGE;
+                break;
+            case 415:
+                error.message = msg.BAD_FILE_FORMAT;
+                break;
             case 500:
                 error.message = msg.FAILED_HTTP;
                 break;
