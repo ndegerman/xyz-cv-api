@@ -12,10 +12,8 @@ module.exports = function(routes) {
 
     //post a file
     routes.post('/', function(request, response) {
-        var originalName = request.files[Object.getOwnPropertyNames(request.files)[0]].originalname;
-
         fileHandler.checkIfSuccess(request, response)
-            .then(fileController.createNewFile(originalName))
+            .then(fileController.createNewFile)
             .then(responseHandler.sendSuccessUploadJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 

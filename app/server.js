@@ -46,13 +46,12 @@ app.use(bodyParser.json());
 // logging
 app.use(morgan('dev'));
 
-app.use(fileHandler.getHandler());
-
 // ROUTES & MIDDLEWARE
 // ============================================================================
 app.use(authenticationMiddleware.authentication);
 app.use(responseMiddleware.nocache);
 app.use(responseMiddleware.accessControl);
+app.use(fileHandler.getHandler());
 
 app.use('/attribute', attributeRoutes);
 app.use('/user', userRoutes);

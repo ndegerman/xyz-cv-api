@@ -4,20 +4,19 @@ var fileDao = require('../dao/file.dao');
 var q = require('q');
 var errorHandler = require('../utils/error.handler');
 
-function getFileTemplate() {
-    return {
-        originalName: null,
-        generatedName: null
-    };
+function validateFile(file) {
+    return q.promise(function(resolve, reject) {
+        if (file && file.generatedName && file.originalName) {
+            return resolve(file);
+        }
+
+        return errorHandler.getHttpError(400)
+            .then(reject);
+    });
 }
 
-exports.createNewFile = function(originalName) {
-    return function(generatedName) {
-        var file = getFileTemplate();
-        file.originalName = originalName;
-        file.generatedName = generatedName.substring(8, generatedName.length);
+exports.createNewFile = function(file) {
         fileDao.createNewFile(file);
-    };
 };
 
 // exports.getFileByGeneratedName = function(name) {
