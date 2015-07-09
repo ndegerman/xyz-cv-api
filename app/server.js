@@ -13,7 +13,7 @@ var skillRoutes = require('./routes/skill.routes')(express.Router());
 var skillGroupRoutes = require('./routes/skillGroup.routes')(express.Router());
 var officeRoutes = require('./routes/office.routes')(express.Router());
 
-var fileUploadRoutes = require('./routes/fileUpload.routes')(express.Router());
+var fileRoutes = require('./routes/file.routes')(express.Router());
 
 var roleToAttributeConnectorRoutes = require('./routes/roleToAttributeConnector.routes')(express.Router());
 var userToSkillConnectorRoutes = require('./routes/userToSkillConnector.routes.js')(express.Router());
@@ -27,7 +27,7 @@ var authenticationMiddleware = require('./middleware/authentication.middleware')
 var responseMiddleware = require('./middleware/response.middleware');
 
 var config = require('config');
-var uploadHandler = require('./utils/upload.handler');
+var fileHandler = require('./utils/file.handler');
 
 var app = express();
 
@@ -46,7 +46,7 @@ app.use(bodyParser.json());
 // logging
 app.use(morgan('dev'));
 
-app.use(uploadHandler.getHandler());
+app.use(fileHandler.getHandler());
 
 // ROUTES & MIDDLEWARE
 // ============================================================================
@@ -61,7 +61,7 @@ app.use('/skill', skillRoutes);
 app.use('/skillGroup', skillGroupRoutes);
 app.use('/office', officeRoutes);
 
-app.use('/upload', fileUploadRoutes);
+app.use('/file', fileRoutes);
 
 app.use('/roleToAttributeConnector', roleToAttributeConnectorRoutes);
 app.use('/userToSkillConnector', userToSkillConnectorRoutes);

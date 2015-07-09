@@ -22,7 +22,20 @@ exports.checkIfSuccess = function(request, response) {
                 .then(reject);
         }
 
-        return resolve();
+        return resolve(request.files[name].path);
+    });
+};
+
+exports.deleteFile = function(file) {
+    return q.promise(function(resolve, reject) {
+        var path = './uploads/' + file.generatedName;
+        fs.unlink(path, function(error) {
+            if (error) {
+                resolve(file._id);
+            }
+
+            resolve(file._id);
+        });
     });
 };
 
@@ -39,6 +52,10 @@ function getConfig() {
             var extensions = ['png', 'jpg', 'jpeg'];
             var extension = file.extension.toLowerCase();
             if (extensions.indexOf(extension) <= -1) {
+                return false;
+            }
+
+            if (request.method !== 'POST') {
                 return false;
             }
         },
