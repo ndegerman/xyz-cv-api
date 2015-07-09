@@ -3,7 +3,6 @@
 var multer = require('multer');
 var fs = require('fs');
 var errorHandler = require('../utils/error.handler');
-var responseHandler = require('../utils/response.handler');
 var q = require('q');
 
 exports.getHandler = function() {
@@ -37,7 +36,9 @@ function getConfig() {
 
         onFileUploadStart: function(file, request, response) {
             file.failed = false;
-            if (file.extension !== 'PNG') {
+            var extensions = ['png', 'jpg', 'jpeg'];
+            var extension = file.extension.toLowerCase();
+            if (extensions.indexOf(extension) <= -1) {
                 return false;
             }
         },

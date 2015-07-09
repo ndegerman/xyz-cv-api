@@ -24,7 +24,7 @@ exports.getHttpError = function(statusCode) {
                 error.message = msg.FILE_TOO_LARGE;
                 break;
             case 415:
-                error.message = msg.FILE_NOT_PNG;
+                error.message = msg.BAD_FILE_FORMAT;
                 break;
             case 500:
                 error.message = msg.FAILED_HTTP;

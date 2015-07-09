@@ -9,7 +9,7 @@ var uploadHandler = require('../utils/upload.handler');
 
 module.exports = function(routes) {
 
-    //post an image
+    //post a file
     routes.post('/', function(request, response) {
         uploadHandler.checkIfSuccess(request, response)
             .then(responseHandler.sendSuccessUploadJsonResponse(response))
