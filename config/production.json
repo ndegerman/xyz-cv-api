@@ -1,5 +1,5 @@
 {
-    "API_URL": "http://xyz.softhouse.se/api/",
-    "UI_URL": "http://xyz.softhouse.se/cv",
+    "API_URL": "http://xyz/api/",
+    "UI_URL": "http://xyz/cv",
     "PORT": 9000
 }
