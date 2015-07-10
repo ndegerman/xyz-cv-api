@@ -1,6 +1,6 @@
 {
-    "API_URL": "http://xyz.softhouse.se/api/",
-    "UI_URL": "http://xyz.softhouse.se/cv",
-    "PORT": 9000,
-    "UPLOAD_PATH": "./uploads/"
+    "UPLOAD_PATH": "./uploads/",
+    "API_URL": "http://xyz/api/",
+    "UI_URL": "http://xyz/cv",
+    "PORT": 9000
 }
