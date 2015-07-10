@@ -1,5 +1,5 @@
 {
     "API_URL": "http://localhost:666/",
     "PORT": 9090,
-    "UPLOAD_PATH": "./testUploads/"
+    "UPLOAD_PATH": "./test/uploads/"
 }

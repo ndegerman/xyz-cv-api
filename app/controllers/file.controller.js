@@ -16,7 +16,7 @@ function validateFile(file) {
 }
 
 exports.createNewFile = function(file) {
-        fileDao.createNewFile(file);
+    fileDao.createNewFile(file);
 };
 
 // exports.getFileByGeneratedName = function(name) {

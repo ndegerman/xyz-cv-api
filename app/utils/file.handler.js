@@ -22,6 +22,7 @@ exports.checkIfSuccess = function(request, response) {
             return errorHandler.getHttpError(413)
                 .then(reject);
         }
+
         var originalName = request.files[Object.getOwnPropertyNames(request.files)[0]].originalname;
         var generatedName = request.files[name].path;
         generatedName = generatedName.substring(8, generatedName.length);
