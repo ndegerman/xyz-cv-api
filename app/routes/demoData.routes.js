@@ -275,10 +275,8 @@ function connectUserAndRandomSkills(user) {
     return function(skills) {
         return q.promise(function(resolve) {
             var promises = [];
-            var total = 0;
             skills.forEach(function(skill) {
                 if (randomHandler.bernoulli(config.DEMO.SKILL_ON_USER_PROBABILITY)) {
-                    total++;
                     promises.push(userToSkillConnectorController.createUserToSkillConnector({userId: user._id, skillId: skill._id}));
                 }
             });
