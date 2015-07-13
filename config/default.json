@@ -4,9 +4,9 @@
     "PREFIX": "cv",
     "UI_URL": "http://localhost:9000",
     "PORT": 9090,
-    "FAKER": {
+    "DEMO": {
         "USER_LIMIT": 500,
-        "SKILL_LIMIT": 20,
-        "SKILL_ON_USER_PROBABILITY": 0.3
+        "SKILL_ON_USER_PROBABILITY": 0.2,
+        "NUMBER_OF_SKILLS": 20
     }
 }
