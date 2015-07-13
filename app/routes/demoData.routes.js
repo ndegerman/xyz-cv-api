@@ -24,9 +24,6 @@ var userLimit = config.DEMO.USER_LIMIT;
 var skillLimit = config.DEMO.SKILL_LIMIT;
 var q = require('q');
 
-var officesConnected = 0;
-var skillsConnected = 0;
-
 module.exports = function(routes) {
 
     // setup demo data
