@@ -103,7 +103,7 @@ describe('/user', function() {
 
     //===============================================================================
 
-    it('5 should reply with HTTP status code 200 and a correctly formatted JSON object when getting the current user', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting the current user', function(done) {
         var resultGetOne = getUserByEmailResponse[0];
 
         nock(mockedUrl)
