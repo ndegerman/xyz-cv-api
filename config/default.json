@@ -4,6 +4,7 @@
     "PREFIX": "cv",
     "UI_URL": "http://localhost:9000",
     "PORT": 9090,
+    "UPLOAD_PATH": "./uploads/",
     "DEMO": {
         "USER_LIMIT": 500,
         "SKILL_ON_USER_PROBABILITY": 0.2,

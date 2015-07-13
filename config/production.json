@@ -1,4 +1,5 @@
 {
+    "UPLOAD_PATH": "./uploads/",
     "API_URL": "http://xyz/api/",
     "UI_URL": "http://xyz/cv",
     "PORT": 9000
