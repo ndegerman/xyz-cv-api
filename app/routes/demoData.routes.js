@@ -24,13 +24,21 @@ var userLimit = config.DEMO.USER_LIMIT;
 var skillLimit = config.DEMO.SKILL_LIMIT;
 var q = require('q');
 
+var officesConnected = 0;
+var skillsConnected = 0;
+
 module.exports = function(routes) {
 
     // setup demo data
-    routes.get('/', function(request, response) {
-        purgeAll()
-            .then(addAll)
+    routes.post('/', function(request, response) {
+        addAll()
             .then(addConnectors)
+            .then(responseHandler.sendJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    routes.delete('/', function(request, response) {
+        purgeAll()
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
@@ -197,6 +205,8 @@ function addSkills() {
     abbreviations.forEach(function(abbreviation) {
         skills.push({name: abbreviation});
     });
+
+    console.log('%d skills generated', abbreviations.length);
 
     return q.all(applyAddOnItems(skills, skillController.createNewSkill));
 }
