@@ -2,7 +2,7 @@
     "SECRET": "turbohipster",
     "API_URL": "http://localhost:3232/",
     "PREFIX": "cv",
-    "UI_URL": "http://localhost:3000",
+    "UI_URL": "http://localhost:9000",
     "PORT": 9090,
     "DEMO": {
         "USER_LIMIT": 100,
