@@ -23,9 +23,6 @@ var config = require('config');
 
 var q = require('q');
 
-var officesConnected = 0;
-var skillsConnected = 0;
-
 module.exports = function(routes) {
 
     // setup demo data
