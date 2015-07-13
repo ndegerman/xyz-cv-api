@@ -16,20 +16,29 @@ var userToOfficeConnectorController = require('../controllers/userToOfficeConnec
 var userToSkillConnectorController = require('../controllers/userToSkillConnector.controller');
 
 var responseHandler = require('../utils/response.handler');
+var randomHandler = require('../utils/random.handler');
 
 var faker = require('faker');
 var config = require('config');
-var userLimit = config.FAKER.USER_LIMIT;
-var skillLimit = config.FAKER.SKILL_LIMIT;
+var userLimit = config.DEMO.USER_LIMIT;
+var skillLimit = config.DEMO.SKILL_LIMIT;
 var q = require('q');
+
+var officesConnected = 0;
+var skillsConnected = 0;
 
 module.exports = function(routes) {
 
     // setup demo data
-    routes.get('/', function(request, response) {
-        purgeAll()
-            .then(addAll)
+    routes.post('/', function(request, response) {
+        addAll()
             .then(addConnectors)
+            .then(responseHandler.sendJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    routes.delete('/', function(request, response) {
+        purgeAll()
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
@@ -192,13 +201,12 @@ function addUsers() {
 function addSkills() {
     var skills = [];
 
-    for (var i = 0; i < skillLimit; i++) {
-        var name = faker.hacker.abbreviation();
-        var skill = {
-            name: name
-        };
-        skills.push(skill);
-    }
+    var abbreviations = randomHandler.getSkillAbbreviations(config.DEMO.NUMBER_OF_SKILLS);
+    abbreviations.forEach(function(abbreviation) {
+        skills.push({name: abbreviation});
+    });
+
+    console.log('%d skills generated', abbreviations.length);
 
     return q.all(applyAddOnItems(skills, skillController.createNewSkill));
 }
@@ -278,7 +286,7 @@ function connectUserAndRandomSkills(user) {
         return q.promise(function(resolve) {
             var promises = [];
             skills.forEach(function(skill) {
-                if (!faker.random.number(1 / config.FAKER.SKILL_ON_USER_PROBABILITY - 1)) {
+                if (randomHandler.bernoulli(config.DEMO.SKILL_ON_USER_PROBABILITY)) {
                     promises.push(userToSkillConnectorController.createUserToSkillConnector({userId: user._id, skillId: skill._id}));
                 }
             });

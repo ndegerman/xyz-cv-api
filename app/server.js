@@ -69,9 +69,8 @@ app.use('/userToOfficeConnector', userToOfficeConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
 
-if (app.get('env') === 'development') {
-    app.use('/demo-data', demoDataRoutes);
-}
+// for debugging and demo
+app.use('/demo-data', demoDataRoutes);
 
 // for debugging
 app.get('/kalle', function(req, res) {
