@@ -70,7 +70,7 @@ describe('/user', function() {
         var resultGetOne = {
             _id: '1234',
             name: 'test3',
-            createAt: '2015-06-15T15:43:31.035Z',
+            createdAt: '2015-06-15T15:43:31.035Z',
             updatedAt: '2015-06-15T15:43:31.035Z'
         };
 
@@ -83,6 +83,38 @@ describe('/user', function() {
 
         request(url)
             .get('/user/1234')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send()
+
+            // end handles the response
+            .end(function(err, res) {
+                if (err) {
+                    throw err;
+                }
+
+                expect(res).to.exist;
+                expect(res.status).to.equal(200);
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultGetOne));
+                done();
+            });
+    });
+
+    //===============================================================================
+
+    it('5 should reply with HTTP status code 200 and a correctly formatted JSON object when getting the current user', function(done) {
+        var resultGetOne = getUserByEmailResponse[0];
+
+        nock(mockedUrl)
+            .get('/user/current')
+            .reply(200, resultGetOne)
+            .persist()
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .get('/user/current')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
