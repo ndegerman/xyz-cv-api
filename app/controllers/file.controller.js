@@ -19,10 +19,6 @@ exports.createNewFile = function(file) {
     fileDao.createNewFile(file);
 };
 
-// exports.getFileByGeneratedName = function(name) {
-//     return fileDao.getFileByGeneratedName(name);
-// };
-
 exports.getFileById = function(id) {
     return fileDao.getFileById(id);
 };
