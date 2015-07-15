@@ -1,10 +1,11 @@
 'use strict';
 
 var multer = require('multer');
-var fs = require('fs');
+var fs = require('fs-extra');
 var errorHandler = require('../utils/error.handler');
 var q = require('q');
 var config = require('config');
+var lwip = require('lwip');
 
 exports.getHandler = function() {
     return multer(getConfig());
@@ -36,12 +37,12 @@ exports.checkIfSuccess = function(request, response) {
 exports.deleteFile = function(file) {
     return q.promise(function(resolve, reject) {
         var path = config.UPLOAD_PATH + file.generatedName;
-        fs.unlink(path, function(error) {
-            if (error) {
-                resolve(file._id);
-            }
+        var retinaPath = config.UPLOAD_PATH + getRetinaName(file.generatedName);
 
-            resolve(file._id);
+        fs.unlink(path, function() {
+            fs.unlink(retinaPath, function() {
+                resolve(file._id);
+            });
         });
     });
 };
@@ -51,6 +52,20 @@ function getFileTemplate() {
         generatedName: null,
         originalName: null
     };
+}
+
+function getRetinaName(name) {
+    var newNameList = name.split('.');
+    var newName = '';
+    for (var i = 0; i < newNameList.length; i++) {
+        if (i === newNameList.length - 1) {
+            break;
+        }
+        newName += newNameList[i];
+    }
+
+    newName += '@2x.' + newNameList[newNameList.length - 1];
+    return newName;
 }
 
 function getConfig() {
@@ -63,7 +78,7 @@ function getConfig() {
 
         onFileUploadStart: function(file, request, response) {
             file.failed = false;
-            var extensions = ['png', 'jpg', 'jpeg'];
+            var extensions = ['png', 'jpg'];
             var extension = file.extension.toLowerCase();
             if (extensions.indexOf(extension) <= -1) {
                 return false;
@@ -72,6 +87,38 @@ function getConfig() {
             if (request.method !== 'POST') {
                 return false;
             }
+        },
+
+        onFileUploadComplete: function(file, request, response) {
+            var newName = getRetinaName(file.name);
+
+            fs.copy(file.path, config.UPLOAD_PATH + newName, function(error) {
+                if (error) {
+                    file.failed = true;
+                    throw error;
+                }
+            });
+
+            lwip.open(file.path, function(error, image) {
+                if (error) {
+                    file.failed = true;
+                }
+
+                image.scale(0.5, function(error, image) {
+                    if (error) {
+                        file.failed = true;
+                    }
+
+                    image.toBuffer(file.extension.toLowerCase(), function(error, buffer) {
+                        if (error) {
+                            file.failed = true;
+                        }
+
+                        fs.writeFileSync(file.path, buffer);
+                    });
+                });
+            });
+
         },
 
         onError: function(error, next) {
