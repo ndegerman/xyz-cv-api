@@ -20,7 +20,28 @@ function getUserTemplate(name, email) {
     return {
         email: email,
         name: name,
-        role: 'user'
+        role: 'user',
+
+        phoneNumber: null,
+        employeeNumber: null,
+        position: null,
+        closestSuperior: null,
+        startDateOfEmployment: null,
+        endDateOfEmployment: null,
+
+        profileImage: null,
+        personalIdNumber: null,
+        sex: null,
+        description: null,
+        personalInterests: [],
+
+        linkedin: null,
+        facebook: null,
+        twitter: null,
+        country: null,
+        address: null,
+        city: null,
+        ZIP: null
     };
 }
 

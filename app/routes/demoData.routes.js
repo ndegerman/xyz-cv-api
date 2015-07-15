@@ -30,13 +30,13 @@ module.exports = function(routes) {
     routes.post('/', function(request, response) {
         addAll()
             .then(addConnectors)
-            .then(responseHandler.sendJsonResponse(response))
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     routes.delete('/', function(request, response) {
         purgeAll()
-            .then(responseHandler.sendJsonResponse(response))
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
@@ -66,7 +66,7 @@ function purgeUsers() {
     return q.promise(function(resolve) {
         userController.getAllUsers()
             .then(function(users) {
-                return q.all(applyDeleteOnItems(users, userController.deleteUserById))
+                return q.all(applyDeleteOnItemRec(users, 0, userController.deleteUserById))
                     .then(resolve);
             });
     });
@@ -76,7 +76,7 @@ function purgeRoles() {
     return q.promise(function(resolve) {
         roleController.getAllRoles()
             .then(function(roles) {
-                return q.all(applyDeleteOnItems(roles, roleController.deleteRoleById))
+                return q.all(applyDeleteOnItemRec(roles, 0, roleController.deleteRoleById))
                     .then(resolve);
             });
     });
@@ -86,7 +86,7 @@ function purgeAttributes() {
     return q.promise(function(resolve) {
         attributeController.getAllAttributes()
             .then(function(attributes) {
-                return q.all(applyDeleteOnItems(attributes, attributeController.deleteAttributeById))
+                return q.all(applyDeleteOnItemRec(attributes, 0, attributeController.deleteAttributeById))
                     .then(resolve);
             });
     });
@@ -96,7 +96,7 @@ function purgeSkills() {
     return q.promise(function(resolve) {
         skillController.getAllSkills()
             .then(function(skills) {
-                return q.all(applyDeleteOnItems(skills, skillController.deleteSkillById))
+                return q.all(applyDeleteOnItemRec(skills, 0, skillController.deleteSkillById))
                     .then(resolve);
             });
     });
@@ -106,7 +106,7 @@ function purgeOffices() {
     return q.promise(function(resolve) {
         officeController.getAllOffices()
             .then(function(offices) {
-                return q.all(applyDeleteOnItems(offices, officeController.deleteOfficeById))
+                return q.all(applyDeleteOnItemRec(offices, 0, officeController.deleteOfficeById))
                     .then(resolve);
             });
     });
@@ -116,7 +116,7 @@ function purgeSkillGroups() {
     return q.promise(function(resolve) {
         skillGroupController.getAllSkillGroups()
             .then(function(skillGroups) {
-                return q.all(applyDeleteOnItems(skillGroups, skillGroupController.deleteSkillGroupById))
+                return q.all(applyDeleteOnItemRec(skillGroups, 0, skillGroupController.deleteSkillGroupById))
                     .then(resolve);
             });
     });
@@ -126,7 +126,7 @@ function purgeUserToSkillConnectors() {
     return q.promise(function(resolve) {
         userToSkillConnectorController.getAllUserToSkillConnectors()
             .then(function(userToSkillConnectors) {
-                return q.all(applyDeleteOnItems(userToSkillConnectors, userToSkillConnectorController.deleteUserToSkillConnectorById))
+                return q.all(applyDeleteOnItemRec(userToSkillConnectors, 0, userToSkillConnectorController.deleteUserToSkillConnectorById))
                     .then(resolve);
             });
     });
@@ -136,7 +136,7 @@ function purgeRoleToAttributeConnectors() {
     return q.promise(function(resolve) {
         roleToAttributeConnectorController.getAllRoleToAttributeConnectors()
             .then(function(roleToAttributeConnectors) {
-                return q.all(applyDeleteOnItems(roleToAttributeConnectors, roleToAttributeConnectorController.deleteRoleToAttributeConnectorById))
+                return q.all(applyDeleteOnItemRec(roleToAttributeConnectors, 0, roleToAttributeConnectorController.deleteRoleToAttributeConnectorById))
                     .then(resolve);
             });
     });
@@ -146,7 +146,7 @@ function purgeSkillToSkillGroupConnectors() {
     return q.promise(function(resolve) {
         skillToSkillGroupConnectorController.getAllSkillToSkillGroupConnectors()
             .then(function(skillToSkillGroupConnectors) {
-                return q.all(applyDeleteOnItems(skillToSkillGroupConnectors, skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorById))
+                return q.all(applyDeleteOnItemRec(skillToSkillGroupConnectors, 0, skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorById))
                     .then(resolve);
             });
     });
@@ -156,7 +156,7 @@ function purgeUserToOfficeConnectors() {
     return q.promise(function(resolve) {
         userToOfficeConnectorController.getAllUserToOfficeConnectors()
             .then(function(userToOfficeConnectors) {
-                return q.all(applyDeleteOnItems(userToOfficeConnectors, userToOfficeConnectorController.deleteUserToOfficeConnectorById))
+                return q.all(applyDeleteOnItemRec(userToOfficeConnectors, 0, userToOfficeConnectorController.deleteUserToOfficeConnectorById))
                     .then(resolve);
             });
     });
@@ -183,16 +183,35 @@ function addUsers() {
         var fullName = firstName + ' ' + lastName;
         var email = firstName + '.' + lastName + '@softhouse.se';
         email = email.toLowerCase();
+        var position = faker.name.title();
 
         var user = {
             name: fullName,
             email: email,
-            role: 'user'
+            role: 'user',
+            phoneNumber: faker.phone.phoneNumberFormat(),
+            employeeNumber: faker.random.number(2000),
+            position: position,
+            closestSuperior: faker.name.firstName() + ' ' + faker.name.lastName(),
+            startDateOfEmployment: faker.date.past(),
+            endDateOfEmployment: null,
+            profileImage: null,
+            personalIdNumber: faker.random.uuid,
+            sex: randomHandler.generateSex(),
+            description: faker.lorem.sentence(),
+            personalInterests: randomHandler.getPersonalInterests(),
+            linkedin: 'https://www.linkedin.com/in/williamhgates',
+            facebook: 'https://www.facebook.com/BillGates',
+            twitter: 'https://twitter.com/billgates',
+            country: faker.address.country(),
+            address: faker.address.streetAddress(),
+            city: faker.address.city(),
+            ZIP: faker.address.zipCode()
         };
         users.push(user);
     }
 
-    return q.all(applyAddOnItems(users, userController.createNewUser));
+    return q.all(applyAddOnItemsRec(users, 0, userController.createNewUser));
 }
 
 function addSkills() {
@@ -203,9 +222,7 @@ function addSkills() {
         skills.push({name: abbreviation});
     });
 
-    console.log('%d skills generated', abbreviations.length);
-
-    return q.all(applyAddOnItems(skills, skillController.createNewSkill));
+    return q.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
 }
 
 function addOffices() {
@@ -220,7 +237,7 @@ function addOffices() {
             name: 'Stockholm'
         }
     ];
-    return q.all(applyAddOnItems(offices, officeController.createNewOffice));
+    return q.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice));
 }
 
 function addAttributes() {
@@ -232,7 +249,7 @@ function addAttributes() {
             name: 'caneEditProfile'
         }
     ];
-    return q.all(applyAddOnItems(attributes, attributeController.createNewAttribute));
+    return q.all(applyAddOnItemsRec(attributes, 0, attributeController.createNewAttribute));
 }
 
 function addRoles() {
@@ -244,7 +261,7 @@ function addRoles() {
             name: 'admin'
         }
     ];
-    return q.all(applyAddOnItems(roles, roleController.createNewRole));
+    return q.all(applyAddOnItemsRec(roles, 0, roleController.createNewRole));
 }
 
 // ADD CONNECTORS
@@ -266,54 +283,17 @@ function addConnectors() {
 }
 
 function connectUsersAndRandomSkills(users) {
-    return q.promise(function(resolve) {
-        var promises = [];
-        users.forEach(function(user) {
-            promises.push(skillController.getAllSkills()
-                .then(connectUserAndRandomSkills(user)));
+    return skillController.getAllSkills()
+        .then(function(skills) {
+            return applyConnectOnItems(users, skills, 'userId', 'skillId', 0, 0, userToSkillConnectorController.createUserToSkillConnector, config.DEMO.SKILL_ON_USER_PROBABILITY);
         });
-
-        return q.all(promises)
-            .then(resolve);
-    });
-}
-
-function connectUserAndRandomSkills(user) {
-    return function(skills) {
-        return q.promise(function(resolve) {
-            var promises = [];
-            skills.forEach(function(skill) {
-                if (randomHandler.bernoulli(config.DEMO.SKILL_ON_USER_PROBABILITY)) {
-                    promises.push(userToSkillConnectorController.createUserToSkillConnector({userId: user._id, skillId: skill._id}));
-                }
-            });
-
-            return q.all(promises)
-                .then(resolve);
-        });
-
-    };
 }
 
 function connectUsersAndRandomOffice(users) {
-    return q.promise(function(resolve) {
-        var promises = [];
-        users.forEach(function(user) {
-            promises.push(officeController.getAllOffices()
-                .then(connectUserAndRandomOffice(user)));
+    return officeController.getAllOffices()
+        .then(function(offices) {
+            return connectOneForItems(users, offices, 'userId', 'officeId', 0, userToOfficeConnectorController.createUserToOfficeConnector);
         });
-
-        return q.all(promises)
-            .then(resolve);
-    });
-}
-
-function connectUserAndRandomOffice(user) {
-    return function(offices) {
-        var officeNumber = faker.random.number(offices.length - 1);
-        var office = offices[officeNumber];
-        return userToOfficeConnectorController.createUserToOfficeConnector({userId: user._id, officeId: office._id});
-    };
 }
 
 function connectRoleAndAttributes(role) {
@@ -343,6 +323,21 @@ function applyDeleteOnItems(items, applyFunction) {
     return promises;
 }
 
+function applyDeleteOnItemRec(items, index, applyFunction) {
+    return q.promise(function(resolve) {
+        if (index >= items.length) {
+            return resolve(items);
+        }
+
+        return applyFunction(items[index]._id)
+            .then(function() {
+                index++;
+                return applyDeleteOnItemRec(items, index, applyFunction)
+                    .then(resolve);
+            });
+    });
+}
+
 function applyAddOnItems(items, applyFunction) {
     var promises = [];
     items.forEach(function(item) {
@@ -350,4 +345,74 @@ function applyAddOnItems(items, applyFunction) {
     });
 
     return promises;
+}
+
+function applyAddOnItemsRec(items, index, applyFunction) {
+    return q.promise(function(resolve) {
+        if (index >= items.length) {
+            return resolve(items);
+        }
+
+        // console.log('applyAddOnItemsRec', items.length);
+        // console.log('applyAddOnItemsRec', index);
+        return applyFunction(items[index])
+            .then(function() {
+                index++;
+                return applyAddOnItemsRec(items, index, applyFunction)
+                    .then(resolve);
+            });
+    });
+}
+
+function applyConnectOnItems(items, connectToItems, itemsProp, connectToItemsProp, index1, index2, applyFunction, p) {
+    return q.promise(function(resolve) {
+        if (index1 >= items.length) {
+            return resolve(items);
+        }
+
+        else if (index2 >= connectToItems.length) {
+            index1++;
+            index2 = 0;
+            return applyConnectOnItems(items, connectToItems, itemsProp, connectToItemsProp, index1, index2, applyFunction, p)
+                .then(resolve);
+        }
+
+        if (randomHandler.bernoulli(p)) {
+            var connector = {};
+            connector[itemsProp] = items[index1]._id;
+            connector[connectToItemsProp] = connectToItems[index2]._id;
+
+            return applyFunction(connector)
+                .then(function() {
+                    index2++;
+                    return applyConnectOnItems(items, connectToItems, itemsProp, connectToItemsProp, index1, index2, applyFunction, p)
+                        .then(resolve);
+                });
+        } else {
+            index2++;
+
+            return applyConnectOnItems(items, connectToItems, itemsProp, connectToItemsProp, index1, index2, applyFunction, p)
+                .then(resolve);
+        }
+    });
+
+}
+
+function connectOneForItems(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction) {
+    return q.promise(function(resolve) {
+        if (index >= items.length) {
+            return resolve(items);
+        }
+
+        var connector = {};
+        connector[itemsProp] = items[index]._id;
+        connector[connectToItemsProp] = connectToItems[faker.random.number(connectToItems.length - 1)];
+        return applyFunction(connector)
+            .then(function() {
+                index++;
+                return connectOneForItems(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction)
+                    .then(resolve);
+            });
+    });
+
 }
