@@ -20,8 +20,6 @@ var randomHandler = require('../utils/random.handler');
 
 var faker = require('faker');
 var config = require('config');
-var userLimit = config.DEMO.USER_LIMIT;
-var skillLimit = config.DEMO.SKILL_LIMIT;
 var q = require('q');
 
 module.exports = function(routes) {
@@ -177,7 +175,7 @@ function addAll() {
 
 function addUsers() {
     var users = [];
-    for (var i = 0; i < userLimit; i++) {
+    for (var i = 0; i < config.DEMO.USER_LIMIT; i++) {
         var firstName = faker.name.firstName();
         var lastName = faker.name.lastName();
         var fullName = firstName + ' ' + lastName;
@@ -202,8 +200,6 @@ function addSkills() {
     abbreviations.forEach(function(abbreviation) {
         skills.push({name: abbreviation});
     });
-
-    console.log('%d skills generated', abbreviations.length);
 
     return q.all(applyAddOnItems(skills, skillController.createNewSkill));
 }
