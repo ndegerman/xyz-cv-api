@@ -1,5 +1,6 @@
 'use strict';
 var q = require('q');
+var faker = require('faker');
 
 exports.getSkillAbbreviations = function(requestedNumber) {
     var list = getListOfAbbreviations();
@@ -33,6 +34,31 @@ exports.bernoulli = function(p) {
     }
 
     return false;
+};
+
+exports.generateSex = function() {
+    if (exports.bernoulli(0.5)) {
+        return 'male';
+    }
+
+    return 'female';
+};
+
+exports.getPersonalInterests = function() {
+    var list = [];
+    if (exports.bernoulli(0.9)) {
+        list.push(faker.hacker.ingverb());
+
+        if (exports.bernoulli(0.6)) {
+            list.push(faker.company.bsNoun());
+
+            if (exports.bernoulli(0.8)) {
+                list.push(faker.company.bs());
+            }
+        }
+    }
+
+    return list;
 };
 
 function randomInt(high) {

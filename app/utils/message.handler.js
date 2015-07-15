@@ -1,7 +1,7 @@
 'use strict';
 
 define('SUCCESS_DELETE', 'The item was removed successfully.');
-define('SUCCESS_UPDATE', 'The user was updated successfully.');
+define('SUCCESS_UPDATE', 'The item was updated successfully.');
 define('SUCCESS_UPLOAD', 'The file was uploaded successfully.');
 define('NO_SUCH_ITEM', 'No item with the given id was found.');
 define('INVALID_JSON', 'invalid json');
