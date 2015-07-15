@@ -352,8 +352,6 @@ function applyAddOnItemsRec(items, index, applyFunction) {
             return resolve(items);
         }
 
-        // console.log('applyAddOnItemsRec', items.length);
-        // console.log('applyAddOnItemsRec', index);
         return applyFunction(items[index])
             .then(function() {
                 index++;
@@ -405,7 +403,7 @@ function connectOneForItems(items, connectToItems, itemsProp, connectToItemsProp
 
         var connector = {};
         connector[itemsProp] = items[index]._id;
-        connector[connectToItemsProp] = connectToItems[faker.random.number(connectToItems.length - 1)];
+        connector[connectToItemsProp] = connectToItems[faker.random.number(connectToItems.length - 1)]._id;
         return applyFunction(connector)
             .then(function() {
                 index++;
