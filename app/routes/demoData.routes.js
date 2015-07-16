@@ -226,6 +226,7 @@ function addAll() {
     added.push(addAttributes());
     added.push(addSkills());
     added.push(addOffices());
+    added.push(addSkillGroups());
     return q.all(added);
 }
 
@@ -323,6 +324,19 @@ function addRoles() {
 
 }
 
+function addSkillGroups() {
+    var skillGroups = [
+        {
+            name: 'technologies'
+        },
+        {
+            name: 'spokenLanguages'
+        }
+    ];
+    return q.all(applyAddOnItemsRec(skillGroups, 0, skillGroupController.createNewSkillGroup));
+
+}
+
 // ADD CONNECTORS
 // ============================================================================
 
@@ -336,6 +350,9 @@ function addConnectors() {
 
     promises.push(userController.getAllUsers()
         .then(connectUsersAndRandomSkills));
+
+    promises.push(skillGroupController.getSkillGroupByName('technologies')
+        .then(connectSkillGroupAndSkills));
 
     return q.all(promises);
 }
@@ -361,6 +378,21 @@ function connectRoleAndAttributes(role) {
                 var promises = [];
                 attributes.forEach(function(attribute) {
                     promises.push(roleToAttributeConnectorController.createRoleToAttributeConnector({roleId: role._id, attributeId: attribute._id}));
+                });
+
+                return q.all(promises)
+                    .then(resolve);
+            });
+        });
+}
+
+function connectSkillGroupAndSkills(skillGroup) {
+    return skillController.getAllSkills()
+        .then(function(skills) {
+            return q.promise(function(resolve) {
+                var promises = [];
+                skills.forEach(function(skill) {
+                    promises.push(skillToSkillGroupConnectorController.createSkillToSkillGroupConnector({skillId: skill._id, skillGroupId: skillGroup._id}));
                 });
 
                 return q.all(promises)
