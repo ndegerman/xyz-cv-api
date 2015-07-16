@@ -5,6 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 var morgan = require('morgan');
+var cors = require('cors');
 
 var attributeRoutes = require('./routes/attribute.routes')(express.Router());
 var userRoutes = require('./routes/user.routes')(express.Router());
@@ -48,9 +49,11 @@ app.use(morgan('dev'));
 
 // ROUTES & MIDDLEWARE
 // ============================================================================
+app.options('*', cors());
+app.use(cors());
+
 app.use(authenticationMiddleware.authentication);
 app.use(responseMiddleware.nocache);
-app.use(responseMiddleware.accessControl);
 app.use(fileHandler.getHandler());
 
 app.use('/attribute', attributeRoutes);
