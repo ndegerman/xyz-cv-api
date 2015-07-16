@@ -21,19 +21,19 @@ var randomHandler = require('../utils/random.handler');
 var faker = require('faker');
 var config = require('config');
 var q = require('q');
-var progressBar = require('progress');
+var ProgressBar = require('progress');
 var bar;
 
 module.exports = function(routes) {
 
     // setup demo data
     routes.post('/', function(request, response) {
-        bar = new progressBar('[:bar] :percent', {
+        bar = new ProgressBar('[:bar] :percent', {
             total: 2 * config.DEMO.USER_LIMIT,
             incomplete: ' ',
             width: 20,
             clear: true
-            });
+        });
 
         addAll()
             .then(addConnectors)
@@ -42,12 +42,12 @@ module.exports = function(routes) {
     });
 
     routes.delete('/', function(request, response) {
-        bar = new progressBar('[:bar] :percent', {
+        bar = new ProgressBar('[:bar] :percent', {
             total: 10,
             incomplete: ' ',
             width: 20,
             clear: true
-            });
+        });
 
         purgeAll()
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
@@ -345,34 +345,13 @@ function addRoles() {
 function addConnectors() {
     var promises = [];
     promises.push(roleController.getRoleByName('admin')
-        .then(connectRoleAndAttributes))
-/*        .then(function(res) {
-            //bar.tick();
-            console.log('tick');
-            return q.promise(function(resolve) {
-                resolve(res);
-            });
-        })*/;
+        .then(connectRoleAndAttributes));
 
     promises.push(userController.getAllUsers()
-        .then(connectUsersAndRandomOffice))
-/*        .then(function(res) {
-            //bar.tick();
-            console.log('tick');
-            return q.promise(function(resolve) {
-                resolve(res);
-            });
-        })*/;
+        .then(connectUsersAndRandomOffice));
 
     promises.push(userController.getAllUsers()
-        .then(connectUsersAndRandomSkills))
-/*        .then(function(res) {
-            //bar.tick();
-            console.log('tick');
-            return q.promise(function(resolve) {
-                resolve(res);
-            });
-        })*/;
+        .then(connectUsersAndRandomSkills));
 
     return q.all(promises);
 }
@@ -497,6 +476,7 @@ function connectOneForItems(items, connectToItems, itemsProp, connectToItemsProp
         if (index >= items.length) {
             return resolve(items);
         }
+
         bar.tick();
         var connector = {};
         connector[itemsProp] = items[index]._id;
