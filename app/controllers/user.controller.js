@@ -29,11 +29,19 @@ function getUserTemplate(name, email) {
         startDateOfEmployment: null,
         endDateOfEmployment: null,
 
+        certificates: [],
+
+        ICEName: null,
+        ICEPhone: null,
+
         profileImage: null,
         personalIdNumber: null,
         sex: null,
         description: null,
         personalInterests: [],
+        foodPreferences: null,
+        shirtSize: null,
+        customHeaders: [],
 
         linkedin: null,
         facebook: null,
