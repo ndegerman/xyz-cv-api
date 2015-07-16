@@ -29,7 +29,7 @@ module.exports = function(routes) {
     // setup demo data
     routes.post('/', function(request, response) {
         bar = new ProgressBar('[:bar] :percent', {
-            total: 2 * config.DEMO.USER_LIMIT,
+            total: 3 * config.DEMO.USER_LIMIT + config.DEMO.NUMBER_OF_SKILLS,
             incomplete: ' ',
             width: 20,
             clear: true
@@ -265,11 +265,8 @@ function addUsers() {
         users.push(user);
     }
 
-    return q.all(applyAddOnItemsRec(users, 0, userController.createNewUser))
-        .then(function(res) {
-            bar.tick();
-            return res;
-        });
+    return q.all(applyAddOnItemsRec(users, 0, userController.createNewUser));
+
 }
 
 function addSkills() {
@@ -280,11 +277,7 @@ function addSkills() {
         skills.push({name: abbreviation});
     });
 
-    return q.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill))
-        .then(function(res) {
-            bar.tick();
-            return res;
-        });
+    return q.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
 
 }
 
@@ -300,11 +293,8 @@ function addOffices() {
             name: 'Stockholm'
         }
     ];
-    return q.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice))
-        .then(function(res) {
-            bar.tick();
-            return res;
-        });
+    return q.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice));
+
 }
 
 function addAttributes() {
@@ -316,11 +306,8 @@ function addAttributes() {
             name: 'caneEditProfile'
         }
     ];
-    return q.all(applyAddOnItemsRec(attributes, 0, attributeController.createNewAttribute))
-        .then(function(res) {
-            bar.tick();
-            return res;
-        });
+    return q.all(applyAddOnItemsRec(attributes, 0, attributeController.createNewAttribute));
+
 }
 
 function addRoles() {
@@ -332,11 +319,8 @@ function addRoles() {
             name: 'admin'
         }
     ];
-    return q.all(applyAddOnItemsRec(roles, 0, roleController.createNewRole))
-        .then(function(res) {
-            bar.tick();
-            return res;
-        });
+    return q.all(applyAddOnItemsRec(roles, 0, roleController.createNewRole));
+
 }
 
 // ADD CONNECTORS
@@ -427,6 +411,7 @@ function applyAddOnItemsRec(items, index, applyFunction) {
             return resolve(items);
         }
 
+        bar.tick();
         return applyFunction(items[index])
             .then(function() {
                 index++;
