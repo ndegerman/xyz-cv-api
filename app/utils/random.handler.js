@@ -44,6 +44,23 @@ exports.generateSex = function() {
     return 'female';
 };
 
+exports.getCustomHeaders = function() {
+    var list = [];
+    var object1 = {
+        title: faker.address.state(),
+        body: 'In-state possessions: ' + faker.finance.amount() + ' ' + faker.finance.currencyName()
+    };
+    var object2 = {
+        title: faker.address.county(),
+        body: 'In-county possessions: ' + faker.finance.amount() + ' ' + faker.finance.currencyName()
+    };
+
+    list.push(object1);
+    list.push(object2);
+
+    return list;
+};
+
 exports.getPersonalInterests = function() {
     var list = [];
     if (exports.bernoulli(0.9)) {
@@ -61,8 +78,27 @@ exports.getPersonalInterests = function() {
     return list;
 };
 
+exports.getShirtSize = function() {
+    var sizes = getShirtSizes();
+    return sizes[randomInt(sizes.length - 1)];
+};
+
 function randomInt(high) {
     return Math.floor(Math.random() * (high + 1));
+}
+
+function getShirtSizes() {
+    return [
+        'XXS',
+        'XS',
+        'S',
+        'M',
+        'L',
+        'XL',
+        'XXL',
+        '3XL',
+        '4XL'
+    ];
 }
 
 function getListOfAbbreviations() {
