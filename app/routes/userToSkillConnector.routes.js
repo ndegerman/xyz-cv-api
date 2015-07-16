@@ -22,6 +22,14 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    //get userToSkillConnector by id
+    routes.get('/:id', function(request, response) {
+        userToSkillConnectorController.getUserToSkillConnectorById(request.params.id)
+            .then(responseHandler.sendJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+
+    });
+
     // delete the userToSkillConnector with the given id
     routes.delete('/:id', function(request, response) {
         userToSkillConnectorController.deleteUserToSkillConnectorById(request.params.id)
@@ -41,6 +49,14 @@ module.exports = function(routes) {
         userToSkillConnectorController.getUserToSkillConnectorsBySkillId(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    // update a userToSkillConnector given an id and an object
+    routes.put('/:id', function(request, response) {
+        userToSkillConnectorController.updateUserToSkillConnector(request.params.id, request.body, request.headers['x-forwarded-email'])
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+
     });
 
     // delete userToSkillConnectors containing the given user id
