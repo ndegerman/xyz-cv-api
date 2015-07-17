@@ -97,28 +97,31 @@ function getConfig() {
                     file.failed = true;
                     throw error;
                 }
-            });
 
-            lwip.open(file.path, function(error, image) {
-                if (error) {
-                    file.failed = true;
-                }
-
-                image.scale(0.5, function(error, image) {
+                lwip.open(file.path, function(error, image) {
                     if (error) {
                         file.failed = true;
                     }
 
-                    image.toBuffer(file.extension.toLowerCase(), function(error, buffer) {
+                    image.scale(0.5, function(error, image) {
                         if (error) {
                             file.failed = true;
                         }
 
-                        fs.writeFileSync(file.path, buffer);
+                        image.toBuffer(file.extension.toLowerCase(), function(error, buffer) {
+                            if (error) {
+                                file.failed = true;
+                            }
+
+                            fs.writeFile(file.path, buffer, function(error) {
+                                if (error) {
+                                    file.failed = true;
+                                }
+                            });
+                        });
                     });
                 });
             });
-
         },
 
         onError: function(error, next) {
