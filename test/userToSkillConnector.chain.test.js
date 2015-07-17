@@ -30,6 +30,7 @@ describe('/userToSkillConnector', function() {
         var resultPost = {
             skillId: '123',
             userId: '456',
+            level: '3',
             createdAt: '2015-06-16T10:33:27.803Z',
             updatedAt: '2015-06-16T10:33:27.803Z',
             _id: '557ffb779a81250f00194d60'
@@ -38,7 +39,8 @@ describe('/userToSkillConnector', function() {
         nock(mockedUrl)
             .post('/userToSkillConnector', {
                 skillId: '123',
-                userId: '456'
+                userId: '456',
+                level: '3'
             })
             .reply(200, resultPost)
 
@@ -52,7 +54,8 @@ describe('/userToSkillConnector', function() {
             .set('Content-Type', 'application/json')
             .send({
                 skillId: '123',
-                userId: '456'
+                userId: '456',
+                level: '3'
             })
 
             // end handles the response
@@ -383,6 +386,44 @@ describe('/userToSkillConnector', function() {
 
     //===============================================================================
 
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting userToSkillConnector by its id', function(done) {
+        var resultGet = {
+            _id: '123',
+            skillId: '557d7cbc9a81250f00194d46',
+            userId: '557eb7199a81250f00194d50',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
+        nock(mockedUrl)
+            .get('/userToSkillConnector/123')
+            .reply(200, resultGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .get('/userToSkillConnector/123')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send()
+
+            // end handles the response
+            .end(function(err, res) {
+                if (err) {
+                    throw err;
+                }
+
+                expect(res).to.exist;
+                expect(res.status).to.equal(200);
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultGet));
+                done();
+            });
+    });
+
+    //===============================================================================
+
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a userToSkillConnector by user id', function(done) {
         var resultGetByUserId = [{
             _id: '123',
@@ -512,6 +553,141 @@ describe('/userToSkillConnector', function() {
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultNotInDb);
+                done();
+            });
+    });
+
+    //===============================================================================
+
+    it('should reply with HTTP status code 200 and a correctly formatted string when updating a userToSkillConnector', function(done) {
+        var resultPut = msg.SUCCESS_UPDATE;
+
+        var body = {
+            level: '1'
+        };
+
+        var resultGetById = {
+            _id: '123',
+            skillId: '456',
+            userId: '789',
+            level: '3',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
+        nock(mockedUrl)
+            .put('/userToSkillConnector/123')
+            .reply(204)
+
+            .get('/userToSkillConnector/123')
+            .reply(200, resultGetById)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .put('/userToSkillConnector/123')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send(body)
+
+            // end handles the response
+            .end(function(err, res) {
+                expect(err).to.exist;
+                expect(res).to.exist;
+                expect(res.status).to.equal(200);
+                expect(res.text).to.equal(resultPut);
+                done();
+            });
+    });
+
+    //===============================================================================
+
+    it('should reply with HTTP status code 400 and a correctly formatted string when updating a userToSkillConnector with a not allowed level (0)', function(done) {
+        var result = msg.INVALID_JSON_OBJECT;
+
+        var body = {
+            level: '0'
+        };
+
+        var resultGetById = {
+            _id: '123',
+            skillId: '456',
+            userId: '789',
+            level: '3',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
+        nock(mockedUrl)
+            .put('/userToSkillConnector/123')
+            .reply(204)
+
+            .get('/userToSkillConnector/123')
+            .reply(200, resultGetById)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .put('/userToSkillConnector/123')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send(body)
+
+            // end handles the response
+            .end(function(err, res) {
+                expect(err).to.exist;
+                expect(res).to.exist;
+                expect(res.status).to.equal(400);
+                expect(res.text).to.equal(result);
+                done();
+            });
+    });
+
+    //===============================================================================
+
+    it('should reply with HTTP status code 400 and a correctly formatted string when updating a userToSkillConnector with a not allowed level (6)', function(done) {
+        var result = msg.INVALID_JSON_OBJECT;
+
+        var body = {
+            level: '6'
+        };
+
+        var resultGetById = {
+            _id: '123',
+            skillId: '456',
+            userId: '789',
+            level: '3',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
+        nock(mockedUrl)
+            .put('/userToSkillConnector/123')
+            .reply(204)
+
+            .get('/userToSkillConnector/123')
+            .reply(200, resultGetById)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .put('/userToSkillConnector/123')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send(body)
+
+            // end handles the response
+            .end(function(err, res) {
+                expect(err).to.exist;
+                expect(res).to.exist;
+                expect(res.status).to.equal(400);
+                expect(res.text).to.equal(result);
                 done();
             });
     });

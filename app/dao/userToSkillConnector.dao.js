@@ -21,6 +21,19 @@ exports.createUserToSkillConnector = function(userToSkillConnector) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
+exports.getUserToSkillConnectorById = function(id) {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: url + '/' + id,
+        method: 'GET',
+        json: true
+    };
+
+    return request(options)
+        .then(responseHandler.parseGet)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
 exports.getUserToSkillConnectorsBySkillId = function(id) {
     var options = {
         resolveWithFullResponse: true,
@@ -54,6 +67,19 @@ exports.getAllUserToSkillConnectors = function() {
 
     return request(options)
         .then(responseHandler.parseGetPolyQuery)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
+exports.updateUserToSkillConnector = function(userToSkillConnector) {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: url + '/' + userToSkillConnector._id,
+        method: 'PUT',
+        json: userToSkillConnector
+    };
+
+    return request(options)
+        .then(responseHandler.parsePut)
         .catch(errorHandler.throwDREAMSHttpError);
 };
 

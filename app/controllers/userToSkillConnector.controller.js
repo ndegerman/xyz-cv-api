@@ -6,13 +6,30 @@ var errorHandler = require('../utils/error.handler');
 
 function validateUserToSkillConnector(userToSkillConnector) {
     return q.promise(function(resolve, reject) {
-        if (userToSkillConnector && userToSkillConnector.userId && userToSkillConnector.skillId) {
-            return resolve(userToSkillConnector);
+        if (userToSkillConnector && userToSkillConnector.userId && userToSkillConnector.skillId && userToSkillConnector.level) {
+            if ((userToSkillConnector.level >= 1) && (userToSkillConnector.level <= 5)) {
+                return resolve(userToSkillConnector);
+            }
         }
 
         return errorHandler.getHttpError(400)
             .then(reject);
     });
+}
+
+function setUserToSkillConnectorProperties(body) {
+    function extend(userToSkillConnector, props) {
+        for (var prop in userToSkillConnector) {
+            if (userToSkillConnector.hasOwnProperty(prop) && props.hasOwnProperty(prop)) {
+                userToSkillConnector[prop] = props[prop];
+            }
+        }
+    }
+
+    return function(userToSkillConnector) {
+        extend(userToSkillConnector, body);
+        return userToSkillConnector;
+    };
 }
 
 exports.assignSkillsToUser = function(skills, userId) {
@@ -33,6 +50,10 @@ exports.createUserToSkillConnector = function(userToSkillConnector) {
         .then(userToSkillConnectorDao.createUserToSkillConnector);
 };
 
+exports.getUserToSkillConnectorById = function(id) {
+    return userToSkillConnectorDao.getUserToSkillConnectorById(id);
+};
+
 exports.getUserToSkillConnectorsByUserId = function(userId) {
     return userToSkillConnectorDao.getUserToSkillConnectorsByUserId(userId);
 };
@@ -43,6 +64,13 @@ exports.getUserToSkillConnectorsBySkillId = function(skillId) {
 
 exports.getAllUserToSkillConnectors = function() {
     return userToSkillConnectorDao.getAllUserToSkillConnectors();
+};
+
+exports.updateUserToSkillConnector = function(id, body, email) {
+    return exports.getUserToSkillConnectorById(id)
+        .then(setUserToSkillConnectorProperties(body))
+        .then(validateUserToSkillConnector)
+        .then(userToSkillConnectorDao.updateUserToSkillConnector);
 };
 
 exports.deleteUserToSkillConnectorById = function(id) {
