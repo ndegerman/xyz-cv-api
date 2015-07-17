@@ -8,6 +8,6 @@
     "DEMO": {
         "USER_LIMIT": 500,
         "SKILL_ON_USER_PROBABILITY": 0.2,
-        "NUMBER_OF_SKILLS": 20
+        "NUMBER_OF_SKILLS": 25
     }
 }

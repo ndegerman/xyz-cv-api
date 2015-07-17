@@ -83,6 +83,10 @@ exports.getShirtSize = function() {
     return sizes[randomInt(sizes.length - 1)];
 };
 
+exports.getSkillLevel = function() {
+    return randomInt(4) + 1;
+};
+
 function randomInt(high) {
     return Math.floor(Math.random() * (high + 1));
 }

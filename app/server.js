@@ -7,21 +7,21 @@ var request = require('request');
 var morgan = require('morgan');
 var cors = require('cors');
 
-var attributeRoutes = require('./routes/attribute.routes')(express.Router());
-var userRoutes = require('./routes/user.routes')(express.Router());
-var roleRoutes = require('./routes/role.routes')(express.Router());
-var skillRoutes = require('./routes/skill.routes')(express.Router());
-var skillGroupRoutes = require('./routes/skillGroup.routes')(express.Router());
-var officeRoutes = require('./routes/office.routes')(express.Router());
+var attributeRoutes = require('./chains/attribute/attribute.routes')(express.Router());
+var userRoutes = require('./chains/user/user.routes')(express.Router());
+var roleRoutes = require('./chains/role/role.routes')(express.Router());
+var skillRoutes = require('./chains/skill/skill.routes')(express.Router());
+var skillGroupRoutes = require('./chains/skillGroup/skillGroup.routes')(express.Router());
+var officeRoutes = require('./chains/office/office.routes')(express.Router());
 
-var fileRoutes = require('./routes/file.routes')(express.Router());
+var fileRoutes = require('./chains/file/file.routes')(express.Router());
 
-var roleToAttributeConnectorRoutes = require('./routes/roleToAttributeConnector.routes')(express.Router());
-var userToSkillConnectorRoutes = require('./routes/userToSkillConnector.routes.js')(express.Router());
-var skillToSkillGroupConnectorRoutes = require('./routes/skillToSkillGroupConnector.routes.js')(express.Router());
-var userToOfficeConnectorRoutes = require('./routes/userToOfficeConnector.routes.js')(express.Router());
+var roleToAttributeConnectorRoutes = require('./chains/roleToAttributeConnector/roleToAttributeConnector.routes')(express.Router());
+var userToSkillConnectorRoutes = require('./chains/userToSkillConnector/userToSkillConnector.routes.js')(express.Router());
+var skillToSkillGroupConnectorRoutes = require('./chains/skillToSkillGroupConnector/skillToSkillGroupConnector.routes.js')(express.Router());
+var userToOfficeConnectorRoutes = require('./chains/userToOfficeConnector/userToOfficeConnector.routes.js')(express.Router());
 
-var dbControlRoutes = require('./routes/dbControl.routes')(express.Router());
+var dbControlRoutes = require('./common/dbControl.routes')(express.Router());
 
 var errorMiddleware = require('./middleware/error.middleware');
 var authenticationMiddleware = require('./middleware/authentication.middleware');
