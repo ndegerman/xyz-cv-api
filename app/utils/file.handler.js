@@ -61,6 +61,7 @@ function getRetinaName(name) {
         if (i === newNameList.length - 1) {
             break;
         }
+
         newName += newNameList[i];
     }
 
