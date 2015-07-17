@@ -16,7 +16,7 @@ function validateFile(file) {
 }
 
 exports.createNewFile = function(file) {
-    fileDao.createNewFile(file);
+    return fileDao.createNewFile(file);
 };
 
 exports.getFileById = function(id) {
@@ -30,3 +30,4 @@ exports.getAllFiles = function() {
 exports.deleteFileById = function(id) {
     return fileDao.deleteFileById(id);
 };
+

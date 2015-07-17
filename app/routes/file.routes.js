@@ -29,7 +29,7 @@ module.exports = function(routes) {
     // get a file by the given id
     routes.get('/:id', function(request, response) {
         fileController.getFileById(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
+            .then(responseHandler.sendFileResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
