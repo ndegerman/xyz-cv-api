@@ -21,7 +21,7 @@ var userToSkillConnectorRoutes = require('./routes/userToSkillConnector.routes.j
 var skillToSkillGroupConnectorRoutes = require('./routes/skillToSkillGroupConnector.routes.js')(express.Router());
 var userToOfficeConnectorRoutes = require('./routes/userToOfficeConnector.routes.js')(express.Router());
 
-var demoDataRoutes = require('./routes/demoData.routes')(express.Router());
+var dbControlRoutes = require('./routes/dbControl.routes')(express.Router());
 
 var errorMiddleware = require('./middleware/error.middleware');
 var authenticationMiddleware = require('./middleware/authentication.middleware');
@@ -73,7 +73,7 @@ app.use('/userToOfficeConnector', userToOfficeConnectorRoutes);
 app.use(errorMiddleware.errorFilter);
 
 // for debugging and demo
-app.use('/demo-data', demoDataRoutes);
+app.use('/dbControl', dbControlRoutes);
 
 // for debugging
 app.get('/kalle', function(req, res) {

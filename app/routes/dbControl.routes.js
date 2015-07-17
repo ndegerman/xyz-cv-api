@@ -27,7 +27,7 @@ var bar;
 module.exports = function(routes) {
 
     // setup demo data
-    routes.post('/', function(request, response) {
+    routes.post('/demo-data', function(request, response) {
         bar = new ProgressBar('[:bar] :percent', {
             total: 3 * config.DEMO.USER_LIMIT + config.DEMO.NUMBER_OF_SKILLS,
             incomplete: ' ',
@@ -41,7 +41,7 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    routes.delete('/', function(request, response) {
+    routes.delete('/purge', function(request, response) {
         bar = new ProgressBar('[:bar] :percent', {
             total: 10,
             incomplete: ' ',
@@ -51,6 +51,13 @@ module.exports = function(routes) {
 
         purgeAll()
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    routes.post('/default', function(request, response) {
+        addAllDefault()
+            .then(addConnectorsDefault)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
@@ -230,6 +237,16 @@ function addAll() {
     return q.all(added);
 }
 
+function addAllDefault() {
+    var added = [];
+    added.push(addRoles());
+    added.push(addAttributes());
+    added.push(addSkillsDefault());
+    added.push(addOffices());
+    added.push(addSkillGroups());
+    return q.all(added);
+}
+
 function addUsers() {
     var users = [];
     for (var i = 0; i < config.DEMO.USER_LIMIT; i++) {
@@ -244,17 +261,28 @@ function addUsers() {
             name: fullName,
             email: email,
             role: 'user',
+
             phoneNumber: faker.phone.phoneNumberFormat(),
             employeeNumber: faker.random.number(2000),
             position: position,
             closestSuperior: faker.name.firstName() + ' ' + faker.name.lastName(),
             startDateOfEmployment: faker.date.past(),
             endDateOfEmployment: null,
+
+            certificates: [faker.company.catchPhraseNoun()],
+
+            ICEName: faker.name.firstName() + ' ' + faker.name.lastName(),
+            ICEPhone: faker.phone.phoneNumberFormat(),
+
             profileImage: null,
             personalIdNumber: faker.random.uuid,
             sex: randomHandler.generateSex(),
             description: faker.lorem.sentence(),
             personalInterests: randomHandler.getPersonalInterests(),
+            foodPreferences: faker.lorem.sentence(),
+            shirtSize: randomHandler.getShirtSize(),
+            customHeaders: randomHandler.getCustomHeaders(),
+
             linkedin: 'https://www.linkedin.com/in/williamhgates',
             facebook: 'https://www.facebook.com/BillGates',
             twitter: 'https://twitter.com/billgates',
@@ -282,6 +310,19 @@ function addSkills() {
 
 }
 
+function addSkillsDefault() {
+    var skills = [
+    {
+        name: 'Java'
+    },
+    {
+        name: 'C'
+    }
+    ];
+    return q.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
+
+}
+
 function addOffices() {
     var offices = [
         {
@@ -292,6 +333,15 @@ function addOffices() {
         },
         {
             name: 'Stockholm'
+        },
+        {
+            name: 'Malmö'
+        },
+        {
+            name: 'Göteborg'
+        },
+        {
+            name: 'Sarajevo'
         }
     ];
     return q.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice));
@@ -304,7 +354,7 @@ function addAttributes() {
             name: 'canViewProfile'
         },
         {
-            name: 'caneEditProfile'
+            name: 'canEditProfile'
         }
     ];
     return q.all(applyAddOnItemsRec(attributes, 0, attributeController.createNewAttribute));
@@ -350,6 +400,17 @@ function addConnectors() {
 
     promises.push(userController.getAllUsers()
         .then(connectUsersAndRandomSkills));
+
+    promises.push(skillGroupController.getSkillGroupByName('technologies')
+        .then(connectSkillGroupAndSkills));
+
+    return q.all(promises);
+}
+
+function addConnectorsDefault() {
+    var promises = [];
+    promises.push(roleController.getRoleByName('admin')
+        .then(connectRoleAndAttributes));
 
     promises.push(skillGroupController.getSkillGroupByName('technologies')
         .then(connectSkillGroupAndSkills));
