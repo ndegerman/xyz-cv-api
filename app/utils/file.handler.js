@@ -2,7 +2,7 @@
 
 var multer = require('multer');
 var fs = require('fs-extra');
-var errorHandler = require('../utils/error.handler');
+var errorHandler = require('./error.handler');
 var q = require('q');
 var config = require('config');
 var lwip = require('lwip');

@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 var q = require('q');
-var userController = require('../controllers/user.controller');
+var userController = require('../chains/user/user.controller');
 var errorHandler = require('../utils/error.handler');
 var responseHandler = require('../utils/response.handler');
 
