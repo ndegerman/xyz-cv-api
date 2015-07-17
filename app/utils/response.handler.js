@@ -3,6 +3,7 @@
 var q = require('q');
 var errorHandler = require('./error.handler');
 var msg = require('./message.handler');
+var config = require('config');
 
 // PARSING
 // ============================================================================
@@ -130,5 +131,11 @@ exports.sendSuccessfulPutJsonResponse = function(response) {
 exports.sendSuccessUploadJsonResponse = function(response) {
     return function() {
         return response.send(msg.SUCCESS_UPLOAD);
+    };
+};
+
+exports.sendFileResponse = function(response) {
+    return function(file) {
+        response.download(config.UPLOAD_PATH + file.generatedName);
     };
 };

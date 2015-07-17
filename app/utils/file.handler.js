@@ -125,7 +125,6 @@ function getConfig() {
         },
 
         onError: function(error, next) {
-            console.log(error);
             next(error);
         },
 

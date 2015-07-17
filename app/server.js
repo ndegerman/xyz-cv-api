@@ -30,7 +30,6 @@ var config = require('config');
 var fileHandler = require('./utils/file.handler');
 
 var app = express();
-
 // CONFIG
 // ============================================================================
 var port = process.env.PORT || config.PORT;
