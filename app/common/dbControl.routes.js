@@ -550,6 +550,7 @@ function applyConnectOnItems(items, connectToItems, itemsProp, connectToItemsPro
 
 }
 
+// connects all the items, to one random item in the connectToItems collection
 function connectOneForItems(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction) {
     return q.promise(function(resolve) {
         if (index >= items.length) {
