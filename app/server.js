@@ -21,6 +21,7 @@ var roleToAttributeConnectorRoutes = require('./chains/roleToAttributeConnector/
 var userToSkillConnectorRoutes = require('./chains/userToSkillConnector/userToSkillConnector.routes.js')(express.Router());
 var skillToSkillGroupConnectorRoutes = require('./chains/skillToSkillGroupConnector/skillToSkillGroupConnector.routes.js')(express.Router());
 var userToOfficeConnectorRoutes = require('./chains/userToOfficeConnector/userToOfficeConnector.routes.js')(express.Router());
+var userToAssignmentConnectorRoutes = require('./chains/userToAssignmentConnector/userToAssignmentConnector.routes.js')(express.Router());
 
 var dbControlRoutes = require('./common/dbControl.routes')(express.Router());
 
@@ -71,6 +72,7 @@ app.use('/roleToAttributeConnector', roleToAttributeConnectorRoutes);
 app.use('/userToSkillConnector', userToSkillConnectorRoutes);
 app.use('/skillToSkillGroupConnector', skillToSkillGroupConnectorRoutes);
 app.use('/userToOfficeConnector', userToOfficeConnectorRoutes);
+app.use('/userToAssignmentConnector', userToAssignmentConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
 
