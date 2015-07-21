@@ -31,6 +31,7 @@ describe('/userToSkillConnector', function() {
             skillId: '123',
             userId: '456',
             level: '3',
+            years: '5',
             createdAt: '2015-06-16T10:33:27.803Z',
             updatedAt: '2015-06-16T10:33:27.803Z',
             _id: '557ffb779a81250f00194d60'
@@ -40,7 +41,8 @@ describe('/userToSkillConnector', function() {
             .post('/userToSkillConnector', {
                 skillId: '123',
                 userId: '456',
-                level: '3'
+                level: '3',
+                years: '5'
             })
             .reply(200, resultPost)
 
@@ -55,7 +57,8 @@ describe('/userToSkillConnector', function() {
             .send({
                 skillId: '123',
                 userId: '456',
-                level: '3'
+                level: '3',
+                years: '5'
             })
 
             // end handles the response
@@ -571,6 +574,7 @@ describe('/userToSkillConnector', function() {
             skillId: '456',
             userId: '789',
             level: '3',
+            years: '5',
             createdAt: '2015-06-15T11:36:08.114Z',
             updatedAt: '2015-06-15T11:36:08.114Z'
         };
@@ -598,6 +602,52 @@ describe('/userToSkillConnector', function() {
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
                 expect(res.text).to.equal(resultPut);
+                done();
+            });
+    });
+
+    //===============================================================================
+
+    it('should reply with HTTP status code 400 and a correctly formatted string when updating a userToSkillConnector with a not allowed number of years (0)', function(done) {
+        var result = msg.INVALID_JSON_OBJECT;
+
+        var body = {
+            years: '0'
+        };
+
+        var resultGetById = {
+            _id: '123',
+            skillId: '456',
+            userId: '789',
+            level: '3',
+            years: '0',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
+        nock(mockedUrl)
+            .put('/userToSkillConnector/123')
+            .reply(204)
+
+            .get('/userToSkillConnector/123')
+            .reply(200, resultGetById)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .put('/userToSkillConnector/123')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send(body)
+
+            // end handles the response
+            .end(function(err, res) {
+                expect(err).to.exist;
+                expect(res).to.exist;
+                expect(res.status).to.equal(400);
+                expect(res.text).to.equal(result);
                 done();
             });
     });

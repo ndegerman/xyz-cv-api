@@ -7,7 +7,7 @@ var errorHandler = require('../../utils/error.handler');
 function validateUserToSkillConnector(userToSkillConnector) {
     return q.promise(function(resolve, reject) {
         if (userToSkillConnector && userToSkillConnector.userId && userToSkillConnector.skillId && userToSkillConnector.level) {
-            if ((userToSkillConnector.level >= 1) && (userToSkillConnector.level <= 5)) {
+            if ((userToSkillConnector.level >= 1) && (userToSkillConnector.level <= 5) && (userToSkillConnector.years > 0)) {
                 return resolve(userToSkillConnector);
             }
         }

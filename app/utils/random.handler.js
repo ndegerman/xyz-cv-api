@@ -87,6 +87,10 @@ exports.getSkillLevel = function() {
     return randomInt(4) + 1;
 };
 
+exports.getYears = function() {
+    return randomInt(20) + 1;
+}
+
 function randomInt(high) {
     return Math.floor(Math.random() * (high + 1));
 }
