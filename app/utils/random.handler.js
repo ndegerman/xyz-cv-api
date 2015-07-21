@@ -4,6 +4,7 @@ var faker = require('faker');
 
 exports.getSkillAbbreviations = function(requestedNumber) {
     var list = getListOfAbbreviations();
+    var result = [];
 
     if (requestedNumber >= list.length) {
         return list;
@@ -13,15 +14,10 @@ exports.getSkillAbbreviations = function(requestedNumber) {
         return [];
     }
 
-    var max = list.length - 1;
-    var result = [];
+    var indices = exports.getUniqueIndices(requestedNumber, list.length);
 
-    //generate the unique list
-    for (var i = 0; i < requestedNumber; i++) {
-        var index = randomInt(max);
-        result.push(list[index]);
-        list[index] = list[max];
-        max--;
+    for (var i = 0; i < indices.length; i++) {
+        result.push(list[indices[i]]);
     }
 
     return result;
@@ -89,7 +85,51 @@ exports.getSkillLevel = function() {
 
 exports.getYears = function() {
     return randomInt(20) + 1;
-}
+};
+
+exports.getBinomial = function(n, p) {
+    var result = 0;
+    for (var i = 0; i < n; i++) {
+        if (Math.random() < p) {
+            result++;
+        }
+    }
+
+    return result;
+};
+
+exports.getUniqueIndices = function(count, total) {
+    var list = [];
+
+    for (var i = 0; i < total; i++) {
+        list.push(i);
+    }
+
+    var max = list.length - 1;
+    var result = [];
+
+    for (var q = 0; q < count; q++) {
+        var index = randomInt(max);
+        result.push(list[index]);
+        list[index] = list[max];
+        max--;
+    }
+
+    return result;
+};
+
+exports.getBinomialUniqueList = function(items, p) {
+    var n = items.length;
+    var count = exports.getBinomial(n, p);
+    var uniqueIndices = exports.getUniqueIndices(count, n);
+    var result = [];
+
+    for (var i = 0; i < count; i++) {
+        result.push(items[uniqueIndices[i]]);
+    }
+
+    return result;
+};
 
 function randomInt(high) {
     return Math.floor(Math.random() * (high + 1));

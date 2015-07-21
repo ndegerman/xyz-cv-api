@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-
+var assignmentController = require('../chains/assignment/assignment.controller');
 var attributeController = require('../chains/attribute/attribute.controller');
 var officeController = require('../chains/office/office.controller');
 var roleController = require('../chains/role/role.controller');
@@ -14,6 +14,7 @@ var skillToSkillGroupConnectorController = require('../chains/skillToSkillGroupC
 var userController = require('../chains/user/user.controller');
 var userToOfficeConnectorController = require('../chains/userToOfficeConnector/userToOfficeConnector.controller');
 var userToSkillConnectorController = require('../chains/userToSkillConnector/userToSkillConnector.controller');
+var userToAssignmentConnectorController = require('../chains/userToAssignmentConnector/userToAssignmentConnector.controller');
 
 var responseHandler = require('../utils/response.handler');
 var randomHandler = require('../utils/random.handler');
@@ -29,7 +30,7 @@ module.exports = function(routes) {
     // setup demo data
     routes.post('/demo-data', function(request, response) {
         bar = new ProgressBar('[:bar] :percent', {
-            total: 3 * config.DEMO.USER_LIMIT + config.DEMO.NUMBER_OF_SKILLS,
+            total: 4 * config.DEMO.USER_LIMIT + config.DEMO.NUMBER_OF_SKILLS,
             incomplete: ' ',
             width: 20,
             clear: true
@@ -43,7 +44,7 @@ module.exports = function(routes) {
 
     routes.delete('/purge', function(request, response) {
         bar = new ProgressBar('[:bar] :percent', {
-            total: 10,
+            total: 12,
             incomplete: ' ',
             width: 20,
             clear: true
@@ -75,11 +76,13 @@ function purgeAll() {
     purge.push(purgeSkills());
     purge.push(purgeOffices());
     purge.push(purgeSkillGroups());
+    purge.push(purgeAssignments());
 
     purge.push(purgeUserToSkillConnectors());
     purge.push(purgeRoleToAttributeConnectors());
     purge.push(purgeSkillToSkillGroupConnectors());
     purge.push(purgeUserToOfficeConnectors());
+    purge.push(purgeUserToAssignmentConnectors());
     return q.all(purge);
 }
 
@@ -167,6 +170,20 @@ function purgeSkillGroups() {
     });
 }
 
+function purgeAssignments() {
+    return q.promise(function(resolve) {
+        assignmentController.getAllAssignments()
+            .then(function(assignments) {
+                return q.all(applyDeleteOnItemRec(assignments, 0, assignmentController.deleteAssignmentById))
+                    .then(function(res) {
+                        bar.tick();
+                        return res;
+                    })
+                    .then(resolve);
+            });
+    });
+}
+
 function purgeUserToSkillConnectors() {
     return q.promise(function(resolve) {
         userToSkillConnectorController.getAllUserToSkillConnectors()
@@ -223,6 +240,20 @@ function purgeUserToOfficeConnectors() {
     });
 }
 
+function purgeUserToAssignmentConnectors() {
+    return q.promise(function(resolve) {
+        userToAssignmentConnectorController.getAllUserToAssignmentConnectors()
+            .then(function(userToAssignmentConnectors) {
+                return q.all(applyDeleteOnItemRec(userToAssignmentConnectors, 0, userToAssignmentConnectorController.deleteUserToAssignmentConnectorById))
+                    .then(function(res) {
+                        bar.tick();
+                        return res;
+                    })
+                    .then(resolve);
+            });
+    });
+}
+
 // ADD ENTITIES
 // ============================================================================
 
@@ -234,6 +265,7 @@ function addAll() {
     added.push(addSkills());
     added.push(addOffices());
     added.push(addSkillGroups());
+    added.push(addAssignments());
     return q.all(added);
 }
 
@@ -323,6 +355,18 @@ function addSkillsDefault() {
 
 }
 
+function addAssignments() {
+    var assignments = [];
+    for (var i = 0; i < 10; i++) {
+        var object = {};
+        object.name = faker.internet.domainName();
+        assignments.push(object);
+    }
+
+    return q.all(applyAddOnItemsRec(assignments, 0, assignmentController.createNewAssignment));
+
+}
+
 function addOffices() {
     var offices = [
         {
@@ -404,6 +448,9 @@ function addConnectors() {
     promises.push(skillGroupController.getSkillGroupByName('technologies')
         .then(connectSkillGroupAndSkills));
 
+    promises.push(userController.getAllUsers()
+        .then(connectUsersAndRandomAssignments));
+
     return q.all(promises);
 }
 
@@ -419,16 +466,28 @@ function addConnectorsDefault() {
 }
 
 function connectUsersAndRandomSkills(users) {
+    var extraFields = {
+        level: randomHandler.getSkillLevel,
+        years: randomHandler.getYears
+    };
+
     return skillController.getAllSkills()
         .then(function(skills) {
-            return applyConnectOnItems(users, skills, 'userId', 'skillId', 0, 0, userToSkillConnectorController.createUserToSkillConnector, config.DEMO.SKILL_ON_USER_PROBABILITY);
+            return connectItemsToRandomItems(users, skills, 'userId', 'skillId', 0, userToSkillConnectorController.createUserToSkillConnector, config.DEMO.SKILL_ON_USER_PROBABILITY, extraFields);
+        });
+}
+
+function connectUsersAndRandomAssignments(users) {
+    return assignmentController.getAllAssignments()
+        .then(function(assignments) {
+            return connectItemsToRandomItems(users, assignments, 'userId', 'assignmentId', 0, userToAssignmentConnectorController.createUserToAssignmentConnector, config.DEMO.USER_ON_ASSIGNMENT_PROBABILITY, null);
         });
 }
 
 function connectUsersAndRandomOffice(users) {
     return officeController.getAllOffices()
         .then(function(offices) {
-            return connectOneForItems(users, offices, 'userId', 'officeId', 0, userToOfficeConnectorController.createUserToOfficeConnector);
+            return connectItemsToRandomItem(users, offices, 'userId', 'officeId', 0, userToOfficeConnectorController.createUserToOfficeConnector);
         });
 }
 
@@ -514,44 +573,53 @@ function applyAddOnItemsRec(items, index, applyFunction) {
     });
 }
 
-function applyConnectOnItems(items, connectToItems, itemsProp, connectToItemsProp, index1, index2, applyFunction, p) {
+function connectOneToAll(item, connectToItems, itemsProp, connectToItemsProp, index, applyFunction, extraFields) {
     return q.promise(function(resolve) {
-        if (index1 >= items.length) {
+        if (index >= connectToItems.length) {
+            return resolve(item);
+        }
+
+        //create the connector
+        var connector = {};
+        connector[itemsProp] = item._id;
+        connector[connectToItemsProp] = connectToItems[index]._id;
+
+        for (var extraField in extraFields) {
+            if (extraFields.hasOwnProperty(extraField)) {
+                connector[extraField] = extraFields[extraField].apply();
+            }
+        }
+
+        //post the connector
+        return applyFunction(connector)
+            .then(function() {
+                index++;
+                return connectOneToAll(item, connectToItems, itemsProp, connectToItemsProp, index, applyFunction, extraFields)
+                    .then(resolve);
+            });
+    });
+}
+
+function connectItemsToRandomItems(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction, p, extraFields) {
+    return q.promise(function(resolve) {
+        if (index >= items.length) {
             return resolve(items);
         }
 
-        else if (index2 >= connectToItems.length) {
-            index1++;
-            index2 = 0;
-            bar.tick();
-            return applyConnectOnItems(items, connectToItems, itemsProp, connectToItemsProp, index1, index2, applyFunction, p)
-                .then(resolve);
-        }
+        var uniqueConnectToItems = randomHandler.getBinomialUniqueList(connectToItems, p);
 
-        if (randomHandler.bernoulli(p)) {
-            var connector = {};
-            connector[itemsProp] = items[index1]._id;
-            connector[connectToItemsProp] = connectToItems[index2]._id;
-            connector.level = randomHandler.getSkillLevel();
-            connector.years = randomHandler.getYears();
-
-            return applyFunction(connector)
-                .then(function() {
-                    index2++;
-                    return applyConnectOnItems(items, connectToItems, itemsProp, connectToItemsProp, index1, index2, applyFunction, p)
-                        .then(resolve);
-                });
-        } else {
-            index2++;
-
-            return applyConnectOnItems(items, connectToItems, itemsProp, connectToItemsProp, index1, index2, applyFunction, p)
-                .then(resolve);
-        }
+        return connectOneToAll(items[index], uniqueConnectToItems, itemsProp, connectToItemsProp, 0, applyFunction, extraFields)
+            .then(function() {
+                bar.tick();
+                index++;
+                return connectItemsToRandomItems(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction, p, extraFields)
+                    .then(resolve);
+            });
     });
 
 }
 
-function connectOneForItems(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction) {
+function connectItemsToRandomItem(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction) {
     return q.promise(function(resolve) {
         if (index >= items.length) {
             return resolve(items);
@@ -564,7 +632,7 @@ function connectOneForItems(items, connectToItems, itemsProp, connectToItemsProp
         return applyFunction(connector)
             .then(function() {
                 index++;
-                return connectOneForItems(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction)
+                return connectItemsToRandomItem(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction)
                     .then(resolve);
             });
     });
