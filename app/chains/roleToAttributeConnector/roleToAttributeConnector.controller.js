@@ -45,6 +45,10 @@ exports.getRoleToAttributeConnectorsByRoleId = function(roleId) {
     return roleToAttributeConnectorDao.getRoleToAttributeConnectorsByRoleId(roleId);
 };
 
+exports.getRoleToAttributeConnectorsByRole = function(role) {
+    return roleToAttributeConnectorDao.getRoleToAttributeConnectorsByRoleId(role._id);
+};
+
 exports.getRoleToAttributeConnectorsByAttributeId = function(attributeId) {
     return roleToAttributeConnectorDao.getRoleToAttributeConnectorsByAttributeId(attributeId);
 };

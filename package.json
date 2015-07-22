@@ -13,7 +13,8 @@
     "progress": "~1.1.8",
     "q": "~1.4.1",
     "request": "~2.57.0",
-    "request-promise": "~0.4.2"
+    "request-promise": "~0.4.2",
+    "node-cache": "~3.0.0"
   },
   "repository": {},
   "devDependencies": {
