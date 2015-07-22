@@ -3,6 +3,7 @@
 var userDao = require('./user.dao');
 var q = require('q');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 // TODO: Make the validation more covering
 function validateUser(user) {
@@ -54,16 +55,8 @@ function getUserTemplate(name, email) {
 }
 
 function setUserProperties(body) {
-    function extend(user, props) {
-        for (var prop in user) {
-            if (user.hasOwnProperty(prop) && props.hasOwnProperty(prop)) {
-                user[prop] = props[prop];
-            }
-        }
-    }
-
     return function(user) {
-        extend(user, body);
+        utils.extend(user, body);
         return user;
     };
 }

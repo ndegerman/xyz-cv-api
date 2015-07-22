@@ -3,16 +3,25 @@
 var q = require('q');
 var roleToAttributeConnectorDao = require('./roleToAttributeConnector.dao');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 function validateRoleToAttributeConnector(roleToAttributeConnector) {
     return q.promise(function(resolve, reject) {
         if (roleToAttributeConnector && roleToAttributeConnector.roleId && roleToAttributeConnector.attributeId) {
+            roleToAttributeConnector = utils.extend(getRoleToAttributeConnectorTemplate(), roleToAttributeConnector);
             return resolve(roleToAttributeConnector);
         }
 
         return errorHandler.getHttpError(400)
             .then(reject);
     });
+}
+
+function getRoleToAttributeConnectorTemplate() {
+    return {
+        roleId: null,
+        attributeId: null
+    };
 }
 
 exports.assignAttributesToRole = function(attributes, roleId) {

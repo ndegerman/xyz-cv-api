@@ -3,16 +3,25 @@
 var q = require('q');
 var userToOfficeConnectorDao = require('./userToOfficeConnector.dao');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 function validateUserToOfficeConnector(userToOfficeConnector) {
     return q.promise(function(resolve, reject) {
         if (userToOfficeConnector && userToOfficeConnector.userId && userToOfficeConnector.officeId) {
+            userToOfficeConnector = utils.extend(getUserToOfficeConnectorTemplate(), userToOfficeConnector);
             return resolve(userToOfficeConnector);
         }
 
         return errorHandler.getHttpError(400)
             .then(reject);
     });
+}
+
+function getUserToOfficeConnectorTemplate() {
+    return {
+        userId: null,
+        officeId: null
+    };
 }
 
 exports.assignOfficesToUser = function(offices, userId) {

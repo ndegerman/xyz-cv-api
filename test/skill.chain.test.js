@@ -31,6 +31,7 @@ describe('api/skill', function() {
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when creating a new skill', function(done) {
         var resultPost = {
             name: 'test2',
+            icon: 'fa fa-flask',
             createAt: '2015-06-16T07:33:14.385Z',
             updatedAt: '2015-06-16T07:33:14.385Z',
             _id: '557fd13a9a81250f00194d58'
@@ -38,7 +39,8 @@ describe('api/skill', function() {
 
         nock(mockedUrl)
             .post('/skill', {
-                name: 'test2'
+                name: 'test2',
+                icon: 'fa fa-flask'
             })
             .reply(200, resultPost)
 
@@ -143,10 +145,9 @@ describe('api/skill', function() {
 
     //===============================================================================
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a skill with too many fields in the body', function(done) {
-        var resultBadJson = msg.INVALID_JSON_OBJECT;
+    it('should correctly extract the needed properties and reply with HTTP status code 200 and a correctly formatted string when posting a skill with too many fields in the body', function(done) {
 
-        var badResultPost = {
+        var resultPost = {
             name: 'test1',
             createAt: '2015-06-16T07:33:14.385Z',
             updatedAt: '2015-06-16T07:33:14.385Z',
@@ -154,8 +155,11 @@ describe('api/skill', function() {
         };
 
         nock(mockedUrl)
-            .post('/skill')
-            .reply(200, badResultPost)
+            .post('/skill', {
+                name: 'test1',
+                icon: 'fa fa-flask'
+            })
+            .reply(200, resultPost)
 
             .get('/user?email=a@softhouse.se')
             .reply(200, getUserByEmailResponse);
@@ -167,6 +171,7 @@ describe('api/skill', function() {
             .set('Content-Type', 'application/json')
             .send({
                 name: 'test1',
+                icon: null,
                 id: '1234'
             })
 
@@ -174,8 +179,8 @@ describe('api/skill', function() {
             .end(function(err, res) {
                 expect(err).to.exist;
                 expect(res).to.exist;
-                expect(res.status).to.equal(400);
-                expect(res.error.text).to.equal(resultBadJson);
+                expect(res.status).to.equal(200);
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
                 done();
             });
     });

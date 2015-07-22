@@ -3,11 +3,13 @@
 var skillGroupDao = require('./skillGroup.dao');
 var q = require('q');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 // TODO: Make the validation more covering
 function validateSkillGroup(skillGroup) {
     return q.promise(function(resolve, reject) {
         if (skillGroup && skillGroup.name) {
+            skillGroup = utils.extend(getSkillGroupTemplate(), skillGroup);
             return resolve(skillGroup);
         }
 
@@ -16,11 +18,11 @@ function validateSkillGroup(skillGroup) {
     });
 }
 
-exports.getSkillGroupTemplate = function() {
+function getSkillGroupTemplate() {
     return {
         name: null
     };
-};
+}
 
 exports.createNewSkillGroup = function(skillGroupObject) {
     return validateSkillGroup(skillGroupObject)

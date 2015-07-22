@@ -3,11 +3,13 @@
 var skillDao = require('./skill.dao');
 var q = require('q');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 // TODO: Make the validation more covering
 function validateSkill(skill) {
     return q.promise(function(resolve, reject) {
         if (skill && skill.name) {
+            skill = utils.extend(getSkillTemplate(), skill);
             return resolve(skill);
         }
 
@@ -16,11 +18,12 @@ function validateSkill(skill) {
     });
 }
 
-exports.getSkillTemplate = function() {
+function getSkillTemplate() {
     return {
-        name: null
+        name: null,
+        icon: 'fa fa-flask'
     };
-};
+}
 
 exports.createNewSkill = function(skillObject) {
     return validateSkill(skillObject)

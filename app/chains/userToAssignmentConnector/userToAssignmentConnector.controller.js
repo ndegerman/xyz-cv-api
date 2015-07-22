@@ -3,10 +3,12 @@
 var q = require('q');
 var userToAssignmentConnectorDao = require('./userToAssignmentConnector.dao');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 function validateUserToAssignmentConnector(userToAssignmentConnector) {
     return q.promise(function(resolve, reject) {
         if (userToAssignmentConnector && userToAssignmentConnector.userId && userToAssignmentConnector.assignmentId) {
+            userToAssignmentConnector = utils.extend(getUserToAssignmentConnectorTemplate(), userToAssignmentConnector);
             return resolve(userToAssignmentConnector);
         }
 
@@ -27,6 +29,13 @@ function setUserToAssignmentConnectorProperties(body) {
     return function(userToAssignmentConnector) {
         extend(userToAssignmentConnector, body);
         return userToAssignmentConnector;
+    };
+}
+
+function getUserToAssignmentConnectorTemplate() {
+    return {
+        userId: null,
+        assignmentId: null
     };
 }
 
