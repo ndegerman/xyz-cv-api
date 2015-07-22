@@ -260,6 +260,7 @@ function purgeUserToAssignmentConnectors() {
 function addAll() {
     var added = [];
     added.push(addUsers());
+    added.push(addAdmin());
     added.push(addRoles());
     added.push(addAttributes());
     added.push(addSkills());
@@ -330,6 +331,46 @@ function addUsers() {
 
 }
 
+function addAdmin() {
+    var user = {
+        name: 'Admin Adminsson',
+        email: 'admin@softhouse.se',
+        role: 'admin',
+
+        phoneNumber: faker.phone.phoneNumberFormat(),
+        employeeNumber: faker.random.number(2000),
+        position: faker.name.title(),
+        closestSuperior: faker.name.firstName() + ' ' + faker.name.lastName(),
+        startDateOfEmployment: faker.date.past(),
+        endDateOfEmployment: null,
+
+        certificates: [faker.company.catchPhraseNoun()],
+
+        ICEName: faker.name.firstName() + ' ' + faker.name.lastName(),
+        ICEPhone: faker.phone.phoneNumberFormat(),
+
+        profileImage: null,
+        personalIdNumber: faker.random.uuid,
+        sex: randomHandler.generateSex(),
+        description: faker.lorem.sentence(),
+        personalInterests: randomHandler.getPersonalInterests(),
+        foodPreferences: faker.lorem.sentence(),
+        shirtSize: randomHandler.getShirtSize(),
+        customHeaders: randomHandler.getCustomHeaders(),
+
+        linkedin: 'https://www.linkedin.com/in/williamhgates',
+        facebook: 'https://www.facebook.com/BillGates',
+        twitter: 'https://twitter.com/billgates',
+        country: faker.address.country(),
+        address: faker.address.streetAddress(),
+        city: faker.address.city(),
+        ZIP: faker.address.zipCode()
+    };
+
+    return q.all(applyAddOnItemsRec([user], 0, userController.createNewUser));
+
+}
+
 function addSkills() {
     var skills = [];
 
@@ -395,10 +436,10 @@ function addOffices() {
 function addAttributes() {
     var attributes = [
         {
-            name: 'canViewProfile'
+            name: 'canViewOffice'
         },
         {
-            name: 'canEditProfile'
+            name: 'canEditOffice'
         }
     ];
     return q.all(applyAddOnItemsRec(attributes, 0, attributeController.createNewAttribute));

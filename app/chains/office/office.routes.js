@@ -5,11 +5,12 @@
  */
 var officeController = require('./office.controller');
 var responseHandler = require('../../utils/response.handler');
+var authentication = require('../../middleware/authentication.middleware');
 
 module.exports = function(routes) {
 
     // create an office
-    routes.post('/', function(request, response) {
+    routes.post('/', authentication.isAllowed('canEditOffice'), function(request, response) {
         officeController.createNewOffice(request.body)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
@@ -30,7 +31,7 @@ module.exports = function(routes) {
     });
 
     // delete an office given an id
-    routes.delete('/:id', function(request, response) {
+    routes.delete('/:id', authentication.isAllowed('canEditOffice'), function(request, response) {
         officeController.deleteOfficeById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
