@@ -1,9 +1,9 @@
 'use strict';
 
-var Promise = require('bluebird');
+var q = require('q');
 
 exports.extractPropertiesFromConnectors = function(property, connectors, extraProps) {
-    return new Promise(function(resolve) {
+    return q.promise(function(resolve) {
         var list = [];
         connectors.forEach(function(connector) {
             var object = {};
@@ -23,7 +23,7 @@ exports.extractPropertiesFromConnectors = function(property, connectors, extraPr
 
 exports.extractPropertyFromList = function(property) {
     return function(items) {
-        return new Promise(function(resolve) {
+        return q.promise(function(resolve) {
             var list = [];
             items.forEach(function(item) {
 
@@ -37,7 +37,7 @@ exports.extractPropertyFromList = function(property) {
 
 exports.matchListAndObjectIds = function(list) {
     return function(objects) {
-        return new Promise(function(resolve) {
+        return q.promise(function(resolve) {
             var items = [];
             objects.forEach(function(object) {
                 list.some(function(item) {
@@ -49,14 +49,14 @@ exports.matchListAndObjectIds = function(list) {
                 });
             });
 
-            Promise.all(items)
+            q.all(items)
                 .then(resolve);
         });
     };
 };
 
 exports.sortListByProperty = function(list, prop) {
-    return new Promise(function(resolve) {
+    return q.promise(function(resolve) {
         list.sort(function(a, b) {
             if (a[prop] > b[prop]) {
                 return 1;
@@ -81,7 +81,7 @@ function listContainsId(list, id) {
 }
 
 function mergeProperties(from, to) {
-    return new Promise(function(resolve) {
+    return q.promise(function(resolve) {
         for (var prop in from) {
             if (from.hasOwnProperty(prop)) {
                 to[prop] = from[prop];
