@@ -35,7 +35,11 @@ function setUserToAssignmentConnectorProperties(body) {
 function getUserToAssignmentConnectorTemplate() {
     return {
         userId: null,
-        assignmentId: null
+        assignmentId: null,
+        skills: [],
+        dateFrom: null,
+        dateTo: null,
+        description: null
     };
 }
 

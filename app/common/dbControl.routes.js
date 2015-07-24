@@ -308,7 +308,7 @@ function addUsers() {
             ICEPhone: faker.phone.phoneNumberFormat(),
 
             profileImage: null,
-            personalIdNumber: faker.random.uuid,
+            personalIdNumber: faker.random.uuid(),
             sex: randomHandler.generateSex(),
             description: faker.lorem.sentence(),
             personalInterests: randomHandler.getPersonalInterests(),
@@ -350,7 +350,7 @@ function addAdmin() {
         ICEPhone: faker.phone.phoneNumberFormat(),
 
         profileImage: null,
-        personalIdNumber: faker.random.uuid,
+        personalIdNumber: faker.random.uuid(),
         sex: randomHandler.generateSex(),
         description: faker.lorem.sentence(),
         personalInterests: randomHandler.getPersonalInterests(),
@@ -387,7 +387,7 @@ function addSkillsDefault() {
 
 function addAssignments() {
     var assignments = [];
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < config.DEMO.NUMBER_OF_ASSIGNMENTS; i++) {
         var object = {};
         object.name = faker.internet.domainName();
         assignments.push(object);
@@ -508,9 +508,19 @@ function connectUsersAndRandomSkills(users) {
 }
 
 function connectUsersAndRandomAssignments(users) {
-    return assignmentController.getAllAssignments()
-        .then(function(assignments) {
-            return connectItemsToRandomItems(users, assignments, 'userId', 'assignmentId', 0, userToAssignmentConnectorController.createUserToAssignmentConnector, config.DEMO.USER_ON_ASSIGNMENT_PROBABILITY, null);
+    return skillController.getAllSkills()
+        .then(function(skills) {
+            var extraFields = {
+                skills: randomHandler.getBinomailUniqueSkillIds(skills, config.DEMO.SKILL_ON_ASSIGNMENT_PROBABILITY),
+                dateFrom: faker.date.past,
+                dateTo: faker.date.future,
+                description: faker.lorem.sentence
+            };
+
+            return assignmentController.getAllAssignments()
+                .then(function(assignments) {
+                    return connectItemsToRandomItems(users, assignments, 'userId', 'assignmentId', 0, userToAssignmentConnectorController.createUserToAssignmentConnector, config.DEMO.USER_ON_ASSIGNMENT_PROBABILITY, extraFields);
+                });
         });
 }
 

@@ -38,7 +38,11 @@ describe('/userToAssignmentConnector', function() {
         nock(mockedUrl)
             .post('/userToAssignmentConnector', {
                 assignmentId: '123',
-                userId: '456'
+                userId: '456',
+                skills: [],
+                dateFrom: null,
+                dateTo: null,
+                description: null
             })
             .reply(200, resultPost)
 
@@ -200,7 +204,11 @@ describe('/userToAssignmentConnector', function() {
         nock(mockedUrl)
             .post('/userToAssignmentConnector', {
                 assignmentId: '123',
-                userId: '456'
+                userId: '456',
+                skills: [],
+                dateFrom: null,
+                dateTo: null,
+                description: null
             })
             .reply(200, resultPost)
 

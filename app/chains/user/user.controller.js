@@ -9,6 +9,7 @@ var utils = require('../../utils/utils');
 function validateUser(user) {
     return q.promise(function(resolve, reject) {
         if (user && user.name && user.email && user.role) {
+            user = utils.extend(getUserTemplate(), user);
             return resolve(user);
         }
 
