@@ -10,7 +10,7 @@ var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
 var cacheHandler = require('../app/utils/cache.handler');
 
-describe('/8 authentication', function() {
+describe('/authentication', function() {
 
     afterEach(function(done) {
         nock.cleanAll();
