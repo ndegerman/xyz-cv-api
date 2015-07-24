@@ -151,10 +151,10 @@ function getShirtSizes() {
 }
 
 function getListOfAllSkillAbbreviations() {
-    return exports.getListofSkillAbbreviationsIcons().concat(getListOfSkillAbbreviationsNoIcons());
+    return exports.getListofDefaultSkillAbbreviations().concat(getListOfSkillAbbreviationsNoIcons());
 }
 
-exports.getListofSkillAbbreviationsIcons = function() {
+exports.getListofDefaultSkillAbbreviations = function() {
     return [
     {name: 'Angularjs', icon: 'devicon-angularjs-plain'},
     {name: 'Apache', icon: 'devicon-apache-plain'},

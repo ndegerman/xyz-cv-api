@@ -380,7 +380,7 @@ function addSkills() {
 }
 
 function addSkillsDefault() {
-    var skills = randomHandler.getListofSkillAbbreviationsIcons();
+    var skills = randomHandler.getListofDefaultSkillAbbreviations();
     return q.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
 
 }
