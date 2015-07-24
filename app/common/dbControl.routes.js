@@ -372,26 +372,15 @@ function addAdmin() {
 }
 
 function addSkills() {
-    var skills = [];
 
-    var abbreviations = randomHandler.getSkillAbbreviations(config.DEMO.NUMBER_OF_SKILLS);
-    abbreviations.forEach(function(abbreviation) {
-        skills.push({name: abbreviation});
-    });
+    var skills = randomHandler.getSkillAbbreviations(config.DEMO.NUMBER_OF_SKILLS);
 
     return q.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
 
 }
 
 function addSkillsDefault() {
-    var skills = [
-    {
-        name: 'Java'
-    },
-    {
-        name: 'C'
-    }
-    ];
+    var skills = randomHandler.getListofSkillAbbreviationsIcons();
     return q.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
 
 }
