@@ -8,11 +8,20 @@ var config = require('config');
 var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
+var cacheHandler = require('../app/utils/cache.handler');
 
 describe('/office', function() {
 
+    beforeEach(function(done) {
+        cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
+        cacheHandler.setToRoleAttributesCache('admin', ['canEditOffice']);
+        done();
+    });
+
     afterEach(function(done) {
         nock.cleanAll();
+        cacheHandler.clearUserRoleCache();
+        cacheHandler.clearRoleAttributesCache();
         done();
     });
 
@@ -62,6 +71,7 @@ describe('/office', function() {
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
+
                 done();
             });
     });

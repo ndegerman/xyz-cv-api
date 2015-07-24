@@ -77,17 +77,17 @@ exports.createNewUser = function(user) {
 };
 
 exports.createUserIfNonexistent = function(name, email) {
-    return exports.getUserByEmail(email)
-        .then(function(user) {
-            return q.promise(function(resolve, reject) {
-                if (!user) {
+    return q.promise(function(resolve) {
+        return exports.getUserByEmail(email)
+            .then(resolve)
+            .catch(function() {
+                return q.promise(function(resolve) {
                     exports.createNewUser(getUserTemplate(name, email))
                     .then(resolve);
-                } else {
-                    return resolve(user);
-                }
+                })
+                    .then(resolve);
             });
-        });
+    });
 };
 
 exports.getUserByEmail = function(email) {

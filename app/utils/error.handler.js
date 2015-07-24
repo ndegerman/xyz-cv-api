@@ -7,6 +7,7 @@ exports.getHttpError = function(statusCode) {
     return q.promise(function(resolve) {
         var error = new Error();
         error.status = statusCode;
+        error.httpError = true;
         switch (statusCode) {
             case 400:
                 error.message = msg.INVALID_JSON_OBJECT;
@@ -39,8 +40,12 @@ exports.getHttpError = function(statusCode) {
 
 exports.throwDREAMSHttpError = function(response) {
     return q.promise(function(resolve, reject) {
-        response.message = response.message.substring(6, response.message.length);
-        response.status = response.statusCode;
-        return reject(response);
+        if (response.httpError) {
+            return reject(response);
+        } else {
+            response.message = response.message.substring(6, response.message.length);
+            response.status = response.statusCode;
+            return reject(response);
+        }
     });
 };
