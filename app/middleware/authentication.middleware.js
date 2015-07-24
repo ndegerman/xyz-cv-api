@@ -76,9 +76,9 @@ function getRoleAttributes(role) {
         var roleAttributes = cacheHandler.getFromRoleAttributesCache(role);
         if (!roleAttributes) {
             var connectors = roleController.getRoleByName(role)
-                .then(roleToAttributeController.getRoleToAttributeConnectorsByRole)
+                .then(roleToAttributeController.getRoleToAttributeConnectorsByRole);
 
-            var attributes = attributeController.getAllAttributes()
+            var attributes = attributeController.getAllAttributes();
 
             q.all([connectors, attributes])
                 .then(function() {

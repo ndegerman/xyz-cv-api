@@ -64,7 +64,7 @@ describe('/authentication', function() {
     });
 
     describe('/office', function() {
-    //===============================================================================
+        //===============================================================================
 
         it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting to office with a cached allowed account', function(done) {
 
@@ -214,7 +214,6 @@ describe('/authentication', function() {
                 _id: '123'
             };
 
-
             var resultGetRole = [{
                 name: 'user',
                 createAt: '2015-06-16T07:33:14.385Z',
@@ -335,7 +334,6 @@ describe('/authentication', function() {
                 _id: '123'
             };
 
-
             var resultGetRole = [{
                 name: 'user',
                 createAt: '2015-06-16T07:33:14.385Z',
@@ -405,7 +403,6 @@ describe('/authentication', function() {
                 updatedAt: '2015-06-16T07:33:14.385Z',
                 _id: '123'
             };
-
 
             var resultGetRole = [{
                 name: 'user',
@@ -480,7 +477,6 @@ describe('/authentication', function() {
                 _id: '123'
             };
 
-
             var resultGetRole = [{
                 name: 'user',
                 createAt: '2015-06-16T07:33:14.385Z',
@@ -554,7 +550,6 @@ describe('/authentication', function() {
                 updatedAt: '2015-06-16T07:33:14.385Z',
                 _id: '123'
             };
-
 
             var resultGetRole = [{
                 name: 'user',
