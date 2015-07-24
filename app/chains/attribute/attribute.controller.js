@@ -3,11 +3,13 @@
 var attributeDao = require('./attribute.dao');
 var q = require('q');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 // TODO: Make the validation more covering
 function validateAttribute(attribute) {
     return q.promise(function(resolve, reject) {
         if (attribute && attribute.name) {
+            attribute = utils.extend(getAttributeTemplate(), attribute);
             return resolve(attribute);
         }
 
@@ -16,11 +18,11 @@ function validateAttribute(attribute) {
     });
 }
 
-exports.getAttributeTemplate = function() {
+function getAttributeTemplate() {
     return {
         name: null
     };
-};
+}
 
 exports.createNewAttribute = function(attributeObject) {
     return validateAttribute(attributeObject)

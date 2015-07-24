@@ -3,16 +3,25 @@
 var q = require('q');
 var skillToSkillGroupConnectorDao = require('./skillToSkillGroupConnector.dao');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 function validateSkillToSkillGroupConnector(skillToSkillGroupConnector) {
     return q.promise(function(resolve, reject) {
         if (skillToSkillGroupConnector && skillToSkillGroupConnector.skillGroupId && skillToSkillGroupConnector.skillId) {
+            skillToSkillGroupConnector = utils.extend(getSkillToSkillGroupConnectorTemplate(), skillToSkillGroupConnector);
             return resolve(skillToSkillGroupConnector);
         }
 
         return errorHandler.getHttpError(400)
             .then(reject);
     });
+}
+
+function getSkillToSkillGroupConnectorTemplate() {
+    return {
+        skillId: null,
+        skillGroupId: null
+    };
 }
 
 exports.assignSkillsToSkillGroup = function(skills, skillGroupId) {

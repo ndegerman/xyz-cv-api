@@ -3,6 +3,7 @@
 var userDao = require('./user.dao');
 var q = require('q');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 // TODO: Make the validation more covering
 function validateUser(user) {
@@ -54,16 +55,8 @@ function getUserTemplate(name, email) {
 }
 
 function setUserProperties(body) {
-    function extend(user, props) {
-        for (var prop in user) {
-            if (user.hasOwnProperty(prop) && props.hasOwnProperty(prop)) {
-                user[prop] = props[prop];
-            }
-        }
-    }
-
     return function(user) {
-        extend(user, body);
+        utils.extend(user, body);
         return user;
     };
 }
@@ -84,17 +77,17 @@ exports.createNewUser = function(user) {
 };
 
 exports.createUserIfNonexistent = function(name, email) {
-    return exports.getUserByEmail(email)
-        .then(function(user) {
-            return q.promise(function(resolve, reject) {
-                if (!user) {
+    return q.promise(function(resolve) {
+        return exports.getUserByEmail(email)
+            .then(resolve)
+            .catch(function() {
+                return q.promise(function(resolve) {
                     exports.createNewUser(getUserTemplate(name, email))
                     .then(resolve);
-                } else {
-                    return resolve(user);
-                }
+                })
+                    .then(resolve);
             });
-        });
+    });
 };
 
 exports.getUserByEmail = function(email) {

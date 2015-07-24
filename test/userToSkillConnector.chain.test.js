@@ -193,20 +193,26 @@ describe('/userToSkillConnector', function() {
 
     //===============================================================================
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToSkillConnector with too many fields in the body', function(done) {
-        var resultNoArg = msg.INVALID_JSON_OBJECT;
+    it('should correctly extract the needed properties and reply with HTTP status code 200 and a correctly formatted string when posting a userToSkillConnector with too many fields in the body', function(done) {
 
-        var badResultPost = {
+        var resultPost = {
             skillId: '123',
             userId: '456',
+            level: '2',
+            years: '5',
             createdAt: '2015-06-16T13:46:07.589Z',
             updatedAt: '2015-06-16T13:46:07.589Z',
             _id: '5580289f9a81250f00194d61'
         };
 
         nock(mockedUrl)
-            .post('/userToSkillConnector')
-            .reply(200, badResultPost)
+            .post('/userToSkillConnector', {
+                skillId: '123',
+                userId: '456',
+                level: '2',
+                years: '5'
+            })
+            .reply(200, resultPost)
 
             .get('/user?email=a@softhouse.se')
             .reply(200, getUserByEmailResponse);
@@ -219,6 +225,8 @@ describe('/userToSkillConnector', function() {
             .send({
                 skillId: '123',
                 userId: '456',
+                level: '2',
+                years: '5',
                 id: '789'
             })
 
@@ -226,8 +234,8 @@ describe('/userToSkillConnector', function() {
             .end(function(err, res) {
                 expect(err).to.exist;
                 expect(res).to.exist;
-                expect(res.status).to.equal(400);
-                expect(res.error.text).to.equal(resultNoArg);
+                expect(res.status).to.equal(200);
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
                 done();
             });
     });

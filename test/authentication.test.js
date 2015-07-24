@@ -8,6 +8,7 @@ var config = require('config');
 var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
+var cacheHandler = require('../app/utils/cache.handler');
 
 describe('/authentication', function() {
 
@@ -20,6 +21,7 @@ describe('/authentication', function() {
         _id:'558bacd8ed289d0f00d2c5f3',
         email:'a@softhouse.se',
         name:'A',
+        role: 'user',
         createdAt:'2015-06-25T07:25:12.523Z',
         updatedAt:'2015-06-25T07:25:12.523Z'
     }];
@@ -61,107 +63,554 @@ describe('/authentication', function() {
             });
     });
 
-    //===============================================================================
+    describe('/office', function() {
+        //===============================================================================
 
-    it('should reply with HTTP status code 401 when getting all roles with no headers set', function(done) {
-        var unauthorized = msg.UNAUTHORIZED;
+        it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting to office with a cached allowed account', function(done) {
 
-        var resultAllGet = [{
-            _id: '557d7cbc9a81250f00194d46',
-            name: 'test1',
-            createAt: '2015-06-14T13:08:12.348Z',
-            updatedAt: '2015-06-14T13:08:12.348Z'
-        }];
+            cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
+            cacheHandler.setToRoleAttributesCache('admin', ['canEditOffice']);
 
-        nock(mockedUrl)
-            .get('/role')
-            .reply(200, resultAllGet)
+            var resultPost = {
+                name: 'test2',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '557fd13a9a81250f00194d58'
+            };
 
-            .get('/user?email=a@softhouse.se')
-            .reply(200, getUserByEmailResponse);
+            nock(mockedUrl)
+                .post('/office', {
+                    name: 'test2'
+                })
+                .reply(200, resultPost)
 
-        request(url)
-            .get('/role')
-            .send()
+                .get('/user?email=a@softhouse.se')
+                .reply(200, getUserByEmailResponse);
 
-            // end handles the response
-            .end(function(err, res) {
-                expect(err).to.exist;
-                expect(res).to.exist;
-                expect(res.status).to.equal(401);
-                expect(res.text).to.equal(unauthorized);
-                done();
-            });
-    });
+            request(url)
+                .post('/office')
+                .set('x-forwarded-email', 'a@softhouse.se')
+                .set('x-forwarded-user', 'A')
+                .set('Content-Type', 'application/json')
+                .send({
+                    name: 'test2'
+                })
 
-    //===============================================================================
+                // end handles the response
+                .end(function(err, res) {
+                    if (err) {
+                        throw err;
+                    }
 
-    it('should reply with HTTP status code 401 when getting all roles with no email header set', function(done) {
-        var unauthorized = msg.UNAUTHORIZED;
+                    expect(res).to.exist;
+                    expect(res.status).to.equal(200);
+                    expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
 
-        var resultAllGet = [{
-            _id: '557d7cbc9a81250f00194d46',
-            name: 'test1',
-            createAt: '2015-06-14T13:08:12.348Z',
-            updatedAt: '2015-06-14T13:08:12.348Z'
-        }];
+                    cacheHandler.clearUserRoleCache();
+                    cacheHandler.clearRoleAttributesCache();
+                    done();
+                });
+        });
 
-        nock(mockedUrl)
-            .get('/role')
-            .reply(200, resultAllGet)
+        //===============================================================================
 
-            .get('/user?email=a@softhouse.se')
-            .reply(200, getUserByEmailResponse);
+        it('should reply with HTTP status code 401 and a correctly formatted string when posting to office with no email header set', function(done) {
+            var resultNotAuthorized = msg.UNAUTHORIZED;
 
-        request(url)
-            .get('/role')
-            .set('x-forwarded-user', 'A')
-            .set('Content-Type', 'application/json')
-            .send()
+            var resultPost = {
+                name: 'test2',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '557fd13a9a81250f00194d58'
+            };
 
-            // end handles the response
-            .end(function(err, res) {
-                expect(err).to.exist;
-                expect(res).to.exist;
-                expect(res.status).to.equal(401);
-                expect(res.text).to.equal(unauthorized);
-                done();
-            });
-    });
+            nock(mockedUrl)
+                .post('/office', {
+                    name: 'test2'
+                })
+                .reply(200, resultPost)
 
-    //===============================================================================
+                .get('/user?email=a@softhouse.se')
+                .reply(200, getUserByEmailResponse);
 
-    it('should reply with HTTP status code 401 when getting all roles with an incorrent email header set', function(done) {
-        var unauthorized = msg.UNAUTHORIZED;
+            request(url)
+                .post('/office')
+                .set('x-forwarded-user', 'A')
+                .set('Content-Type', 'application/json')
+                .send({
+                    name: 'test2'
+                })
 
-        var resultAllGet = [{
-            _id: '557d7cbc9a81250f00194d46',
-            name: 'test1',
-            createAt: '2015-06-14T13:08:12.348Z',
-            updatedAt: '2015-06-14T13:08:12.348Z'
-        }];
+                // end handles the response
+                .end(function(err, res) {
 
-        nock(mockedUrl)
-            .get('/role')
-            .reply(200, resultAllGet)
+                    expect(res).to.exist;
+                    expect(err).to.exist;
+                    expect(res.status).to.equal(401);
+                    expect(res.text).to.equal(resultNotAuthorized);
 
-            .get('/user?email=a@softhouse.se')
-            .reply(200, getUserByEmailResponse);
+                    cacheHandler.clearUserRoleCache();
+                    cacheHandler.clearRoleAttributesCache();
+                    done();
+                });
+        });
 
-        request(url)
-            .get('/role')
-            .set('x-forwarded-email', 'a@google.se')
-            .set('x-forwarded-user', 'A')
-            .set('Content-Type', 'application/json')
-            .send()
+        //===============================================================================
 
-            // end handles the response
-            .end(function(err, res) {
-                expect(err).to.exist;
-                expect(res).to.exist;
-                expect(res.status).to.equal(401);
-                expect(res.text).to.equal(unauthorized);
-                done();
-            });
+        it('should reply with HTTP status code 401 and a correctly formatted string when posting to office with a cached unallowed account', function(done) {
+            var resultNotAuthorized = msg.UNAUTHORIZED;
+
+            cacheHandler.setToUserRoleCache('a@softhouse.se', 'user');
+            cacheHandler.setToRoleAttributesCache('user', ['can\'tEditOffice']);
+
+            var resultPost = {
+                name: 'test2',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '557fd13a9a81250f00194d58'
+            };
+
+            nock(mockedUrl)
+                .post('/office', {
+                    name: 'test2'
+                })
+                .reply(200, resultPost)
+
+                .get('/user?email=a@softhouse.se')
+                .reply(200, getUserByEmailResponse);
+
+            request(url)
+                .post('/office')
+                .set('x-forwarded-email', 'a@softhouse.se')
+                .set('x-forwarded-user', 'A')
+                .set('Content-Type', 'application/json')
+                .send({
+                    name: 'test2'
+                })
+
+                // end handles the response
+                .end(function(err, res) {
+                    expect(err).to.exist;
+                    expect(res).to.exist;
+                    expect(res.status).to.equal(401);
+                    expect(res.text).to.equal(resultNotAuthorized);
+
+                    cacheHandler.clearUserRoleCache();
+                    cacheHandler.clearRoleAttributesCache();
+                    done();
+                });
+        });
+
+        //===============================================================================
+
+        it('should reply with HTTP status code 200 and a correctly formatted string when posting to office with a cached role but no cached roleToAttributeConnectors, and is allowed', function(done) {
+
+            cacheHandler.setToUserRoleCache('a@softhouse.se', 'user');
+
+            var resultPost = {
+                name: 'test2',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            };
+
+            var resultGetRole = [{
+                name: 'user',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            var resultGetConnectors = [{
+                attributeId: '123',
+                roleId: '123',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            var resultGetAttributes = [{
+                name: 'canEditOffice',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            nock(mockedUrl)
+                .post('/office', {
+                    name: 'test2'
+                })
+                .reply(200, resultPost)
+
+                .get('/user?email=a@softhouse.se')
+                .reply(200, getUserByEmailResponse)
+
+                .get('/role?name=user')
+                .reply(200, resultGetRole)
+
+                .get('/roleToAttributeConnector?roleId=123')
+                .reply(200, resultGetConnectors)
+
+                .get('/attribute')
+                .reply(200, resultGetAttributes);
+
+            request(url)
+                .post('/office')
+                .set('x-forwarded-email', 'a@softhouse.se')
+                .set('x-forwarded-user', 'A')
+                .set('Content-Type', 'application/json')
+                .send({
+                    name: 'test2'
+                })
+
+                // end handles the response
+                .end(function(err, res) {
+                    expect(err).to.exist;
+                    expect(res).to.exist;
+                    expect(res.status).to.equal(200);
+                    expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
+
+                    cacheHandler.clearUserRoleCache();
+                    cacheHandler.clearRoleAttributesCache();
+                    done();
+                });
+        });
+
+        //===============================================================================
+
+        it('should reply with HTTP status code 200 and a correctly formatted JSON object when posting to office with a cached roleToAttributeConnector but no cached role, and is allowed', function(done) {
+
+            cacheHandler.setToRoleAttributesCache('user', 'canEditOffice');
+
+            var resultPost = {
+                name: 'test2',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            };
+
+            nock(mockedUrl)
+                .post('/office', {
+                    name: 'test2'
+                })
+                .reply(200, resultPost)
+
+                .get('/user?email=a@softhouse.se')
+                .reply(200, getUserByEmailResponse)
+
+            request(url)
+                .post('/office')
+                .set('x-forwarded-email', 'a@softhouse.se')
+                .set('x-forwarded-user', 'A')
+                .set('Content-Type', 'application/json')
+                .send({
+                    name: 'test2'
+                })
+
+                // end handles the response
+                .end(function(err, res) {
+                    expect(err).to.exist;
+                    expect(res).to.exist;
+                    expect(res.status).to.equal(200);
+                    expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
+
+                    cacheHandler.clearUserRoleCache();
+                    cacheHandler.clearRoleAttributesCache();
+                    done();
+                });
+        });
+
+        //===============================================================================
+
+        it('should reply with HTTP status code 401 and a correctly formatted string when posting to office with a cached role but no cached roleToAttributeConnectors, and is unallowed', function(done) {
+
+            var resultNotAuthorized = msg.UNAUTHORIZED;
+            cacheHandler.setToUserRoleCache('a@softhouse.se', 'user');
+
+            var resultPost = {
+                name: 'test2',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            };
+
+            var resultGetRole = [{
+                name: 'user',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            var resultGetConnectors = [];
+
+            var resultGetAttributes = [{
+                name: 'canEditOffice',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            nock(mockedUrl)
+                .post('/office', {
+                    name: 'test2'
+                })
+                .reply(200, resultPost)
+
+                .get('/user?email=a@softhouse.se')
+                .reply(200, getUserByEmailResponse)
+
+                .get('/role?name=user')
+                .reply(200, resultGetRole)
+
+                .get('/roleToAttributeConnector?roleId=123')
+                .reply(200, resultGetConnectors)
+
+                .get('/attribute')
+                .reply(200, resultGetAttributes);
+
+            request(url)
+                .post('/office')
+                .set('x-forwarded-email', 'a@softhouse.se')
+                .set('x-forwarded-user', 'A')
+                .set('Content-Type', 'application/json')
+                .send({
+                    name: 'test2'
+                })
+
+                // end handles the response
+                .end(function(err, res) {
+                    expect(err).to.exist;
+                    expect(res).to.exist;
+                    expect(res.status).to.equal(401);
+                    expect(res.text).to.equal(resultNotAuthorized);
+
+                    cacheHandler.clearUserRoleCache();
+                    cacheHandler.clearRoleAttributesCache();
+                    done();
+                });
+        });
+
+        //===============================================================================
+
+        it('should reply with HTTP status code 401 and a correctly formatted string when posting to office with a cached role but no cached roleToAttributeConnectors, and is unallowed', function(done) {
+
+            var resultNotAuthorized = msg.UNAUTHORIZED;
+            cacheHandler.setToUserRoleCache('a@softhouse.se', 'user');
+
+            var resultPost = {
+                name: 'test2',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            };
+
+            var resultGetRole = [{
+                name: 'user',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            var resultGetConnectors = [{
+                attributeId: '123',
+                roleId: '123',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            var resultGetAttributes = [{
+                name: 'can\'tEditOffice',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            nock(mockedUrl)
+                .post('/office', {
+                    name: 'test2'
+                })
+                .reply(200, resultPost)
+
+                .get('/user?email=a@softhouse.se')
+                .reply(200, getUserByEmailResponse)
+
+                .get('/role?name=user')
+                .reply(200, resultGetRole)
+
+                .get('/roleToAttributeConnector?roleId=123')
+                .reply(200, resultGetConnectors)
+
+                .get('/attribute')
+                .reply(200, resultGetAttributes);
+
+            request(url)
+                .post('/office')
+                .set('x-forwarded-email', 'a@softhouse.se')
+                .set('x-forwarded-user', 'A')
+                .set('Content-Type', 'application/json')
+                .send({
+                    name: 'test2'
+                })
+
+                // end handles the response
+                .end(function(err, res) {
+                    expect(err).to.exist;
+                    expect(res).to.exist;
+                    expect(res.status).to.equal(401);
+                    expect(res.text).to.equal(resultNotAuthorized);
+
+                    cacheHandler.clearUserRoleCache();
+                    cacheHandler.clearRoleAttributesCache();
+                    done();
+                });
+        });
+
+        //===============================================================================
+
+        it('should reply with HTTP status code 200 and a correctly formatted string when posting to office with no cached role or roleToAttributeConnector, but is allowed', function(done) {
+
+            var resultPost = {
+                name: 'test2',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            };
+
+            var resultGetRole = [{
+                name: 'user',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            var resultGetConnectors = [{
+                attributeId: '123',
+                roleId: '123',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            var resultGetAttributes = [{
+                name: 'canEditOffice',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            nock(mockedUrl)
+                .post('/office', {
+                    name: 'test2'
+                })
+                .reply(200, resultPost)
+
+                .get('/user?email=a@softhouse.se')
+                .reply(200, getUserByEmailResponse)
+
+                .get('/role?name=user')
+                .reply(200, resultGetRole)
+
+                .get('/roleToAttributeConnector?roleId=123')
+                .reply(200, resultGetConnectors)
+
+                .get('/attribute')
+                .reply(200, resultGetAttributes);
+
+            request(url)
+                .post('/office')
+                .set('x-forwarded-email', 'a@softhouse.se')
+                .set('x-forwarded-user', 'A')
+                .set('Content-Type', 'application/json')
+                .send({
+                    name: 'test2'
+                })
+
+                // end handles the response
+                .end(function(err, res) {
+                    expect(err).to.exist;
+                    expect(res).to.exist;
+                    expect(res.status).to.equal(200);
+                    expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
+
+                    cacheHandler.clearUserRoleCache();
+                    cacheHandler.clearRoleAttributesCache();
+                    done();
+                });
+        });
+
+        //===============================================================================
+
+        it('should reply with HTTP status code 401 and a correctly formatted string when posting to office with no cached role or roleToAttributeConnector, and is unallowed', function(done) {
+
+            var resultNotAuthorized = msg.UNAUTHORIZED;
+            var resultPost = {
+                name: 'test2',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            };
+
+            var resultGetRole = [{
+                name: 'user',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            var resultGetConnectors = [{
+                attributeId: '123',
+                roleId: '123',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            var resultGetAttributes = [{
+                name: 'can\'tEditOffice',
+                createAt: '2015-06-16T07:33:14.385Z',
+                updatedAt: '2015-06-16T07:33:14.385Z',
+                _id: '123'
+            }];
+
+            nock(mockedUrl)
+                .post('/office', {
+                    name: 'test2'
+                })
+                .reply(200, resultPost)
+
+                .get('/user?email=a@softhouse.se')
+                .reply(200, getUserByEmailResponse)
+
+                .get('/role?name=user')
+                .reply(200, resultGetRole)
+
+                .get('/roleToAttributeConnector?roleId=123')
+                .reply(200, resultGetConnectors)
+
+                .get('/attribute')
+                .reply(200, resultGetAttributes);
+
+            request(url)
+                .post('/office')
+                .set('x-forwarded-email', 'a@softhouse.se')
+                .set('x-forwarded-user', 'A')
+                .set('Content-Type', 'application/json')
+                .send({
+                    name: 'test2'
+                })
+
+                // end handles the response
+                .end(function(err, res) {
+                    expect(err).to.exist;
+                    expect(res).to.exist;
+                    expect(res.status).to.equal(401);
+                    expect(res.text).to.equal(resultNotAuthorized);
+
+                    cacheHandler.clearUserRoleCache();
+                    cacheHandler.clearRoleAttributesCache();
+                    done();
+                });
+        });
     });
 });

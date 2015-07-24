@@ -8,11 +8,20 @@ var config = require('config');
 var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
+var cacheHandler = require('../app/utils/cache.handler');
 
 describe('/office', function() {
 
+    beforeEach(function(done) {
+        cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
+        cacheHandler.setToRoleAttributesCache('admin', ['canEditOffice']);
+        done();
+    });
+
     afterEach(function(done) {
         nock.cleanAll();
+        cacheHandler.clearUserRoleCache();
+        cacheHandler.clearRoleAttributesCache();
         done();
     });
 
@@ -62,6 +71,7 @@ describe('/office', function() {
                 expect(res).to.exist;
                 expect(res.status).to.equal(200);
                 expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
+
                 done();
             });
     });
@@ -144,10 +154,9 @@ describe('/office', function() {
 
     //===============================================================================
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting an office with too many fields in the body', function(done) {
-        var resultBadJson = msg.INVALID_JSON_OBJECT;
+    it('should correctly extract the needed properties and reply with HTTP status code 200 and a correctly formatted string when posting an office with too many fields in the body', function(done) {
 
-        var badResultPost = {
+        var resultPost = {
             name: 'test1',
             createAt: '2015-06-16T07:33:14.385Z',
             updatedAt: '2015-06-16T07:33:14.385Z',
@@ -155,8 +164,10 @@ describe('/office', function() {
         };
 
         nock(mockedUrl)
-            .post('/office')
-            .reply(200, badResultPost)
+            .post('/office', {
+                name: 'test1'
+            })
+            .reply(200, resultPost)
 
             .get('/user?email=a@softhouse.se')
             .reply(200, getUserByEmailResponse);
@@ -175,8 +186,8 @@ describe('/office', function() {
             .end(function(err, res) {
                 expect(err).to.exist;
                 expect(res).to.exist;
-                expect(res.status).to.equal(400);
-                expect(res.error.text).to.equal(resultBadJson);
+                expect(res.status).to.equal(200);
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
                 done();
             });
     });

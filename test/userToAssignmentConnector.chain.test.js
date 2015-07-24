@@ -187,10 +187,9 @@ describe('/userToAssignmentConnector', function() {
 
     //===============================================================================
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a userToAssignmentConnector with too many fields in the body', function(done) {
-        var resultNoArg = msg.INVALID_JSON_OBJECT;
+    it('should correctly extract the needed properties and reply with HTTP status code 200 and a correctly formatted string when posting a userToAssignmentConnector with too many fields in the body', function(done) {
 
-        var badResultPost = {
+        var resultPost = {
             assignmentId: '123',
             userId: '456',
             createdAt: '2015-06-16T13:46:07.589Z',
@@ -199,8 +198,11 @@ describe('/userToAssignmentConnector', function() {
         };
 
         nock(mockedUrl)
-            .post('/userToAssignmentConnector')
-            .reply(200, badResultPost)
+            .post('/userToAssignmentConnector', {
+                assignmentId: '123',
+                userId: '456'
+            })
+            .reply(200, resultPost)
 
             .get('/user?email=a@softhouse.se')
             .reply(200, getUserByEmailResponse);
@@ -220,8 +222,8 @@ describe('/userToAssignmentConnector', function() {
             .end(function(err, res) {
                 expect(err).to.exist;
                 expect(res).to.exist;
-                expect(res.status).to.equal(400);
-                expect(res.error.text).to.equal(resultNoArg);
+                expect(res.status).to.equal(200);
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
                 done();
             });
     });

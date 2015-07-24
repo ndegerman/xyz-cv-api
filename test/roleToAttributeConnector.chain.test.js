@@ -188,10 +188,9 @@ describe('/roleToAttributeConnector', function() {
 
     //===============================================================================
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when posting a roleToAttributeConnector with too many fields in the body', function(done) {
-        var resultNoArg = msg.INVALID_JSON_OBJECT;
+    it('should correctly extract the needed properties and reply with HTTP status code 200 and a correctly formatted string when posting a roleToAttributeConnector with too many fields in the body', function(done) {
 
-        var badResultPost = {
+        var resultPost = {
             attributeId: '123',
             roleId: '456',
             createdAt: '2015-06-16T13:46:07.589Z',
@@ -200,8 +199,11 @@ describe('/roleToAttributeConnector', function() {
         };
 
         nock(mockedUrl)
-            .post('/roleToAttributeConnector')
-            .reply(200, badResultPost)
+            .post('/roleToAttributeConnector', {
+                attributeId: '123',
+                roleId: '456'
+            })
+            .reply(200, resultPost)
 
             .get('/user?email=a@softhouse.se')
             .reply(200, getUserByEmailResponse);
@@ -221,8 +223,8 @@ describe('/roleToAttributeConnector', function() {
             .end(function(err, res) {
                 expect(err).to.exist;
                 expect(res).to.exist;
-                expect(res.status).to.equal(400);
-                expect(res.error.text).to.equal(resultNoArg);
+                expect(res.status).to.equal(200);
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultPost));
                 done();
             });
     });

@@ -3,11 +3,13 @@
 var officeDao = require('./office.dao');
 var q = require('q');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 // TODO: Make the validation more covering
 function validateOffice(office) {
     return q.promise(function(resolve, reject) {
         if (office && office.name) {
+            office = utils.extend(getOfficeTemplate(), office);
             return resolve(office);
         }
 
@@ -16,11 +18,11 @@ function validateOffice(office) {
     });
 }
 
-exports.getOfficeTemplate = function() {
+function getOfficeTemplate() {
     return {
         name: null
     };
-};
+}
 
 exports.createNewOffice = function(officeObject) {
     return validateOffice(officeObject)

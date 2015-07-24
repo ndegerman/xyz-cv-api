@@ -76,11 +76,16 @@ function parsePolyQuery(response) {
 }
 
 function parseMonoQuery(response) {
-    return q.promise(function(resolve) {
+    return q.promise(function(resolve, reject) {
         parsePolyQuery(response)
             .then(function(items) {
                 var item = (items.length > 0) ? items[0] : null;
-                return resolve(item);
+                if (item) {
+                    return resolve(item);
+                } else {
+                    return errorHandler.getHttpError(404)
+                        .then(reject);
+                }
             });
     });
 }
@@ -101,6 +106,13 @@ function parseBody(response) {
 exports.sendErrorResponse = function(response) {
     return function(error) {
         response.status(error.status || 500).send(error.message);
+    };
+};
+
+exports.sendUnauthorizedResponse = function(response) {
+    return function() {
+        return errorHandler.getHttpError(401)
+            .then(exports.sendErrorResponse(response));
     };
 };
 

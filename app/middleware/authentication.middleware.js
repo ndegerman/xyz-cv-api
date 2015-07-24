@@ -13,10 +13,7 @@ var NodeCache = require('node-cache');
 var roleController = require('../chains/role/role.controller');
 var roleToAttributeController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
 var attributeController = require('../chains/attribute/attribute.controller');
-
-// Cache
-var userRoleCache = new NodeCache({stdTTL: 500});
-var roleAttributesCache = new NodeCache({stdTTL: 500});
+var cacheHandler = require('../utils/cache.handler');
 
 // middleware
 exports.authentication = function(request, response, next) {
@@ -24,11 +21,10 @@ exports.authentication = function(request, response, next) {
     var name = request.headers['x-forwarded-user'];
 
     if (!email) {
-        errorHandler.getHttpError(401)
-            .then(responseHandler.sendErrorResponse(response));
+        return responseHandler.sendUnauthorizedResponse(response)();
     }
 
-    if (userRoleCache.get(email)) {
+    if (cacheHandler.getFromUserRoleCache(email)) {
         return next();
     } else {
         userController.createUserIfNonexistent(name, email)
@@ -46,21 +42,22 @@ exports.isAllowed = function(attribute) {
                 if (attributes !== undefined && attributes.indexOf(attribute) >= 0) {
                     return next();
                 } else {
-                    errorHandler.getHttpError(401)
-                        .then(responseHandler.sendErrorResponse(response));
+                    return responseHandler.sendUnauthorizedResponse(response)();
                 }
-            });
+            })
+            .catch(responseHandler.sendUnauthorizedResponse(response));
     };
 };
 
 function getUserRole(request, response) {
     return q.promise(function(resolve) {
         var email = request.headers['x-forwarded-email'];
-        var userRoleFromCache = userRoleCache.get(email);
-        if (userRoleFromCache === undefined) {
+        var userRoleFromCache = cacheHandler.getFromUserRoleCache(email);
+        if (!userRoleFromCache) {
             return userController.getUserByEmail(email)
                 .then(setUserRoleCache)
-                .then(resolve);
+                .then(resolve)
+                .catch(responseHandler.sendUnauthorizedResponse(response));
         }
 
         return resolve(userRoleFromCache);
@@ -69,28 +66,31 @@ function getUserRole(request, response) {
 
 function setUserRoleCache(user) {
     return q.promise(function(resolve) {
-        userRoleCache.set(user.email, user.role);
+        cacheHandler.setToUserRoleCache(user.email, user.role);
         return resolve(user.role);
     });
 }
 
 function getRoleAttributes(role) {
-    return q.promise(function(resolve) {
-        var roleAttributes = roleAttributesCache.get(role);
-        if (roleAttributes === undefined) {
+    return q.promise(function(resolve, reject) {
+        var roleAttributes = cacheHandler.getFromRoleAttributesCache(role);
+        if (!roleAttributes) {
             var connectors = roleController.getRoleByName(role)
                 .then(roleToAttributeController.getRoleToAttributeConnectorsByRole);
+
             var attributes = attributeController.getAllAttributes();
+
             q.all([connectors, attributes])
                 .then(function() {
-                    utils.extractPropertiesFromConnectors('attributeId', connectors.value())
+                    return utils.extractPropertiesFromConnectors('attributeId', connectors.value())
                         .then(utils.matchListAndObjectIds(attributes.value()))
                         .then(utils.extractPropertyFromList('name'))
                         .then(function(attributeNames) {
-                            roleAttributesCache.set(role, attributeNames);
+                            cacheHandler.setToRoleAttributesCache(role, attributeNames);
                             return resolve(attributeNames);
                         });
-                });
+                })
+                .catch(reject);
         } else {
             return resolve(roleAttributes);
         }
