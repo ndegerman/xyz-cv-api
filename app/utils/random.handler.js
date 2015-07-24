@@ -132,6 +132,21 @@ exports.getBinomialUniqueList = function(items, p) {
     return result;
 };
 
+exports.getBinomailUniqueSkillIds = function(skills, p) {
+    return function() {
+        var n = skills.length;
+        var count = exports.getBinomial(n, p);
+        var uniqueIndices = exports.getUniqueIndices(count, n);
+        var result = [];
+
+        for (var i = 0; i < count; i++) {
+            result.push(skills[uniqueIndices[i]]._id);
+        }
+
+        return result;
+    };
+};
+
 function randomInt(high) {
     return Math.floor(Math.random() * (high + 1));
 }
