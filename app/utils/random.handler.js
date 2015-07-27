@@ -177,7 +177,7 @@ function getRandomCertificatePrefix() {
     ];
 
     return list[randomInt(list.length) - 1];
-};
+}
 
 function randomInt(high) {
     return Math.floor(Math.random() * (high + 1));
