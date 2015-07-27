@@ -147,6 +147,38 @@ exports.getBinomailUniqueSkillIds = function(skills, p) {
     };
 };
 
+exports.getCertificates = function() {
+
+    var list = [];
+    if (exports.bernoulli(0.9)) {
+        list.push(getRandomCertificatePrefix() + faker.hacker.ingverb());
+        list.push(getRandomCertificatePrefix() + faker.company.catchPhraseNoun());
+
+        if (exports.bernoulli(0.6)) {
+            list.push(getRandomCertificatePrefix() + faker.company.catchPhraseNoun());
+
+            if (exports.bernoulli(0.8)) {
+                list.push(getRandomCertificatePrefix() + faker.company.bs());
+            }
+        }
+    }
+
+    return list;
+};
+
+function getRandomCertificatePrefix() {
+    var list = [
+        'Bachelor of ',
+        'Master of ',
+        'Bachelor of Science in Engineering in ',
+        'Bachelor of Arts in ',
+        'MD in ',
+        'JD in '
+    ];
+
+    return list[randomInt(list.length) - 1];
+};
+
 function randomInt(high) {
     return Math.floor(Math.random() * (high + 1));
 }
