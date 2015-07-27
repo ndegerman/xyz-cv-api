@@ -141,8 +141,8 @@ exports.sendSuccessfulPutJsonResponse = function(response) {
 };
 
 exports.sendSuccessUploadJsonResponse = function(response) {
-    return function() {
-        return response.send(msg.SUCCESS_UPLOAD);
+    return function(file) {
+        return response.send(file._id);
     };
 };
 
