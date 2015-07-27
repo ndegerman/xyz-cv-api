@@ -302,7 +302,7 @@ function addUsers() {
             startDateOfEmployment: faker.date.past(),
             endDateOfEmployment: null,
 
-            certificates: [faker.company.catchPhraseNoun()],
+            certificates: randomHandler.getCertificates(),
 
             ICEName: faker.name.firstName() + ' ' + faker.name.lastName(),
             ICEPhone: faker.phone.phoneNumberFormat(),
@@ -344,7 +344,7 @@ function addAdmin() {
         startDateOfEmployment: faker.date.past(),
         endDateOfEmployment: null,
 
-        certificates: [faker.company.catchPhraseNoun()],
+        certificates: randomHandler.getCertificates(),
 
         ICEName: faker.name.firstName() + ' ' + faker.name.lastName(),
         ICEPhone: faker.phone.phoneNumberFormat(),
