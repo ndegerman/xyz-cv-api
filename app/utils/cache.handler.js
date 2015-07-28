@@ -19,6 +19,12 @@ exports.setToRoleAttributesCache = function(role, attributes) {
     return roleAttributesCache.set(role, attributes);
 };
 
+exports.setToRoleAttributesCachePromise = function(role, attributes) {
+    return q.promise(function(resolve) {
+        return resolve(roleAttributesCache.set(role, attributes));
+    });
+};
+
 exports.setToEmailIdCache = function(email, id) {
     return EmailIdCache.set(email, id);
 };

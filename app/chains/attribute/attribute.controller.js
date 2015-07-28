@@ -20,7 +20,8 @@ function validateAttribute(attribute) {
 
 function getAttributeTemplate() {
     return {
-        name: null
+        name: null,
+        hiddenFields: null
     };
 }
 

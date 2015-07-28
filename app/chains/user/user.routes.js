@@ -26,6 +26,7 @@ module.exports = function(routes) {
     //get user by id
     routes.get('/:id', function(request, response) {
         userController.getUserById(request.params.id)
+            .then(responseHandler.trimByAttributes(request.headers['x-forwarded-email'], ['canViewProfile', 'canEditProfile']))
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 

@@ -4,6 +4,11 @@ var q = require('q');
 var errorHandler = require('./error.handler');
 var msg = require('./message.handler');
 var config = require('config');
+var authenticationHandler = require('./authentication.handler');
+var roleController = require('../chains/role/role.controller');
+var attributeController = require('../chains/attribute/attribute.controller');
+var roleToAttributeController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
+var utils = require('../utils/utils');
 
 // PARSING
 // ============================================================================
@@ -157,3 +162,121 @@ exports.sendThumbnailResponse = function(response) {
         response.download(config.UPLOAD_PATH + generatedName);
     };
 };
+
+// TRIMMING
+// ==============================================================================
+// TODO: error handling
+
+exports.trimByAttributes = function(email, attributes) {
+    return function(body) {
+        return q.promise(function(resolve) {
+            var userIsSelf = authenticationHandler.isSelf(email, body._id);
+
+            return q.all(userIsSelf)
+                .then(function(result) {
+                    if (result) {
+                        return resolve(body);
+                    } else {
+                        return authenticationHandler.getUserAttributeObjects(email)
+                            .then(extractRelevantAttributes(attributes))
+                            .then(findSmallestIntersectionOfHiddenFields)
+                            .then(trimByFields(body))
+                            .then(resolve);
+                    }
+                });
+        });
+    };
+};
+
+function getRoleAttributes(role) {
+    return q.promise(function(resolve, reject) {
+        var connectors = roleController.getRoleByName(role)
+            .then(roleToAttributeController.getRoleToAttributeConnectorsByRole);
+
+        var attributes = attributeController.getAllAttributes();
+
+        q.all([connectors, attributes])
+            .then(function() {
+                return utils.extractPropertiesFromConnectors('attributeId', connectors.value())
+                    .then(utils.matchListAndObjectIds(attributes.value()))
+                    .then(resolve);
+            })
+            .catch(reject);
+    });
+}
+
+function extractRelevantAttributes(relevantAttributes) {
+    return function(presentAttributes) {
+        return q.promise(function(resolve) {
+            var list = [];
+            presentAttributes.forEach(function(presentAttribute) {
+                if (relevantAttributes.indexOf(presentAttribute.name) >= 0) {
+                    list.push(presentAttribute);
+                }
+            });
+
+            return q.all(list)
+                .then(resolve);
+        });
+    };
+}
+
+function findSmallestIntersectionOfHiddenFields(attributes) {
+    return q.promise(function(resolve) {
+        var list = [];
+        var length = attributes.length;
+
+        return getFieldCounts(attributes)
+            .then(pushFieldsIfPresentInAllAttributes(length))
+            .then(resolve);
+    });
+}
+
+function getFieldCounts(attributes) {
+    return q.promise(function(resolve) {
+        var count = {};
+        attributes.forEach(function(attribute) {
+            if (attribute.hiddenFields) {
+                attribute.hiddenFields.forEach(function(hiddenField) {
+                    if (!count[hiddenField]) {
+                        count[hiddenField] = 1;
+                    } else {
+                        count[hiddenField]++;
+                    }
+                });
+            }
+        });
+
+        return resolve(count);
+    });
+}
+
+function pushFieldsIfPresentInAllAttributes(length) {
+    return function(count) {
+        return q.promise(function(resolve) {
+            var promises = [];
+            for (var field in count) {
+                if (count[field] === length) {
+                    promises.push(field);
+                }
+            }
+
+            q.all(promises)
+                .then(resolve);
+        });
+    };
+}
+
+function trimByFields(body) {
+    return function(fields) {
+        return q.promise(function(resolve) {
+            for (var field in body) {
+                if (fields.indexOf(field) >= 0) {
+                    body[field] = null;
+                }
+            }
+
+            return resolve(body);
+        });
+    };
+}

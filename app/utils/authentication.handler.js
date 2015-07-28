@@ -8,9 +8,14 @@ var roleController = require('../chains/role/role.controller');
 var attributeController = require('../chains/attribute/attribute.controller');
 var roleToAttributeController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
 
-exports.getUserAttributes = function(email) {
+exports.getUserAttributeNames = function(email) {
     return getUserRole(email)
         .then(getRoleAttributes);
+};
+
+exports.getUserAttributeObjects = function(email) {
+    return getUserRole(email)
+        .then(getRoleAttributesObjects);
 };
 
 exports.authenticate = function(name, email) {
@@ -33,7 +38,7 @@ function getUserRole(email) {
             return userController.getUserByEmail(email)
                 .then(setUserRoleCache)
                 .then(resolve)
-                .catch(console.dir);
+                .catch(reject);
         }
 
         return resolve(userRoleFromCache);
@@ -71,5 +76,71 @@ function getRoleAttributes(role) {
             return resolve(roleAttributes);
         }
     });
+}
+
+function getRoleAttributesObjects(role) {
+    return q.promise(function(resolve, reject) {
+        var roleAttributes = cacheHandler.getFromRoleAttributesCache(role);
+        if (!roleAttributes) {
+            var connectors = roleController.getRoleByName(role)
+                .then(roleToAttributeController.getRoleToAttributeConnectorsByRole);
+
+            var attributes = attributeController.getAllAttributes();
+
+            q.all([connectors, attributes])
+                .then(function() {
+                    return utils.extractPropertiesFromConnectors('attributeId', connectors.value())
+                        .then(utils.matchListAndObjectIds(attributes.value()))
+                        .then(resolve);
+                })
+                .catch(reject);
+        } else {
+            return resolve(roleAttributes);
+        }
+    });
+}
+
+exports.isSelf = function(email, id) {
+    return q.promise(function(resolve) {
+        var userId = cacheHandler.getFromEmailIdCache(email);
+
+        if (!id) {
+            return resolve(false);
+        }
+
+        if (!userId) {
+            return userController.getUserByEmail(email)
+                .then(getIdfromUser)
+                .then(setEmailToIdCache(email))
+                .then(checkIds(id))
+                .then(resolve);
+        } else {
+            return checkIds(userId)(id)
+                .then(resolve);
+        }
+    });
+};
+
+function setEmailToIdCache(email) {
+    return function(id) {
+        return q.promise(function(resolve) {
+            cacheHandler.setToEmailIdCache(email, id);
+            return resolve(id);
+        });
+    };
+}
+
+function getIdfromUser(user) {
+    return q.promise(function(resolve) {
+        return resolve(user._id);
+    });
+}
+
+function checkIds(id1) {
+    return function(id2) {
+        return q.promise(function(resolve) {
+            return resolve(id1 === id2);
+        });
+    };
 }
 

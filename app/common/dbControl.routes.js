@@ -432,7 +432,17 @@ function addAttributes() {
             name: 'canEditOffice'
         },
         {
-            name: 'canViewProfile'
+            name: 'canViewProfile',
+            hiddenFields: [
+                'personalIdNumber',
+                'foodPreferences',
+                'shirtSize',
+                'ICEName',
+                'ICEPhone',
+                'address',
+                'city',
+                'ZIP'
+            ]
         },
         {
             name: 'canEditProfile'
