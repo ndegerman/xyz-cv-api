@@ -29,7 +29,7 @@ module.exports = function(routes) {
     // get a file by the given id
     routes.get('/:id', function(request, response) {
         fileController.getFileById(request.params.id)
-            .then(responseHandler.sendFileResponse(response))
+            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
@@ -40,6 +40,11 @@ module.exports = function(routes) {
             .then(fileController.deleteFileById)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    // get a file by the given id
+    routes.get('/thumbnail/:id', function(request, response) {
+        return responseHandler.sendThumbnailResponse(response)(request.params.id)
     });
 
     return routes;
