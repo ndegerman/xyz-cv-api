@@ -3,17 +3,14 @@
 /**
  * Module dependencies.
  */
-var q = require('q');
-var authenticationMiddleware = require('./authentication.middleware');
-var userController = require('../chains/user/user.controller');
-var errorHandler = require('../utils/error.handler');
-var utils = require('../utils/utils');
 var responseHandler = require('../utils/response.handler');
-var NodeCache = require('node-cache');
+var authenticationHandler = require('../utils/authentication.handler');
+var userController = require('../chains/user/user.controller');
 var roleController = require('../chains/role/role.controller');
-var roleToAttributeController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
-var attributeController = require('../chains/attribute/attribute.controller');
 var cacheHandler = require('../utils/cache.handler');
+var attributeController = require('../chains/attribute/attribute.controller');
+var roleToAttributeController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
+var q = require('q');
 
 // middleware
 exports.authentication = function(request, response, next) {
@@ -24,14 +21,9 @@ exports.authentication = function(request, response, next) {
         return responseHandler.sendUnauthorizedResponse(response)();
     }
 
-    if (cacheHandler.getFromUserRoleCache(email)) {
-        return next();
-    } else {
-        userController.createUserIfNonexistent(name, email)
-            .then(setUserRoleCache)
-            .then(responseHandler.sendToNext(next))
-            .catch(responseHandler.sendErrorResponse(response));
-    }
+    authenticationHandler.authenticate(name, email)
+        .then(responseHandler.sendToNext(next))
+        .catch(responseHandler.sendErrorResponse(response));
 };
 
 exports.isAllowedOrSelf = function(attribute) {
@@ -52,8 +44,7 @@ exports.isAllowedOrSelf = function(attribute) {
 
 exports.isAllowed = function(attribute) {
     return function(request, response, next) {
-        return getUserRole(request, response)
-            .then(getRoleAttributes)
+        authenticationHandler.getUserAttributes(request.headers['x-forwarded-email'])
             .then(function(attributes) {
                 if (attributes !== undefined && attributes.indexOf(attribute) >= 0) {
                     return next();
@@ -64,54 +55,6 @@ exports.isAllowed = function(attribute) {
             .catch(responseHandler.sendUnauthorizedResponse(response));
     };
 };
-
-function getUserRole(request, response) {
-    return q.promise(function(resolve) {
-        var email = request.headers['x-forwarded-email'];
-        var userRoleFromCache = cacheHandler.getFromUserRoleCache(email);
-        if (!userRoleFromCache) {
-            return userController.getUserByEmail(email)
-                .then(setUserRoleCache)
-                .then(resolve)
-                .catch(responseHandler.sendUnauthorizedResponse(response));
-        }
-
-        return resolve(userRoleFromCache);
-    });
-}
-
-function setUserRoleCache(user) {
-    return q.promise(function(resolve) {
-        cacheHandler.setToUserRoleCache(user.email, user.role);
-        return resolve(user.role);
-    });
-}
-
-function getRoleAttributes(role) {
-    return q.promise(function(resolve, reject) {
-        var roleAttributes = cacheHandler.getFromRoleAttributesCache(role);
-        if (!roleAttributes) {
-            var connectors = roleController.getRoleByName(role)
-                .then(roleToAttributeController.getRoleToAttributeConnectorsByRole);
-
-            var attributes = attributeController.getAllAttributes();
-
-            q.all([connectors, attributes])
-                .then(function() {
-                    return utils.extractPropertiesFromConnectors('attributeId', connectors.value())
-                        .then(utils.matchListAndObjectIds(attributes.value()))
-                        .then(utils.extractPropertyFromList('name'))
-                        .then(function(attributeNames) {
-                            cacheHandler.setToRoleAttributesCache(role, attributeNames);
-                            return resolve(attributeNames);
-                        });
-                })
-                .catch(reject);
-        } else {
-            return resolve(roleAttributes);
-        }
-    });
-}
 
 function isSelf(request, id) {
     return q.promise(function(resolve) {

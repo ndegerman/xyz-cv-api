@@ -44,7 +44,7 @@ module.exports = function(routes) {
 
     // get a file by the given id
     routes.get('/thumbnail/:id', function(request, response) {
-        return responseHandler.sendThumbnailResponse(response)(request.params.id)
+        return responseHandler.sendThumbnailResponse(response)(request.params.id);
     });
 
     return routes;

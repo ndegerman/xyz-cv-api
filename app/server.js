@@ -24,6 +24,7 @@ var userToOfficeConnectorRoutes = require('./chains/userToOfficeConnector/userTo
 var userToAssignmentConnectorRoutes = require('./chains/userToAssignmentConnector/userToAssignmentConnector.routes.js')(express.Router());
 
 var dbControlRoutes = require('./common/dbControl.routes')(express.Router());
+var authenticationRoutes = require('./common/authentication.routes')(express.Router());
 
 var errorMiddleware = require('./middleware/error.middleware');
 var authenticationMiddleware = require('./middleware/authentication.middleware');
@@ -67,6 +68,7 @@ app.use('/office', officeRoutes);
 app.use('/assignment', assignmentRoutes);
 
 app.use('/file', fileRoutes);
+app.use('/authentication', authenticationRoutes);
 
 app.use('/roleToAttributeConnector', roleToAttributeConnectorRoutes);
 app.use('/userToSkillConnector', userToSkillConnectorRoutes);
