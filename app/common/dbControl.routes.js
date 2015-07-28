@@ -24,6 +24,7 @@ var config = require('config');
 var q = require('q');
 var ProgressBar = require('progress');
 var bar;
+var userAttributes;
 
 module.exports = function(routes) {
 
@@ -423,15 +424,27 @@ function addOffices() {
 }
 
 function addAttributes() {
-    var attributes = [
+    var allAttributes = [
         {
             name: 'canViewOffice'
         },
         {
             name: 'canEditOffice'
+        },
+        {
+            name: 'canViewProfile'
+        },
+        {
+            name: 'canEditProfile'
         }
     ];
-    return q.all(applyAddOnItemsRec(attributes, 0, attributeController.createNewAttribute));
+
+    userAttributes = [
+        'canViewOffice',
+        'canViewProfile'
+    ];
+
+    return q.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
 
 }
 
@@ -467,7 +480,10 @@ function addSkillGroups() {
 function addConnectors() {
     var promises = [];
     promises.push(roleController.getRoleByName('admin')
-        .then(connectRoleAndAttributes));
+        .then(connectAdminAndAttributes));
+
+    promises.push(roleController.getRoleByName('user')
+        .then(connectUserAndAttributes));
 
     promises.push(userController.getAllUsers()
         .then(connectUsersAndRandomOffice));
@@ -487,7 +503,10 @@ function addConnectors() {
 function addConnectorsDefault() {
     var promises = [];
     promises.push(roleController.getRoleByName('admin')
-        .then(connectRoleAndAttributes));
+        .then(connectAdminAndAttributes));
+
+    promises.push(roleController.getRoleByName('user')
+        .then(connectUserAndAttributes));
 
     promises.push(skillGroupController.getSkillGroupByName('technologies')
         .then(connectSkillGroupAndSkills));
@@ -531,13 +550,30 @@ function connectUsersAndRandomOffice(users) {
         });
 }
 
-function connectRoleAndAttributes(role) {
+function connectAdminAndAttributes(role) {
     return attributeController.getAllAttributes()
         .then(function(attributes) {
             return q.promise(function(resolve) {
                 var promises = [];
                 attributes.forEach(function(attribute) {
                     promises.push(roleToAttributeConnectorController.createRoleToAttributeConnector({roleId: role._id, attributeId: attribute._id}));
+                });
+
+                return q.all(promises)
+                    .then(resolve);
+            });
+        });
+}
+
+function connectUserAndAttributes(role) {
+    return attributeController.getAllAttributes()
+        .then(function(attributes) {
+            return q.promise(function(resolve) {
+                var promises = [];
+                attributes.forEach(function(attribute) {
+                    if (isUserAttribute(attribute)) {
+                        promises.push(roleToAttributeConnectorController.createRoleToAttributeConnector({roleId: role._id, attributeId: attribute._id}));
+                    }
                 });
 
                 return q.all(promises)
@@ -677,4 +713,12 @@ function connectItemsToRandomItem(items, connectToItems, itemsProp, connectToIte
             });
     });
 
+}
+
+function isUserAttribute(attribute) {
+    if (userAttributes.indexOf(attribute.name) >= 0) {
+        return true;
+    }
+
+    return false;
 }
