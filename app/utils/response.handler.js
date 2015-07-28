@@ -167,9 +167,9 @@ exports.sendThumbnailResponse = function(response) {
 // ==============================================================================
 // TODO: error handling
 
-exports.trimByAttributes = function(email, attributes) {
+exports.trimByAttributes = function(email, attributes, response) {
     return function(body) {
-        return q.promise(function(resolve) {
+        return q.promise(function(resolve, reject) {
             var userIsSelf = authenticationHandler.isSelf(email, body._id);
 
             return q.all(userIsSelf)
@@ -181,33 +181,21 @@ exports.trimByAttributes = function(email, attributes) {
                             .then(extractRelevantAttributes(attributes))
                             .then(findSmallestIntersectionOfHiddenFields)
                             .then(trimByFields(body))
-                            .then(resolve);
+                            .then(resolve)
+                            .catch(exports.sendUnauthorizedResponse(response));
                     }
                 });
         });
     };
 };
 
-function getRoleAttributes(role) {
-    return q.promise(function(resolve, reject) {
-        var connectors = roleController.getRoleByName(role)
-            .then(roleToAttributeController.getRoleToAttributeConnectorsByRole);
-
-        var attributes = attributeController.getAllAttributes();
-
-        q.all([connectors, attributes])
-            .then(function() {
-                return utils.extractPropertiesFromConnectors('attributeId', connectors.value())
-                    .then(utils.matchListAndObjectIds(attributes.value()))
-                    .then(resolve);
-            })
-            .catch(reject);
-    });
-}
-
 function extractRelevantAttributes(relevantAttributes) {
     return function(presentAttributes) {
-        return q.promise(function(resolve) {
+        return q.promise(function(resolve, reject) {
+            if (presentAttributes.length <= 0) {
+                reject();
+            }
+
             var list = [];
             presentAttributes.forEach(function(presentAttribute) {
                 if (relevantAttributes.indexOf(presentAttribute.name) >= 0) {
