@@ -34,9 +34,25 @@ exports.authentication = function(request, response, next) {
     }
 };
 
+exports.isAllowedOrSelf = function(attribute) {
+    return function(request, response, next) {
+
+        var userIsSelf = isSelf(request, request.params.id);
+
+        return q.all(userIsSelf)
+            .then(function(result) {
+                if (result) {
+                    return next();
+                } else {
+                    return exports.isAllowed(attribute)(request, response, next);
+                }
+            });
+    };
+};
+
 exports.isAllowed = function(attribute) {
     return function(request, response, next) {
-        getUserRole(request, response)
+        return getUserRole(request, response)
             .then(getRoleAttributes)
             .then(function(attributes) {
                 if (attributes !== undefined && attributes.indexOf(attribute) >= 0) {
@@ -95,4 +111,50 @@ function getRoleAttributes(role) {
             return resolve(roleAttributes);
         }
     });
+}
+
+function isSelf(request, id) {
+    return q.promise(function(resolve) {
+
+        var email = request.headers['x-forwarded-email'];
+        var userId = cacheHandler.getFromEmailIdCache(email);
+
+        if (!id) {
+            return resolve(false);
+        }
+
+        if (!userId) {
+            return userController.getUserByEmail(email)
+                .then(getIdfromUser)
+                .then(setEmailToIdCache(email))
+                .then(checkIds(id))
+                .then(resolve);
+        } else {
+            return checkIds(userId)(id)
+                .then(resolve);
+        }
+    });
+}
+
+function setEmailToIdCache(email) {
+    return function(id) {
+        return q.promise(function(resolve) {
+            cacheHandler.setToEmailIdCache(email, id);
+            return resolve(id);
+        });
+    };
+}
+
+function getIdfromUser(user) {
+    return q.promise(function(resolve) {
+        return resolve(user._id);
+    });
+}
+
+function checkIds(id1) {
+    return function(id2) {
+        return q.promise(function(resolve) {
+            return resolve(id1 === id2);
+        });
+    };
 }

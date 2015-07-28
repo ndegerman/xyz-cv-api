@@ -5,6 +5,7 @@
  */
 var userController = require('./user.controller');
 var responseHandler = require('../../utils/response.handler');
+var authentication = require('../../middleware/authentication.middleware');
 
 module.exports = function(routes) {
 
@@ -31,14 +32,14 @@ module.exports = function(routes) {
     });
 
     // delete a user given an id
-    routes.delete('/:id', function(request, response) {
+    routes.delete('/:id', authentication.isAllowedOrSelf('canEditProfile'), function(request, response) {
         userController.deleteUserById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     // update a user given an id and an object
-    routes.put('/:id', function(request, response) {
+    routes.put('/:id', authentication.isAllowedOrSelf('canEditProfile'), function(request, response) {
         userController.updateUser(request.params.id, request.body, request.headers['x-forwarded-email'])
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
