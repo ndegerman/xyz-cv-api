@@ -5,6 +5,12 @@
  */
 var responseHandler = require('../utils/response.handler');
 var authenticationHandler = require('../utils/authentication.handler');
+var userController = require('../chains/user/user.controller');
+var roleController = require('../chains/role/role.controller');
+var cacheHandler = require('../utils/cache.handler');
+var attributeController = require('../chains/attribute/attribute.controller');
+var roleToAttributeController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
+var q = require('q');
 
 // middleware
 exports.authentication = function(request, response, next) {
@@ -49,7 +55,6 @@ exports.isAllowed = function(attribute) {
             .catch(responseHandler.sendUnauthorizedResponse(response));
     };
 };
-
 
 function isSelf(request, id) {
     return q.promise(function(resolve) {
