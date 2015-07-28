@@ -151,3 +151,9 @@ exports.sendFileResponse = function(response) {
         response.download(config.UPLOAD_PATH + file.generatedName);
     };
 };
+
+exports.sendThumbnailResponse = function(response) {
+    return function(generatedName) {
+        response.download(config.UPLOAD_PATH + generatedName);
+    }
+}
