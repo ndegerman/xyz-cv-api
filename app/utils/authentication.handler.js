@@ -7,6 +7,7 @@ var userController = require('../chains/user/user.controller');
 var roleController = require('../chains/role/role.controller');
 var attributeController = require('../chains/attribute/attribute.controller');
 var roleToAttributeController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
+var errorHandler = require('./error.handler');
 
 exports.getUserAttributeNames = function(email) {
     return getUserRole(email)
@@ -29,6 +30,29 @@ exports.authenticate = function(name, email) {
                 .catch(reject);
         }
     });
+};
+
+exports.trimByAttributes = function(email, attributes) {
+    return function(body) {
+        return q.promise(function(resolve, reject) {
+            return exports.isSelf(email, body._id)
+                .then(function(result) {
+                    if (result) {
+                        return resolve(body);
+                    } else {
+                        return exports.getUserAttributeObjects(email)
+                            .then(extractRelevantAttributes(attributes))
+                            .then(findSmallestIntersectionOfHiddenFields)
+                            .then(trimByFields(body))
+                            .then(resolve);
+                    }
+                })
+                .catch(function() {
+                    return errorHandler.getHttpError(401)
+                        .then(reject);
+                });
+        });
+    };
 };
 
 function getUserRole(email) {
@@ -144,3 +168,89 @@ function checkIds(id1) {
     };
 }
 
+// TRIMMING
+// ==============================================================================
+
+function extractRelevantAttributes(relevantAttributes) {
+    return function(presentAttributes) {
+        return q.promise(function(resolve, reject) {
+            if (presentAttributes.length <= 0) {
+                return reject();
+            }
+
+            var list = [];
+            presentAttributes.forEach(function(presentAttribute) {
+                if (relevantAttributes.indexOf(presentAttribute.name) >= 0) {
+                    list.push(presentAttribute);
+                }
+            });
+
+            return q.all(list)
+                .then(resolve);
+        });
+    };
+}
+
+function findSmallestIntersectionOfHiddenFields(attributes) {
+    return q.promise(function(resolve, reject) {
+        if (attributes.length <= 0) {
+            return reject();
+        }
+
+        var list = [];
+        var length = attributes.length;
+
+        return getFieldCounts(attributes)
+            .then(pushFieldsIfPresentInAllAttributes(length))
+            .then(resolve);
+    });
+}
+
+function getFieldCounts(attributes) {
+    return q.promise(function(resolve) {
+        var count = {};
+        attributes.forEach(function(attribute) {
+            if (attribute.hiddenFields) {
+                attribute.hiddenFields.forEach(function(hiddenField) {
+                    if (!count[hiddenField]) {
+                        count[hiddenField] = 1;
+                    } else {
+                        count[hiddenField]++;
+                    }
+                });
+            }
+        });
+
+        return resolve(count);
+    });
+}
+
+function pushFieldsIfPresentInAllAttributes(length) {
+    return function(count) {
+        return q.promise(function(resolve) {
+            var promises = [];
+            for (var field in count) {
+                if (count[field] === length) {
+                    promises.push(field);
+                }
+            }
+
+            q.all(promises)
+                .then(resolve);
+        });
+    };
+}
+
+function trimByFields(body) {
+    return function(fields) {
+        return q.promise(function(resolve) {
+            for (var field in body) {
+                if (fields.indexOf(field) >= 0) {
+                    body[field] = null;
+                }
+            }
+
+            return resolve(body);
+        });
+    };
+}

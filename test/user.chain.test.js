@@ -17,13 +17,15 @@ describe('/user', function() {
     beforeEach(function(done) {
         cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
         cacheHandler.setToRoleAttributesCache('admin', ['canEditProfile']);
+        cacheHandler.setToEmailIdCache('a@softhouse.se', '1234');
         done();
-    })
+    });
 
     afterEach(function(done) {
         nock.cleanAll();
         cacheHandler.clearUserRoleCache();
         cacheHandler.clearRoleAttributesCache();
+        cacheHandler.clearEmailIdCache();
         done();
     });
 
@@ -75,7 +77,7 @@ describe('/user', function() {
 
     //===============================================================================
 
-    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a user by id', function(done) {
+    it('8 should reply with HTTP status code 200 and a correctly formatted JSON object when getting a user by id', function(done) {
         var resultGetOne = {
             _id: '1234',
             name: 'test3',

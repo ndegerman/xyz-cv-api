@@ -296,7 +296,7 @@ describe('/authentication', function() {
                 .reply(200, resultPost)
 
                 .get('/user?email=a@softhouse.se')
-                .reply(200, getUserByEmailResponse)
+                .reply(200, getUserByEmailResponse);
 
             request(url)
                 .post('/office')

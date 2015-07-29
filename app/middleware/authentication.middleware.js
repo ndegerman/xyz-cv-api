@@ -25,16 +25,15 @@ exports.authentication = function(request, response, next) {
 exports.isAllowedOrSelf = function(attribute) {
     return function(request, response, next) {
 
-        var userIsSelf = authenticationHandler.isSelf(request.headers['x-forwarded-email'], request.params.id);
-
-        return q.all(userIsSelf)
+        return authenticationHandler.isSelf(request.headers['x-forwarded-email'], request.params.id)
             .then(function(result) {
                 if (result) {
                     return next();
                 } else {
                     return exports.isAllowed(attribute)(request, response, next);
                 }
-            });
+            })
+            .catch(responseHandler.sendUnauthorizedResponse(response));
     };
 };
 
