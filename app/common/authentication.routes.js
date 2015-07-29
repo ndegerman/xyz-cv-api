@@ -10,7 +10,7 @@ var authenticationHandler = require('../utils/authentication.handler');
 module.exports = function(routes) {
 
     routes.get('/', function(request, response) {
-        authenticationHandler.getUserAttributeObjects(request.headers['x-forwarded-email'])
+        authenticationHandler.getAuthenticationObject(request.headers['x-forwarded-email'])
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

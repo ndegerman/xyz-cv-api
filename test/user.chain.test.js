@@ -77,7 +77,7 @@ describe('/user', function() {
 
     //===============================================================================
 
-    it('8 should reply with HTTP status code 200 and a correctly formatted JSON object when getting a user by id', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a user by id', function(done) {
         var resultGetOne = {
             _id: '1234',
             name: 'test3',
