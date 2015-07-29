@@ -1,13 +1,13 @@
 'use strict';
 
 var attributeDao = require('./attribute.dao');
-var q = require('q');
+var Promise = require('bluebird');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
 
 // TODO: Make the validation more covering
 function validateAttribute(attribute) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (attribute && attribute.name) {
             attribute = utils.extend(getAttributeTemplate(), attribute);
             return resolve(attribute);
@@ -20,7 +20,8 @@ function validateAttribute(attribute) {
 
 function getAttributeTemplate() {
     return {
-        name: null
+        name: null,
+        hiddenFields: null
     };
 }
 

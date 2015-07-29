@@ -36,7 +36,8 @@ describe('/attribute', function() {
 
         nock(mockedUrl)
             .post('/attribute', {
-                name: 'test1'
+                name: 'test1',
+                hiddenFields: null
             })
             .reply(200, resultPost)
 
@@ -152,7 +153,8 @@ describe('/attribute', function() {
 
         nock(mockedUrl)
             .post('/attribute', {
-                name: '123'
+                name: '123',
+                hiddenFields: null
             })
             .reply(200, resultPost)
 

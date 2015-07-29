@@ -5,6 +5,7 @@
  */
 var userController = require('./user.controller');
 var responseHandler = require('../../utils/response.handler');
+var authenticationHandler = require('../../utils/authentication.handler');
 var authentication = require('../../middleware/authentication.middleware');
 
 module.exports = function(routes) {
@@ -26,6 +27,7 @@ module.exports = function(routes) {
     //get user by id
     routes.get('/:id', function(request, response) {
         userController.getUserById(request.params.id)
+            .then(authenticationHandler.trimByAttributes(request.headers['x-forwarded-email'], ['canViewProfile', 'canEditProfile']))
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 

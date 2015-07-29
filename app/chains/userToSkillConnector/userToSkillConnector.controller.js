@@ -1,12 +1,12 @@
 'use strict';
 
-var q = require('q');
+var Promise = require('bluebird');
 var userToSkillConnectorDao = require('./userToSkillConnector.dao');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
 
 function validateUserToSkillConnector(userToSkillConnector) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (userToSkillConnector && userToSkillConnector.userId && userToSkillConnector.skillId && userToSkillConnector.level && userToSkillConnector.years) {
             if ((userToSkillConnector.level >= 1) && (userToSkillConnector.level <= 5) && (userToSkillConnector.years > 0)) {
                 userToSkillConnector = utils.extend(getUserToSkillConnectorTemplate(), userToSkillConnector);
@@ -30,7 +30,7 @@ function getUserToSkillConnectorTemplate() {
 
 function setUserToSkillConnectorProperties(body) {
     return function(userToSkillConnector) {
-        return q.promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject) {
             if (body.userId) {
                 return errorHandler.getHttpError(400)
                     .then(reject);
@@ -44,7 +44,7 @@ function setUserToSkillConnectorProperties(body) {
 
 function setIdOnConnector(id) {
     return function(userToSkillConnector) {
-        return q.promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject) {
             userToSkillConnector._id = id;
             return resolve(userToSkillConnector);
         });
@@ -61,7 +61,7 @@ exports.assignSkillsToUser = function(skills, userId) {
         promises.push(exports.createUserToSkillConnector(userToSkillConnector));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.createUserToSkillConnector = function(userToSkillConnector) {
@@ -103,7 +103,7 @@ exports.deleteUserToSkillConnectors = function(userToSkillConnectors) {
         promises.push(exports.deleteUserToSkillConnectorById(userToSkillConnector._id));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.deleteUserToSkillConnectorsByUserId = function(userId) {

@@ -1,12 +1,12 @@
 'use strict';
 
-var q = require('q');
+var Promise = require('bluebird');
 var userToAssignmentConnectorDao = require('./userToAssignmentConnector.dao');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
 
 function validateUserToAssignmentConnector(userToAssignmentConnector) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (userToAssignmentConnector && userToAssignmentConnector.userId && userToAssignmentConnector.assignmentId) {
             userToAssignmentConnector = utils.extend(getUserToAssignmentConnectorTemplate(), userToAssignmentConnector);
             return resolve(userToAssignmentConnector);
@@ -53,7 +53,7 @@ exports.assignAssignmentsToUser = function(assignments, userId) {
         promises.push(exports.createUserToAssignmentConnector(userToAssignmentConnector));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.createUserToAssignmentConnector = function(userToAssignmentConnector) {
@@ -94,7 +94,7 @@ exports.deleteUserToAssignmentConnectors = function(userToAssignmentConnectors) 
         promises.push(exports.deleteUserToAssignmentConnectorById(userToAssignmentConnector._id));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.deleteUserToAssignmentConnectorsByUserId = function(userId) {

@@ -1,13 +1,13 @@
 'use strict';
 
 var assignmentDao = require('./assignment.dao');
-var q = require('q');
+var Promise = require('bluebird');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
 
 // TODO: Make the validation more covering
 function validateAssignment(assignment) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (assignment && assignment.name) {
             assignment = utils.extend(getAssignmentTemplate(), assignment);
             return resolve(assignment);

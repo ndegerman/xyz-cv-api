@@ -17,13 +17,15 @@ describe('/user', function() {
     beforeEach(function(done) {
         cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
         cacheHandler.setToRoleAttributesCache('admin', ['canEditProfile']);
+        cacheHandler.setToEmailIdCache('a@softhouse.se', '1234');
         done();
-    })
+    });
 
     afterEach(function(done) {
         nock.cleanAll();
         cacheHandler.clearUserRoleCache();
         cacheHandler.clearRoleAttributesCache();
+        cacheHandler.clearEmailIdCache();
         done();
     });
 

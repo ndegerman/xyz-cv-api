@@ -1,12 +1,12 @@
 'use strict';
 
-var q = require('q');
+var Promise = require('bluebird');
 var roleToAttributeConnectorDao = require('./roleToAttributeConnector.dao');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
 
 function validateRoleToAttributeConnector(roleToAttributeConnector) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (roleToAttributeConnector && roleToAttributeConnector.roleId && roleToAttributeConnector.attributeId) {
             roleToAttributeConnector = utils.extend(getRoleToAttributeConnectorTemplate(), roleToAttributeConnector);
             return resolve(roleToAttributeConnector);
@@ -34,7 +34,7 @@ exports.assignAttributesToRole = function(attributes, roleId) {
         promises.push(exports.createRoleToAttributeConnector(roleToAttributeConnector));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.createRoleToAttributeConnector = function(roleToAttributeConnector) {return validateRoleToAttributeConnector(roleToAttributeConnector)
@@ -67,7 +67,7 @@ exports.deleteRoleToAttributeConnectors = function(roleToAttributeConnector) {
         promises.push(exports.deleteRoleToAttributeConnectorById(roleToAttributeConnector._id));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.deleteRoleToAttributeConnectorsByRoleId = function(roleId) {

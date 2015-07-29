@@ -3,7 +3,7 @@
 var multer = require('multer');
 var fs = require('fs-extra');
 var errorHandler = require('./error.handler');
-var q = require('q');
+var Promise = require('bluebird');
 var config = require('config');
 var lwip = require('lwip');
 
@@ -12,7 +12,7 @@ exports.getHandler = function() {
 };
 
 exports.checkIfSuccess = function(request, response) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (!Object.keys(request.files).length) {
             return errorHandler.getHttpError(415)
                 .then(reject);
@@ -35,7 +35,7 @@ exports.checkIfSuccess = function(request, response) {
 };
 
 exports.deleteFile = function(file) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         var path = config.UPLOAD_PATH + file.generatedName;
         var retinaPath = config.UPLOAD_PATH + getRetinaName(file.generatedName);
 

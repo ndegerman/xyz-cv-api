@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-var q = require('q');
+var Promise = require('bluebird');
 var NodeCache = require('node-cache');
 
 // Cache

@@ -1,12 +1,12 @@
 'use strict';
 
 var fileDao = require('./file.dao');
-var q = require('q');
+var Promise = require('bluebird');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
 
 function validateFile(file) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (file && file.generatedName && file.originalName) {
             file = utils.extend(getFileTemplate(), file);
             return resolve(file);

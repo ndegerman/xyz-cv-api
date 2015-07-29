@@ -1,6 +1,6 @@
 'use strict';
 
-var q = require('q');
+var Promise = require('bluebird');
 var faker = require('faker');
 
 exports.getSkillAbbreviations = function(requestedNumber) {

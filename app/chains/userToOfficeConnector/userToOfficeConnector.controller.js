@@ -1,12 +1,12 @@
 'use strict';
 
-var q = require('q');
+var Promise = require('bluebird');
 var userToOfficeConnectorDao = require('./userToOfficeConnector.dao');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
 
 function validateUserToOfficeConnector(userToOfficeConnector) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (userToOfficeConnector && userToOfficeConnector.userId && userToOfficeConnector.officeId) {
             userToOfficeConnector = utils.extend(getUserToOfficeConnectorTemplate(), userToOfficeConnector);
             return resolve(userToOfficeConnector);
@@ -34,7 +34,7 @@ exports.assignOfficesToUser = function(offices, userId) {
         promises.push(exports.createUserToOfficeConnector(userToOfficeConnector));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.createUserToOfficeConnector = function(userToOfficeConnector) {
@@ -64,7 +64,7 @@ exports.deleteUserToOfficeConnectors = function(userToOfficeConnectors) {
         promises.push(exports.deleteUserToOfficeConnectorById(userToOfficeConnector._id));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.deleteUserToOfficeConnectorsByUserId = function(userId) {

@@ -1,12 +1,12 @@
 'use strict';
 
-var q = require('q');
+var Promise = require('bluebird');
 var skillToSkillGroupConnectorDao = require('./skillToSkillGroupConnector.dao');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
 
 function validateSkillToSkillGroupConnector(skillToSkillGroupConnector) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (skillToSkillGroupConnector && skillToSkillGroupConnector.skillGroupId && skillToSkillGroupConnector.skillId) {
             skillToSkillGroupConnector = utils.extend(getSkillToSkillGroupConnectorTemplate(), skillToSkillGroupConnector);
             return resolve(skillToSkillGroupConnector);
@@ -34,7 +34,7 @@ exports.assignSkillsToSkillGroup = function(skills, skillGroupId) {
         promises.push(exports.createSkillToSkillGroupConnector(skillToSkillGroupConnector));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.createSkillToSkillGroupConnector = function(skillToSkillGroupConnector)
@@ -64,11 +64,10 @@ exports.deleteSkillToSkillGroupConnectors = function(skillToSkillGroupConnector)
         promises.push(exports.deleteSkillToSkillGroupConnectorById(skillToSkillGroupConnector._id));
     });
 
-    return q.all(promises);
+    return Promise.all(promises);
 };
 
 exports.deleteSkillToSkillGroupConnectorsById = function(skillGroupId) {
-    console.log('a');
     return exports.getSkillToSkillGroupConnectorsBySkillGroupId(skillGroupId)
         .then(exports.deleteSkillToSkillGroupConnectors);
 };
