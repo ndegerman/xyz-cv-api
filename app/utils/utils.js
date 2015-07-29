@@ -1,6 +1,6 @@
 'use strict';
 
-var q = require('q');
+var Promise = require('bluebird');
 
 exports.extend = function(destination, source) {
     for (var prop in destination) {
@@ -13,7 +13,7 @@ exports.extend = function(destination, source) {
 };
 
 exports.extractPropertiesFromConnectors = function(property, connectors, extraProps) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         var list = [];
         connectors.forEach(function(connector) {
             var object = {};
@@ -33,7 +33,7 @@ exports.extractPropertiesFromConnectors = function(property, connectors, extraPr
 
 exports.extractPropertyFromList = function(property) {
     return function(items) {
-        return q.promise(function(resolve) {
+        return new Promise(function(resolve) {
             var list = [];
             items.forEach(function(item) {
 
@@ -47,7 +47,7 @@ exports.extractPropertyFromList = function(property) {
 
 exports.matchListAndObjectIds = function(list) {
     return function(objects) {
-        return q.promise(function(resolve) {
+        return new Promise(function(resolve) {
             var items = [];
             objects.forEach(function(object) {
                 list.some(function(item) {
@@ -59,14 +59,14 @@ exports.matchListAndObjectIds = function(list) {
                 });
             });
 
-            q.all(items)
+            Promise.all(items)
                 .then(resolve);
         });
     };
 };
 
 exports.sortListByProperty = function(list, prop) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         list.sort(function(a, b) {
             if (a[prop] > b[prop]) {
                 return 1;
@@ -91,7 +91,7 @@ function listContainsId(list, id) {
 }
 
 function mergeProperties(from, to) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         for (var prop in from) {
             if (from.hasOwnProperty(prop)) {
                 to[prop] = from[prop];

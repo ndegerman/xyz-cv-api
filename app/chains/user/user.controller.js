@@ -1,13 +1,13 @@
 'use strict';
 
 var userDao = require('./user.dao');
-var q = require('q');
+var Promise = require('bluebird');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
 
 // TODO: Make the validation more covering
 function validateUser(user) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (user && user.name && user.email && user.role) {
             user = utils.extend(getUserTemplate(), user);
             return resolve(user);
@@ -78,11 +78,11 @@ exports.createNewUser = function(user) {
 };
 
 exports.createUserIfNonexistent = function(name, email) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         return exports.getUserByEmail(email)
             .then(resolve)
             .catch(function() {
-                return q.promise(function(resolve) {
+                return new Promise(function(resolve) {
                     exports.createNewUser(getUserTemplate(name, email))
                     .then(resolve);
                 })

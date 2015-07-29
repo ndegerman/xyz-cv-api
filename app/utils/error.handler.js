@@ -1,10 +1,10 @@
 'use strict';
 
-var q = require('q');
+var Promise = require('bluebird');
 var msg = require('./message.handler');
 
 exports.getHttpError = function(statusCode) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         var error = new Error();
         error.status = statusCode;
         error.httpError = true;
@@ -39,7 +39,7 @@ exports.getHttpError = function(statusCode) {
 };
 
 exports.throwDREAMSHttpError = function(response) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (response.httpError) {
             return reject(response);
         } else {

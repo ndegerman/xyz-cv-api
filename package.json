@@ -1,6 +1,7 @@
 {
   "name": "xyz-nodejs",
   "dependencies": {
+    "bluebird": "~2.9.34",
     "body-parser": "~1.12.4",
     "config": "^1.14.0",
     "cors": "^2.7.1",
@@ -10,11 +11,10 @@
     "lwip": "~0.0.7",
     "morgan": "~1.5.3",
     "multer": "~0.1.8",
+    "node-cache": "~3.0.0",
     "progress": "~1.1.8",
-    "q": "~1.4.1",
     "request": "~2.57.0",
-    "request-promise": "~0.4.2",
-    "node-cache": "~3.0.0"
+    "request-promise": "~0.4.2"
   },
   "repository": {},
   "devDependencies": {

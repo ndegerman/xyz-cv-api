@@ -1,6 +1,6 @@
 'use strict';
 
-var q = require('q');
+var Promise = require('bluebird');
 var utils = require('../utils/utils');
 var cacheHandler = require('./cache.handler');
 var userController = require('../chains/user/user.controller');
@@ -10,16 +10,16 @@ var roleToAttributeController = require('../chains/roleToAttributeConnector/role
 var errorHandler = require('./error.handler');
 
 exports.getAuthenticationObject = function(email) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         var attributes = exports.getUserAttributeObjects(email);
         var userId = getUserId(email);
 
-        q.all([attributes, userId])
+        Promise.all([attributes, userId])
             .then(function() {
-                return q.promise(function(resolve) {
+                return new Promise(function(resolve) {
                     var authenticationObject = {
-                        userId: userId.valueOf(),
-                        attributes: attributes.valueOf()
+                        userId: userId.value(),
+                        attributes: attributes.value()
                     };
                     return resolve(authenticationObject);
                 });
@@ -40,7 +40,7 @@ exports.getUserAttributeObjects = function(email) {
 };
 
 exports.authenticate = function(name, email) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (cacheHandler.getFromUserRoleCache(email)) {
             return resolve();
         } else {
@@ -54,7 +54,7 @@ exports.authenticate = function(name, email) {
 
 exports.trimByAttributes = function(email, attributes) {
     return function(body) {
-        return q.promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject) {
             return exports.isSelf(email, body._id)
                 .then(function(result) {
                     if (result) {
@@ -84,7 +84,7 @@ exports.isSelf = function(email, id) {
 // ==============================================================================
 
 function getUserRole(email) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         var userRoleFromCache = cacheHandler.getFromUserRoleCache(email);
         if (!userRoleFromCache) {
             return userController.getUserByEmail(email)
@@ -98,7 +98,7 @@ function getUserRole(email) {
 }
 
 function setUserRoleCache(user) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         cacheHandler.setToUserRoleCache(user.email, user.role);
         return resolve(user.role);
     });
@@ -108,7 +108,7 @@ function setUserRoleCache(user) {
 // ==============================================================================
 
 function getRoleAttributeNames(role) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         var roleAttributes = cacheHandler.getFromRoleAttributesCache(role);
         if (!roleAttributes) {
             return getRoleAttributeObjects(role)
@@ -122,13 +122,13 @@ function getRoleAttributeNames(role) {
 }
 
 function getRoleAttributeObjects(role) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         var connectors = roleController.getRoleByName(role)
             .then(roleToAttributeController.getRoleToAttributeConnectorsByRole);
 
         var attributes = attributeController.getAllAttributes();
 
-        q.all([connectors, attributes])
+        Promise.all([connectors, attributes])
             .then(function() {
                 return utils.extractPropertiesFromConnectors('attributeId', connectors.value())
                     .then(utils.matchListAndObjectIds(attributes.value()))
@@ -140,7 +140,7 @@ function getRoleAttributeObjects(role) {
 
 function setRoleAttributesCache(role) {
     return function(attributeNames) {
-        return q.promise(function(resolve) {
+        return new Promise(function(resolve) {
             cacheHandler.setToRoleAttributesCache(role, attributeNames);
             return resolve(attributeNames);
         });
@@ -151,7 +151,7 @@ function setRoleAttributesCache(role) {
 // ==============================================================================
 
 function getUserId(email) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         var userId = cacheHandler.getFromEmailIdCache(email);
 
         if (!userId) {
@@ -167,7 +167,7 @@ function getUserId(email) {
 
 function setEmailToIdCache(email) {
     return function(id) {
-        return q.promise(function(resolve) {
+        return new Promise(function(resolve) {
             cacheHandler.setToEmailIdCache(email, id);
             return resolve(id);
         });
@@ -175,14 +175,14 @@ function setEmailToIdCache(email) {
 }
 
 function getIdfromUser(user) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         return resolve(user._id);
     });
 }
 
 function checkIds(id1) {
     return function(id2) {
-        return q.promise(function(resolve) {
+        return new Promise(function(resolve) {
             return resolve(id1 === id2);
         });
     };
@@ -193,7 +193,7 @@ function checkIds(id1) {
 
 function extractRelevantAttributes(relevantAttributes) {
     return function(presentAttributes) {
-        return q.promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject) {
             if (presentAttributes.length <= 0) {
                 return reject();
             }
@@ -205,14 +205,14 @@ function extractRelevantAttributes(relevantAttributes) {
                 }
             });
 
-            return q.all(list)
+            return Promise.all(list)
                 .then(resolve);
         });
     };
 }
 
 function findSmallestIntersectionOfHiddenFields(attributes) {
-    return q.promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         if (attributes.length <= 0) {
             return reject();
         }
@@ -227,7 +227,7 @@ function findSmallestIntersectionOfHiddenFields(attributes) {
 }
 
 function getFieldCounts(attributes) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         var count = {};
         attributes.forEach(function(attribute) {
             if (attribute.hiddenFields) {
@@ -247,7 +247,7 @@ function getFieldCounts(attributes) {
 
 function pushFieldsIfPresentInAllAttributes(length) {
     return function(count) {
-        return q.promise(function(resolve) {
+        return new Promise(function(resolve) {
             var promises = [];
             for (var field in count) {
                 if (count[field] === length) {
@@ -255,7 +255,7 @@ function pushFieldsIfPresentInAllAttributes(length) {
                 }
             }
 
-            q.all(promises)
+            Promise.all(promises)
                 .then(resolve);
         });
     };
@@ -263,7 +263,7 @@ function pushFieldsIfPresentInAllAttributes(length) {
 
 function trimByFields(body) {
     return function(fields) {
-        return q.promise(function(resolve) {
+        return new Promise(function(resolve) {
             for (var field in body) {
                 if (fields.indexOf(field) >= 0) {
                     body[field] = null;

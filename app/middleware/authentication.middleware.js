@@ -6,7 +6,7 @@
 var responseHandler = require('../utils/response.handler');
 var authenticationHandler = require('../utils/authentication.handler');
 
-var q = require('q');
+var Promise = require('bluebird');
 
 // middleware
 exports.authentication = function(request, response, next) {

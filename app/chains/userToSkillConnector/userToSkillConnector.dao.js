@@ -1,7 +1,7 @@
 'use strict';
 
 var request = require('request-promise');
-var q = require('q');
+var Promise = require('bluebird');
 var config = require('config');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');

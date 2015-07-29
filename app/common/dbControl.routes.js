@@ -21,7 +21,7 @@ var randomHandler = require('../utils/random.handler');
 
 var faker = require('faker');
 var config = require('config');
-var q = require('q');
+var Promise = require('bluebird');
 var ProgressBar = require('progress');
 var bar;
 var userAttributes;
@@ -84,14 +84,14 @@ function purgeAll() {
     purge.push(purgeSkillToSkillGroupConnectors());
     purge.push(purgeUserToOfficeConnectors());
     purge.push(purgeUserToAssignmentConnectors());
-    return q.all(purge);
+    return Promise.all(purge);
 }
 
 function purgeUsers() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         userController.getAllUsers()
             .then(function(users) {
-                return q.all(applyDeleteOnItemRec(users, 0, userController.deleteUserById))
+                return Promise.all(applyDeleteOnItemRec(users, 0, userController.deleteUserById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -102,10 +102,10 @@ function purgeUsers() {
 }
 
 function purgeRoles() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         roleController.getAllRoles()
             .then(function(roles) {
-                return q.all(applyDeleteOnItemRec(roles, 0, roleController.deleteRoleById))
+                return Promise.all(applyDeleteOnItemRec(roles, 0, roleController.deleteRoleById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -116,10 +116,10 @@ function purgeRoles() {
 }
 
 function purgeAttributes() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         attributeController.getAllAttributes()
             .then(function(attributes) {
-                return q.all(applyDeleteOnItemRec(attributes, 0, attributeController.deleteAttributeById))
+                return Promise.all(applyDeleteOnItemRec(attributes, 0, attributeController.deleteAttributeById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -130,10 +130,10 @@ function purgeAttributes() {
 }
 
 function purgeSkills() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         skillController.getAllSkills()
             .then(function(skills) {
-                return q.all(applyDeleteOnItemRec(skills, 0, skillController.deleteSkillById))
+                return Promise.all(applyDeleteOnItemRec(skills, 0, skillController.deleteSkillById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -144,10 +144,10 @@ function purgeSkills() {
 }
 
 function purgeOffices() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         officeController.getAllOffices()
             .then(function(offices) {
-                return q.all(applyDeleteOnItemRec(offices, 0, officeController.deleteOfficeById))
+                return Promise.all(applyDeleteOnItemRec(offices, 0, officeController.deleteOfficeById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -158,10 +158,10 @@ function purgeOffices() {
 }
 
 function purgeSkillGroups() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         skillGroupController.getAllSkillGroups()
             .then(function(skillGroups) {
-                return q.all(applyDeleteOnItemRec(skillGroups, 0, skillGroupController.deleteSkillGroupById))
+                return Promise.all(applyDeleteOnItemRec(skillGroups, 0, skillGroupController.deleteSkillGroupById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -172,10 +172,10 @@ function purgeSkillGroups() {
 }
 
 function purgeAssignments() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         assignmentController.getAllAssignments()
             .then(function(assignments) {
-                return q.all(applyDeleteOnItemRec(assignments, 0, assignmentController.deleteAssignmentById))
+                return Promise.all(applyDeleteOnItemRec(assignments, 0, assignmentController.deleteAssignmentById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -186,10 +186,10 @@ function purgeAssignments() {
 }
 
 function purgeUserToSkillConnectors() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         userToSkillConnectorController.getAllUserToSkillConnectors()
             .then(function(userToSkillConnectors) {
-                return q.all(applyDeleteOnItemRec(userToSkillConnectors, 0, userToSkillConnectorController.deleteUserToSkillConnectorById))
+                return Promise.all(applyDeleteOnItemRec(userToSkillConnectors, 0, userToSkillConnectorController.deleteUserToSkillConnectorById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -200,10 +200,10 @@ function purgeUserToSkillConnectors() {
 }
 
 function purgeRoleToAttributeConnectors() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         roleToAttributeConnectorController.getAllRoleToAttributeConnectors()
             .then(function(roleToAttributeConnectors) {
-                return q.all(applyDeleteOnItemRec(roleToAttributeConnectors, 0, roleToAttributeConnectorController.deleteRoleToAttributeConnectorById))
+                return Promise.all(applyDeleteOnItemRec(roleToAttributeConnectors, 0, roleToAttributeConnectorController.deleteRoleToAttributeConnectorById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -214,10 +214,10 @@ function purgeRoleToAttributeConnectors() {
 }
 
 function purgeSkillToSkillGroupConnectors() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         skillToSkillGroupConnectorController.getAllSkillToSkillGroupConnectors()
             .then(function(skillToSkillGroupConnectors) {
-                return q.all(applyDeleteOnItemRec(skillToSkillGroupConnectors, 0, skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorById))
+                return Promise.all(applyDeleteOnItemRec(skillToSkillGroupConnectors, 0, skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -228,10 +228,10 @@ function purgeSkillToSkillGroupConnectors() {
 }
 
 function purgeUserToOfficeConnectors() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         userToOfficeConnectorController.getAllUserToOfficeConnectors()
             .then(function(userToOfficeConnectors) {
-                return q.all(applyDeleteOnItemRec(userToOfficeConnectors, 0, userToOfficeConnectorController.deleteUserToOfficeConnectorById))
+                return Promise.all(applyDeleteOnItemRec(userToOfficeConnectors, 0, userToOfficeConnectorController.deleteUserToOfficeConnectorById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -242,10 +242,10 @@ function purgeUserToOfficeConnectors() {
 }
 
 function purgeUserToAssignmentConnectors() {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         userToAssignmentConnectorController.getAllUserToAssignmentConnectors()
             .then(function(userToAssignmentConnectors) {
-                return q.all(applyDeleteOnItemRec(userToAssignmentConnectors, 0, userToAssignmentConnectorController.deleteUserToAssignmentConnectorById))
+                return Promise.all(applyDeleteOnItemRec(userToAssignmentConnectors, 0, userToAssignmentConnectorController.deleteUserToAssignmentConnectorById))
                     .then(function(res) {
                         bar.tick();
                         return res;
@@ -268,7 +268,7 @@ function addAll() {
     added.push(addOffices());
     added.push(addSkillGroups());
     added.push(addAssignments());
-    return q.all(added);
+    return Promise.all(added);
 }
 
 function addAllDefault() {
@@ -278,7 +278,7 @@ function addAllDefault() {
     added.push(addSkillsDefault());
     added.push(addOffices());
     added.push(addSkillGroups());
-    return q.all(added);
+    return Promise.all(added);
 }
 
 function addUsers() {
@@ -328,7 +328,7 @@ function addUsers() {
         users.push(user);
     }
 
-    return q.all(applyAddOnItemsRec(users, 0, userController.createNewUser));
+    return Promise.all(applyAddOnItemsRec(users, 0, userController.createNewUser));
 
 }
 
@@ -368,7 +368,7 @@ function addAdmin() {
         ZIP: faker.address.zipCode()
     };
 
-    return q.all(applyAddOnItemsRec([user], 0, userController.createNewUser));
+    return Promise.all(applyAddOnItemsRec([user], 0, userController.createNewUser));
 
 }
 
@@ -376,13 +376,13 @@ function addSkills() {
 
     var skills = randomHandler.getSkillAbbreviations(config.DEMO.NUMBER_OF_SKILLS);
 
-    return q.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
+    return Promise.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
 
 }
 
 function addSkillsDefault() {
     var skills = randomHandler.getListofDefaultSkillAbbreviations();
-    return q.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
+    return Promise.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
 
 }
 
@@ -394,7 +394,7 @@ function addAssignments() {
         assignments.push(object);
     }
 
-    return q.all(applyAddOnItemsRec(assignments, 0, assignmentController.createNewAssignment));
+    return Promise.all(applyAddOnItemsRec(assignments, 0, assignmentController.createNewAssignment));
 
 }
 
@@ -419,7 +419,7 @@ function addOffices() {
             name: 'Sarajevo'
         }
     ];
-    return q.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice));
+    return Promise.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice));
 
 }
 
@@ -454,7 +454,7 @@ function addAttributes() {
         'canViewProfile'
     ];
 
-    return q.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
+    return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
 
 }
 
@@ -467,7 +467,7 @@ function addRoles() {
             name: 'admin'
         }
     ];
-    return q.all(applyAddOnItemsRec(roles, 0, roleController.createNewRole));
+    return Promise.all(applyAddOnItemsRec(roles, 0, roleController.createNewRole));
 
 }
 
@@ -480,7 +480,7 @@ function addSkillGroups() {
             name: 'spokenLanguages'
         }
     ];
-    return q.all(applyAddOnItemsRec(skillGroups, 0, skillGroupController.createNewSkillGroup));
+    return Promise.all(applyAddOnItemsRec(skillGroups, 0, skillGroupController.createNewSkillGroup));
 
 }
 
@@ -507,7 +507,7 @@ function addConnectors() {
     promises.push(userController.getAllUsers()
         .then(connectUsersAndRandomAssignments));
 
-    return q.all(promises);
+    return Promise.all(promises);
 }
 
 function addConnectorsDefault() {
@@ -521,7 +521,7 @@ function addConnectorsDefault() {
     promises.push(skillGroupController.getSkillGroupByName('technologies')
         .then(connectSkillGroupAndSkills));
 
-    return q.all(promises);
+    return Promise.all(promises);
 }
 
 function connectUsersAndRandomSkills(users) {
@@ -563,13 +563,13 @@ function connectUsersAndRandomOffice(users) {
 function connectAdminAndAttributes(role) {
     return attributeController.getAllAttributes()
         .then(function(attributes) {
-            return q.promise(function(resolve) {
+            return new Promise(function(resolve) {
                 var promises = [];
                 attributes.forEach(function(attribute) {
                     promises.push(roleToAttributeConnectorController.createRoleToAttributeConnector({roleId: role._id, attributeId: attribute._id}));
                 });
 
-                return q.all(promises)
+                return Promise.all(promises)
                     .then(resolve);
             });
         });
@@ -578,7 +578,7 @@ function connectAdminAndAttributes(role) {
 function connectUserAndAttributes(role) {
     return attributeController.getAllAttributes()
         .then(function(attributes) {
-            return q.promise(function(resolve) {
+            return new Promise(function(resolve) {
                 var promises = [];
                 attributes.forEach(function(attribute) {
                     if (isUserAttribute(attribute)) {
@@ -586,7 +586,7 @@ function connectUserAndAttributes(role) {
                     }
                 });
 
-                return q.all(promises)
+                return Promise.all(promises)
                     .then(resolve);
             });
         });
@@ -595,13 +595,13 @@ function connectUserAndAttributes(role) {
 function connectSkillGroupAndSkills(skillGroup) {
     return skillController.getAllSkills()
         .then(function(skills) {
-            return q.promise(function(resolve) {
+            return new Promise(function(resolve) {
                 var promises = [];
                 skills.forEach(function(skill) {
                     promises.push(skillToSkillGroupConnectorController.createSkillToSkillGroupConnector({skillId: skill._id, skillGroupId: skillGroup._id}));
                 });
 
-                return q.all(promises)
+                return Promise.all(promises)
                     .then(resolve);
             });
         });
@@ -620,7 +620,7 @@ function applyDeleteOnItems(items, applyFunction) {
 }
 
 function applyDeleteOnItemRec(items, index, applyFunction) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         if (index >= items.length) {
             return resolve(items);
         }
@@ -644,7 +644,7 @@ function applyAddOnItems(items, applyFunction) {
 }
 
 function applyAddOnItemsRec(items, index, applyFunction) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         if (index >= items.length) {
             return resolve(items);
         }
@@ -660,7 +660,7 @@ function applyAddOnItemsRec(items, index, applyFunction) {
 }
 
 function connectOneToAll(item, connectToItems, itemsProp, connectToItemsProp, index, applyFunction, extraFields) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         if (index >= connectToItems.length) {
             return resolve(item);
         }
@@ -687,7 +687,7 @@ function connectOneToAll(item, connectToItems, itemsProp, connectToItemsProp, in
 }
 
 function connectItemsToRandomItems(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction, p, extraFields) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         if (index >= items.length) {
             return resolve(items);
         }
@@ -706,7 +706,7 @@ function connectItemsToRandomItems(items, connectToItems, itemsProp, connectToIt
 }
 
 function connectItemsToRandomItem(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction) {
-    return q.promise(function(resolve) {
+    return new Promise(function(resolve) {
         if (index >= items.length) {
             return resolve(items);
         }

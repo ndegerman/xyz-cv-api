@@ -2,7 +2,7 @@
 
 var request = require('request-promise');
 var config = require('config');
-var q = require('q');
+var Promise = require('bluebird');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
 
