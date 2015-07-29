@@ -68,7 +68,6 @@ exports.deleteSkillToSkillGroupConnectors = function(skillToSkillGroupConnector)
 };
 
 exports.deleteSkillToSkillGroupConnectorsById = function(skillGroupId) {
-    console.log('a');
     return exports.getSkillToSkillGroupConnectorsBySkillGroupId(skillGroupId)
         .then(exports.deleteSkillToSkillGroupConnectors);
 };
