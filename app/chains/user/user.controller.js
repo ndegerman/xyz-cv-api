@@ -23,6 +23,7 @@ function getUserTemplate(name, email) {
         email: email,
         name: name,
         role: 'user',
+        hidden: false,
 
         phoneNumber: null,
         employeeNumber: null,
