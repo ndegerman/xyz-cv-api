@@ -63,7 +63,11 @@ exports.checkForForbiddenFields = function(forbiddenFields, requiredAttributes) 
                             if (relevantAttributes.length > 0) {
                                 return next();
                             } else {
-                                responseHandler.sendUnauthorizedResponse(response)();
+                                forbiddenFields.forEach(function(forbiddenField) {
+                                    delete request.body[forbiddenField];
+                                });
+
+                                return next();
                             }
                         });
                 }

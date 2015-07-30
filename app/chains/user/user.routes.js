@@ -44,7 +44,7 @@ module.exports = function(routes) {
     });
 
     // update a user given an id and an object
-    routes.put('/:id', authentication.isAllowedOrSelf('canEditUser'), authentication.checkForForbiddenFields(['hidden'], ['canEditUser']), function(request, response) {
+    routes.put('/:id', authentication.isAllowedOrSelf('canEditUser'), authentication.checkForForbiddenFields(['hidden', 'email', 'role'], ['canEditUser']), function(request, response) {
         userController.updateUser(request.params.id, request.body, request.headers['x-forwarded-email'])
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
