@@ -52,7 +52,7 @@ exports.isAllowed = function(attribute) {
 
 exports.checkForForbiddenFields = function(forbiddenFields, requiredAttributes) {
     return function(request, response, next) {
-        return utils.objectContainsAtLeastOneOfFields(request.body, forbiddenFields)
+        return utils.objectContainsOneOfFields(request.body, forbiddenFields)
             .then(function(result) {
                 if (!result) {
                     return next();

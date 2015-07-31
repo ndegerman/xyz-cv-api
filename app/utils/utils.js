@@ -95,7 +95,7 @@ exports.rejectIfEmpty = function(body) {
     };
 };
 
-exports.objectContainsAtLeastOneOfFields = function(object, fields) {
+exports.objectContainsOneOfFields = function(object, fields) {
     return new Promise(function(resolve, reject) {
         var contains = false;
         for (var field in object) {
