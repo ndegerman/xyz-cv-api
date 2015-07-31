@@ -77,12 +77,24 @@ exports.trimByAttributes = function(email, attributes) {
 
 exports.trimManyByattributes = function(email, attributes) {
     return function(bodies) {
-        var promises = [];
-        bodies.forEach(function(body) {
-            promises.push(exports.trimByAttributes(email, attributes)(body));
-        });
+        return exports.getUserAttributeObjects(email)
+            .then(utils.extractRelevantAttributes(attributes))
+            .then(findSmallestIntersectionOfHiddenFields)
+            .then(function(fields) {
+                return new Promise(function(resolve) {
+                    if (fields.length <= 0) {
+                        return resolve(bodies);
+                    } else {
+                        var promises = [];
+                        bodies.forEach(function(body) {
+                            promises.push(trimByFields(body)(fields));
+                        });
 
-        return Promise.all(promises);
+                        return Promise.all(promises)
+                            .then(resolve);
+                    }
+                });
+            });
     };
 };
 
@@ -120,11 +132,12 @@ exports.blockHidden = function(email, attributes) {
 
 exports.filterHiddenEntities = function(email, attributes) {
     return function(bodies) {
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             return exports.getUserAttributeObjects(email)
                 .then(utils.extractRelevantAttributes(attributes))
                 .then(filterIfNoAccess(bodies))
-                .then(resolve);
+                .then(resolve)
+                .catch(reject);
         });
     };
 };
