@@ -5,7 +5,7 @@
  */
 var responseHandler = require('../utils/response.handler');
 var authenticationHandler = require('../utils/authentication.handler');
-
+var utils = require('../utils/utils');
 var Promise = require('bluebird');
 
 // middleware
@@ -24,7 +24,6 @@ exports.authentication = function(request, response, next) {
 
 exports.isAllowedOrSelf = function(attribute) {
     return function(request, response, next) {
-
         return authenticationHandler.isSelf(request.headers['x-forwarded-email'], request.params.id)
             .then(function(result) {
                 if (result) {
@@ -50,3 +49,29 @@ exports.isAllowed = function(attribute) {
             .catch(responseHandler.sendUnauthorizedResponse(response));
     };
 };
+
+exports.checkForForbiddenFields = function(forbiddenFields, requiredAttributes) {
+    return function(request, response, next) {
+        return utils.objectContainsOneOfFields(request.body, forbiddenFields)
+            .then(function(result) {
+                if (!result) {
+                    return next();
+                } else {
+                    return authenticationHandler.getUserAttributeObjects(request.headers['x-forwarded-email'])
+                        .then(utils.extractRelevantAttributes(requiredAttributes))
+                        .then(function(relevantAttributes) {
+                            if (relevantAttributes.length > 0) {
+                                return next();
+                            } else {
+                                forbiddenFields.forEach(function(forbiddenField) {
+                                    delete request.body[forbiddenField];
+                                });
+
+                                return next();
+                            }
+                        });
+                }
+            });
+    };
+};
+

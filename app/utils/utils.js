@@ -83,6 +83,51 @@ exports.sortListByProperty = function(list, prop) {
     });
 };
 
+exports.rejectIfEmpty = function(body) {
+    return function(list) {
+        return new Promise(function(resolve, reject) {
+            if (list.length <= 0) {
+                return reject();
+            } else {
+                return resolve(body);
+            }
+        });
+    };
+};
+
+exports.objectContainsOneOfFields = function(object, fields) {
+    return new Promise(function(resolve, reject) {
+        var contains = false;
+        for (var field in object) {
+            if (fields.indexOf(field) >= 0) {
+                contains = true;
+            }
+        }
+
+        resolve(contains);
+    });
+};
+
+exports.extractRelevantAttributes = function(relevantAttributes) {
+    return function(presentAttributes) {
+        return new Promise(function(resolve, reject) {
+            if (presentAttributes.length <= 0) {
+                return reject();
+            }
+
+            var list = [];
+            presentAttributes.forEach(function(presentAttribute) {
+                if (relevantAttributes.indexOf(presentAttribute.name) >= 0) {
+                    list.push(presentAttribute);
+                }
+            });
+
+            return Promise.all(list)
+                .then(resolve);
+        });
+    };
+};
+
 // HELPER
 // ============================================================================
 

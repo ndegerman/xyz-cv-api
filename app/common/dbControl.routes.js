@@ -432,7 +432,7 @@ function addAttributes() {
             name: 'canEditOffice'
         },
         {
-            name: 'canViewProfile',
+            name: 'canViewUser',
             hiddenFields: [
                 'personalIdNumber',
                 'foodPreferences',
@@ -445,13 +445,13 @@ function addAttributes() {
             ]
         },
         {
-            name: 'canEditProfile'
+            name: 'canEditUser'
         }
     ];
 
     userAttributes = [
         'canViewOffice',
-        'canViewProfile'
+        'canViewUser'
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));

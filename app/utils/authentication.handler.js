@@ -61,7 +61,7 @@ exports.trimByAttributes = function(email, attributes) {
                         return resolve(body);
                     } else {
                         return exports.getUserAttributeObjects(email)
-                            .then(extractRelevantAttributes(attributes))
+                            .then(utils.extractRelevantAttributes(attributes))
                             .then(findSmallestIntersectionOfHiddenFields)
                             .then(trimByFields(body))
                             .then(resolve);
@@ -75,10 +75,74 @@ exports.trimByAttributes = function(email, attributes) {
     };
 };
 
+exports.trimManyByattributes = function(email, attributes) {
+    return function(bodies) {
+        var promises = [];
+        bodies.forEach(function(body) {
+            promises.push(exports.trimByAttributes(email, attributes)(body));
+        });
+
+        return Promise.all(promises);
+    };
+};
+
 exports.isSelf = function(email, id) {
     return getUserId(email)
         .then(checkIds(id));
 };
+
+exports.blockHidden = function(email, attributes) {
+    return function(body) {
+        return new Promise(function(resolve, reject) {
+            return exports.isSelf(email, body._id)
+                .then(function(result) {
+                    if (result) {
+                        return resolve(body);
+
+                    } else if (!body.hidden) {
+                        return resolve(body);
+
+                    } else {
+                        return exports.getUserAttributeObjects(email)
+                            .then(utils.extractRelevantAttributes(attributes))
+                            .then(utils.rejectIfEmpty(body))
+                            .then(resolve)
+                            .catch(function() {
+                                return errorHandler.getHttpError(404)
+                                    .then(reject);
+                            });
+                    }
+                })
+                .catch(reject);
+        });
+    };
+};
+
+exports.filterHiddenEntities = function(email, attributes) {
+    return function(bodies) {
+        return new Promise(function(resolve) {
+            return exports.getUserAttributeObjects(email)
+                .then(utils.extractRelevantAttributes(attributes))
+                .then(filterIfNoAccess(bodies))
+                .then(resolve);
+        });
+    };
+};
+
+function filterIfNoAccess(bodies) {
+    return function(relevantAttributes) {
+        return new Promise(function(resolve) {
+            if (relevantAttributes.length > 0) {
+                return resolve(bodies);
+            } else {
+                return Promise.filter(bodies, function(body) {
+                    return !body.hidden;
+                })
+                .then(resolve);
+            }
+        });
+    };
+}
 
 // ROLE
 // ==============================================================================
@@ -190,26 +254,6 @@ function checkIds(id1) {
 
 // TRIMMING
 // ==============================================================================
-
-function extractRelevantAttributes(relevantAttributes) {
-    return function(presentAttributes) {
-        return new Promise(function(resolve, reject) {
-            if (presentAttributes.length <= 0) {
-                return reject();
-            }
-
-            var list = [];
-            presentAttributes.forEach(function(presentAttribute) {
-                if (relevantAttributes.indexOf(presentAttribute.name) >= 0) {
-                    list.push(presentAttribute);
-                }
-            });
-
-            return Promise.all(list)
-                .then(resolve);
-        });
-    };
-}
 
 function findSmallestIntersectionOfHiddenFields(attributes) {
     return new Promise(function(resolve, reject) {
