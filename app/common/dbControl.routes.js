@@ -18,6 +18,7 @@ var userToAssignmentConnectorController = require('../chains/userToAssignmentCon
 
 var responseHandler = require('../utils/response.handler');
 var randomHandler = require('../utils/random.handler');
+var cacheHandler = require('../utils/cache.handler');
 
 var faker = require('faker');
 var config = require('config');
@@ -84,6 +85,7 @@ function purgeAll() {
     purge.push(purgeSkillToSkillGroupConnectors());
     purge.push(purgeUserToOfficeConnectors());
     purge.push(purgeUserToAssignmentConnectors());
+    purge.push(purgeCache());
     return Promise.all(purge);
 }
 
@@ -252,6 +254,15 @@ function purgeUserToAssignmentConnectors() {
                     })
                     .then(resolve);
             });
+    });
+}
+
+function purgeCache() {
+    return new Promise(function(resolve) {
+        cacheHandler.clearUserRoleCache();
+        cacheHandler.clearRoleAttributesCache();
+        cacheHandler.clearEmailIdCache();
+        return resolve();
     });
 }
 
