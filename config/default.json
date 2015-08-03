@@ -6,9 +6,9 @@
     "PORT": 9090,
     "UPLOAD_PATH": "./uploads/",
     "DEMO": {
-        "USER_LIMIT": 400,
-        "SKILL_ON_USER_PROBABILITY": 0.2,
-        "NUMBER_OF_SKILLS": 25,
+        "USER_LIMIT": 50,
+        "SKILL_ON_USER_PROBABILITY": 0.5,
+        "NUMBER_OF_SKILLS": 15,
         "USER_ON_ASSIGNMENT_PROBABILITY": 0.2,
         "SKILL_ON_ASSIGNMENT_PROBABILITY": 0.3,
         "NUMBER_OF_ASSIGNMENTS": 10
