@@ -333,7 +333,7 @@ function addUsers() {
 }
 
 function addAdmin() {
-    var user = {
+    var user = [{
         name: 'Admin Adminsson',
         email: 'admin@softhouse.se',
         role: 'admin',
@@ -366,9 +366,43 @@ function addAdmin() {
         address: faker.address.streetAddress(),
         city: faker.address.city(),
         ZIP: faker.address.zipCode()
-    };
+    },
+    {
+        name: 'Young Fogelström',
+        email: 'young.fogelstrom@softhouse.se',
+        role: 'admin',
 
-    return Promise.all(applyAddOnItemsRec([user], 0, userController.createNewUser));
+        phoneNumber: faker.phone.phoneNumberFormat(),
+        employeeNumber: faker.random.number(2000),
+        position: faker.name.title(),
+        closestSuperior: faker.name.firstName() + ' ' + faker.name.lastName(),
+        startDateOfEmployment: faker.date.past(),
+        endDateOfEmployment: null,
+
+        certificates: randomHandler.getCertificates(),
+
+        ICEName: faker.name.firstName() + ' ' + faker.name.lastName(),
+        ICEPhone: faker.phone.phoneNumberFormat(),
+
+        profileImage: null,
+        personalIdNumber: faker.random.uuid(),
+        sex: randomHandler.generateSex(),
+        description: faker.lorem.sentence(),
+        personalInterests: randomHandler.getPersonalInterests(),
+        foodPreferences: faker.lorem.sentence(),
+        shirtSize: randomHandler.getShirtSize(),
+        customHeaders: randomHandler.getCustomHeaders(),
+
+        linkedin: 'https://www.linkedin.com/in/williamhgates',
+        facebook: 'https://www.facebook.com/BillGates',
+        twitter: 'https://twitter.com/billgates',
+        country: faker.address.country(),
+        address: faker.address.streetAddress(),
+        city: faker.address.city(),
+        ZIP: faker.address.zipCode()
+    }];
+
+    return Promise.all(applyAddOnItemsRec(user, 0, userController.createNewUser));
 
 }
 
