@@ -55,6 +55,9 @@ app.use(morgan('dev'));
 app.options('*', cors({credentials: true, origin: true}));
 app.use(cors({credentials: true, origin: true}));
 
+// for debugging and demo
+app.use('/dbControl', dbControlRoutes);
+
 app.use(authenticationMiddleware.authentication);
 app.use(responseMiddleware.nocache);
 app.use(fileHandler.getHandler());
@@ -77,9 +80,6 @@ app.use('/userToOfficeConnector', userToOfficeConnectorRoutes);
 app.use('/userToAssignmentConnector', userToAssignmentConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
-
-// for debugging and demo
-app.use('/dbControl', dbControlRoutes);
 
 // for debugging
 app.get('/kalle', function(req, res) {
