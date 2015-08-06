@@ -21,6 +21,19 @@ exports.createUserToOfficeConnector = function(userToOfficeConnector) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
+exports.getUserToOfficeConnectorById = function(id) {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: url + '/' + id,
+        method: 'GET',
+        json: true
+    };
+
+    return request(options)
+        .then(responseHandler.parseGet)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
 exports.getUserToOfficeConnectorsByOfficeId = function(id) {
     var options = {
         resolveWithFullResponse: true,
@@ -54,6 +67,19 @@ exports.getAllUserToOfficeConnectors = function() {
 
     return request(options)
         .then(responseHandler.parseGetPolyQuery)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
+exports.updateUserToOfficeConnector = function(userToOfficeConnector) {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: url + '/' + userToOfficeConnector._id,
+        method: 'PUT',
+        json: userToOfficeConnector
+    };
+
+    return request(options)
+        .then(responseHandler.parsePut)
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
