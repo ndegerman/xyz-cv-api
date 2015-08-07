@@ -385,6 +385,44 @@ describe('/userToOfficeConnector', function() {
 
     //===============================================================================
 
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting userToOfficeConnector by its id', function(done) {
+        var resultGet = {
+            _id: '123',
+            skillId: '557d7cbc9a81250f00194d46',
+            userId: '557eb7199a81250f00194d50',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
+        nock(mockedUrl)
+            .get('/userToOfficeConnector/123')
+            .reply(200, resultGet)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .get('/userToOfficeConnector/123')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send()
+
+            // end handles the response
+            .end(function(err, res) {
+                if (err) {
+                    throw err;
+                }
+
+                expect(res).to.exist;
+                expect(res.status).to.equal(200);
+                expect(JSON.stringify(res.body)).to.equal(JSON.stringify(resultGet));
+                done();
+            });
+    });
+
+    //===============================================================================
+
     it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting a userToOfficeConnector by user id', function(done) {
         var resultGetByUserId = [{
             _id: '123',
@@ -514,6 +552,94 @@ describe('/userToOfficeConnector', function() {
                 expect(res).to.exist;
                 expect(res.status).to.equal(404);
                 expect(res.error.text).to.equal(resultNotInDb);
+                done();
+            });
+    });
+
+    //===============================================================================
+
+    it('should reply with HTTP status code 200 and a correctly formatted string when updating a userToOfficeConnector', function(done) {
+        var resultPut = msg.SUCCESS_UPDATE;
+
+        var body = {
+            officeId: '1234'
+        };
+
+        var resultGetById = {
+            _id: '123',
+            officeId: '456',
+            userId: '789',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
+        nock(mockedUrl)
+            .put('/userToOfficeConnector/123')
+            .reply(204)
+
+            .get('/userToOfficeConnector/123')
+            .reply(200, resultGetById)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .put('/userToOfficeConnector/123')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send(body)
+
+            // end handles the response
+            .end(function(err, res) {
+                expect(err).to.exist;
+                expect(res).to.exist;
+                expect(res.status).to.equal(200);
+                expect(res.text).to.equal(resultPut);
+                done();
+            });
+    });
+
+    //===============================================================================
+
+    it('should reply with HTTP status code 400 and a correctly formatted string when updating a userToOfficeConnector with a userId', function(done) {
+        var result = msg.INVALID_JSON_OBJECT;
+
+        var body = {
+            userId: '123'
+        };
+
+        var resultGetById = {
+            _id: '123',
+            skillId: '456',
+            userId: '1234',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
+        nock(mockedUrl)
+            .put('/userToOfficeConnector/123')
+            .reply(204)
+
+            .get('/userToOfficeConnector/123')
+            .reply(200, resultGetById)
+
+            .get('/user?email=a@softhouse.se')
+            .reply(200, getUserByEmailResponse);
+
+        request(url)
+            .put('/userToOfficeConnector/123')
+            .set('x-forwarded-email', 'a@softhouse.se')
+            .set('x-forwarded-user', 'A')
+            .set('Content-Type', 'application/json')
+            .send(body)
+
+            // end handles the response
+            .end(function(err, res) {
+                expect(err).to.exist;
+                expect(res).to.exist;
+                expect(res.status).to.equal(400);
+                expect(res.text).to.equal(result);
                 done();
             });
     });
