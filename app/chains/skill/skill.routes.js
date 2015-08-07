@@ -15,9 +15,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get skills
+    // get skills by query
     routes.get('/', function(request, response) {
-        skillController.getAllSkills()
+        skillController.getSkills(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

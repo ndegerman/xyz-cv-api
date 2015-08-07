@@ -80,7 +80,7 @@ exports.createNewUser = function(user) {
 
 exports.createUserIfNonexistent = function(name, email) {
     return new Promise(function(resolve) {
-        return exports.getUserByEmail(email)
+        return exports.getUsers({email: email})
             .then(resolve)
             .catch(function() {
                 return new Promise(function(resolve) {
@@ -92,12 +92,8 @@ exports.createUserIfNonexistent = function(name, email) {
     });
 };
 
-exports.getUserByEmail = function(email) {
-    return userDao.getUserByEmail(email);
-};
-
-exports.getAllUsers = function() {
-    return userDao.getAllUsers();
+exports.getUsers = function(query) {
+    return userDao.getUsers(query);
 };
 
 exports.deleteUserById = function(id) {

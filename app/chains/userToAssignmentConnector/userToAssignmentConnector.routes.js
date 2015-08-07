@@ -15,9 +15,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get all userToAssignmentConnectors
+    // get all userToAssignmentConnectors by query
     routes.get('/', function(request, response) {
-        userToAssignmentConnectorController.getAllUserToAssignmentConnectors()
+        userToAssignmentConnectorController.getUserToAssignmentConnectors(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
@@ -34,20 +34,6 @@ module.exports = function(routes) {
     routes.delete('/:id', function(request, response) {
         userToAssignmentConnectorController.deleteUserToAssignmentConnectorById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
-    // get userToAssignmentConnectors for user
-    routes.get('/user/:id', function(request, response) {
-        userToAssignmentConnectorController.getUserToAssignmentConnectorsByUserId(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
-    // get userToAssignmentConnectors for assignment
-    routes.get('/assignment/:id', function(request, response) {
-        userToAssignmentConnectorController.getUserToAssignmentConnectorsByAssignmentId(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 

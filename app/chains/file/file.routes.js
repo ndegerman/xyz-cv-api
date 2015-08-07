@@ -19,9 +19,9 @@ module.exports = function(routes) {
 
     });
 
-    // get all files
+    // get files by query
     routes.get('/', function(request, response) {
-        fileController.getAllFiles()
+        fileController.getFiles(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

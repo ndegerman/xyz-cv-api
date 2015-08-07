@@ -164,7 +164,7 @@ function getUserRole(email) {
     return new Promise(function(resolve, reject) {
         var userRoleFromCache = cacheHandler.getFromUserRoleCache(email);
         if (!userRoleFromCache) {
-            return userController.getUserByEmail(email)
+            return userController.getUser({email: email})
                 .then(setUserRoleCache)
                 .then(resolve)
                 .catch(reject);
@@ -176,7 +176,7 @@ function getUserRole(email) {
 
 function setUserRoleCache(user) {
     return new Promise(function(resolve) {
-        cacheHandler.setToUserRoleCache(user.email, user.role);
+        cacheHandler.setToUserRoleCache(user[0].email, user[0].role);
         return resolve(user.role);
     });
 }
@@ -200,13 +200,16 @@ function getRoleAttributeNames(role) {
 
 function getRoleAttributeObjects(role) {
     return new Promise(function(resolve, reject) {
-        var connectors = roleController.getRoleByName(role)
-            .then(roleToAttributeController.getRoleToAttributeConnectorsByRole);
+        var connectors = roleController.getRoles({name: role})
+            .then(utils.createQueryObjectFromList('roleId', '_id'))
+            .then(roleToAttributeController.getRoleToAttributeConnectors);
 
-        var attributes = attributeController.getAllAttributes();
+        var attributes = attributeController.getAttributes();
 
         Promise.all([connectors, attributes])
             .then(function() {
+                //console.log(attributes.value());
+                //console.log(connectors.value());
                 return utils.extractPropertiesFromConnectors('attributeId', connectors.value())
                     .then(utils.matchListAndObjectIds(attributes.value()))
                     .then(resolve);
@@ -232,7 +235,7 @@ function getUserId(email) {
         var userId = cacheHandler.getFromEmailIdCache(email);
 
         if (!userId) {
-            return userController.getUserByEmail(email)
+            return userController.getUsers({email: email})
                 .then(getIdfromUser)
                 .then(setEmailToIdCache(email))
                 .then(resolve);

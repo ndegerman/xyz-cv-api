@@ -5,9 +5,7 @@ var errorHandler = require('./error.handler');
 var msg = require('./message.handler');
 var config = require('config');
 var authenticationHandler = require('./authentication.handler');
-var roleController = require('../chains/role/role.controller');
-var attributeController = require('../chains/attribute/attribute.controller');
-var roleToAttributeController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
+
 var utils = require('../utils/utils');
 
 // PARSING

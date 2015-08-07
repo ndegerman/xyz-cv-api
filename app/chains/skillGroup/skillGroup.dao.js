@@ -5,6 +5,7 @@ var config = require('config');
 var Promise = require('bluebird');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 var url = config.API_URL + 'skillGroup';
 
@@ -21,18 +22,6 @@ exports.createNewSkillGroup = function(skillGroup) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getSkillGroupByName = function(name) {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url + '?name=' + name,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetMonoQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
 exports.getSkillGroupById = function(id) {
     var options = {
         resolveWithFullResponse: true,
@@ -46,10 +35,10 @@ exports.getSkillGroupById = function(id) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getAllSkillGroups = function() {
+exports.getSkillGroups = function(query) {
     var options = {
         resolveWithFullResponse: true,
-        uri: url,
+        uri: url + utils.getQueryByObject(query),
         method: 'GET'
     };
 

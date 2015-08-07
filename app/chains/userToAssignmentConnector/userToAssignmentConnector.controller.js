@@ -65,16 +65,8 @@ exports.getUserToAssignmentConnectorById = function(id) {
     return userToAssignmentConnectorDao.getUserToAssignmentConnectorById(id);
 };
 
-exports.getUserToAssignmentConnectorsByUserId = function(userId) {
-    return userToAssignmentConnectorDao.getUserToAssignmentConnectorsByUserId(userId);
-};
-
-exports.getUserToAssignmentConnectorsByAssignmentId = function(assignmentId) {
-    return userToAssignmentConnectorDao.getUserToAssignmentConnectorsByAssignmentId(assignmentId);
-};
-
-exports.getAllUserToAssignmentConnectors = function() {
-    return userToAssignmentConnectorDao.getAllUserToAssignmentConnectors();
+exports.getUserToAssignmentConnectors = function(query) {
+    return userToAssignmentConnectorDao.getUserToAssignmentConnectors(query);
 };
 
 exports.updateUserToAssignmentConnector = function(id, body, email) {

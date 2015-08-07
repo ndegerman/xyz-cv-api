@@ -29,16 +29,12 @@ exports.createNewSkillGroup = function(skillGroupObject) {
         .then(skillGroupDao.createNewSkillGroup);
 };
 
-exports.getSkillGroupByName = function(name) {
-    return skillGroupDao.getSkillGroupByName(name);
-};
-
 exports.getSkillGroupById = function(id) {
     return skillGroupDao.getSkillGroupById(id);
 };
 
-exports.getAllSkillGroups = function() {
-    return skillGroupDao.getAllSkillGroups();
+exports.getSkillGroups = function(query) {
+    return skillGroupDao.getSkillGroups(query);
 };
 
 exports.deleteSkillGroupById = function(id) {

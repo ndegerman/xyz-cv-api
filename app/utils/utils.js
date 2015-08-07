@@ -128,6 +128,37 @@ exports.extractRelevantAttributes = function(relevantAttributes) {
     };
 };
 
+exports.getQueryByObject = function(queryObject) {
+    if (!queryObject) {
+        return '';
+    }
+
+    var queryString = '?';
+    for (var queryParam in queryObject) {
+        if (queryObject.hasOwnProperty(queryParam)) {
+            queryString += queryParam + '=' + queryObject[queryParam] + '&';
+        }
+    }
+
+    return queryString;
+};
+
+exports.createQueryObjectFromList = function(newFieldName, OldFieldName) {
+    return function(object) {
+        return new Promise(function(resolve) {
+            var res = {};
+            res[newFieldName] = object[0][OldFieldName];
+            return resolve(res);
+        });
+    };
+};
+
+exports.returnFirstIndex = function(list) {
+    return new Promise(function(resolve) {
+        return resolve(list[0]);
+    });
+};
+
 // HELPER
 // ============================================================================
 

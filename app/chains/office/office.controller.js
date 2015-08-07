@@ -29,16 +29,12 @@ exports.createNewOffice = function(officeObject) {
         .then(officeDao.createNewOffice);
 };
 
-exports.getOfficeByName = function(name) {
-    return officeDao.getOfficeByName(name);
-};
-
 exports.getOfficeById = function(id) {
     return officeDao.getOfficeById(id);
 };
 
-exports.getAllOffices = function() {
-    return officeDao.getAllOffices();
+exports.getOffices = function(query) {
+    return officeDao.getOffices(query);
 };
 
 exports.deleteOfficeById = function(id) {

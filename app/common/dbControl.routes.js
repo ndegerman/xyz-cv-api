@@ -91,7 +91,7 @@ function purgeAll() {
 
 function purgeUsers() {
     return new Promise(function(resolve) {
-        userController.getAllUsers()
+        userController.getUsers()
             .then(function(users) {
                 return Promise.all(applyDeleteOnItemRec(users, 0, userController.deleteUserById))
                     .then(function(res) {
@@ -105,7 +105,7 @@ function purgeUsers() {
 
 function purgeRoles() {
     return new Promise(function(resolve) {
-        roleController.getAllRoles()
+        roleController.getRoles()
             .then(function(roles) {
                 return Promise.all(applyDeleteOnItemRec(roles, 0, roleController.deleteRoleById))
                     .then(function(res) {
@@ -119,7 +119,7 @@ function purgeRoles() {
 
 function purgeAttributes() {
     return new Promise(function(resolve) {
-        attributeController.getAllAttributes()
+        attributeController.getAttributes()
             .then(function(attributes) {
                 return Promise.all(applyDeleteOnItemRec(attributes, 0, attributeController.deleteAttributeById))
                     .then(function(res) {
@@ -133,7 +133,7 @@ function purgeAttributes() {
 
 function purgeSkills() {
     return new Promise(function(resolve) {
-        skillController.getAllSkills()
+        skillController.getSkills()
             .then(function(skills) {
                 return Promise.all(applyDeleteOnItemRec(skills, 0, skillController.deleteSkillById))
                     .then(function(res) {
@@ -147,7 +147,7 @@ function purgeSkills() {
 
 function purgeOffices() {
     return new Promise(function(resolve) {
-        officeController.getAllOffices()
+        officeController.getOffices()
             .then(function(offices) {
                 return Promise.all(applyDeleteOnItemRec(offices, 0, officeController.deleteOfficeById))
                     .then(function(res) {
@@ -161,7 +161,7 @@ function purgeOffices() {
 
 function purgeSkillGroups() {
     return new Promise(function(resolve) {
-        skillGroupController.getAllSkillGroups()
+        skillGroupController.getSkillGroups()
             .then(function(skillGroups) {
                 return Promise.all(applyDeleteOnItemRec(skillGroups, 0, skillGroupController.deleteSkillGroupById))
                     .then(function(res) {
@@ -175,7 +175,7 @@ function purgeSkillGroups() {
 
 function purgeAssignments() {
     return new Promise(function(resolve) {
-        assignmentController.getAllAssignments()
+        assignmentController.getAssignments()
             .then(function(assignments) {
                 return Promise.all(applyDeleteOnItemRec(assignments, 0, assignmentController.deleteAssignmentById))
                     .then(function(res) {
@@ -189,7 +189,7 @@ function purgeAssignments() {
 
 function purgeUserToSkillConnectors() {
     return new Promise(function(resolve) {
-        userToSkillConnectorController.getAllUserToSkillConnectors()
+        userToSkillConnectorController.getUserToSkillConnectors()
             .then(function(userToSkillConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToSkillConnectors, 0, userToSkillConnectorController.deleteUserToSkillConnectorById))
                     .then(function(res) {
@@ -203,7 +203,7 @@ function purgeUserToSkillConnectors() {
 
 function purgeRoleToAttributeConnectors() {
     return new Promise(function(resolve) {
-        roleToAttributeConnectorController.getAllRoleToAttributeConnectors()
+        roleToAttributeConnectorController.getRoleToAttributeConnectors()
             .then(function(roleToAttributeConnectors) {
                 return Promise.all(applyDeleteOnItemRec(roleToAttributeConnectors, 0, roleToAttributeConnectorController.deleteRoleToAttributeConnectorById))
                     .then(function(res) {
@@ -217,7 +217,7 @@ function purgeRoleToAttributeConnectors() {
 
 function purgeSkillToSkillGroupConnectors() {
     return new Promise(function(resolve) {
-        skillToSkillGroupConnectorController.getAllSkillToSkillGroupConnectors()
+        skillToSkillGroupConnectorController.getSkillToSkillGroupConnectors()
             .then(function(skillToSkillGroupConnectors) {
                 return Promise.all(applyDeleteOnItemRec(skillToSkillGroupConnectors, 0, skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorById))
                     .then(function(res) {
@@ -231,7 +231,7 @@ function purgeSkillToSkillGroupConnectors() {
 
 function purgeUserToOfficeConnectors() {
     return new Promise(function(resolve) {
-        userToOfficeConnectorController.getAllUserToOfficeConnectors()
+        userToOfficeConnectorController.getUserToOfficeConnectors()
             .then(function(userToOfficeConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToOfficeConnectors, 0, userToOfficeConnectorController.deleteUserToOfficeConnectorById))
                     .then(function(res) {
@@ -245,7 +245,7 @@ function purgeUserToOfficeConnectors() {
 
 function purgeUserToAssignmentConnectors() {
     return new Promise(function(resolve) {
-        userToAssignmentConnectorController.getAllUserToAssignmentConnectors()
+        userToAssignmentConnectorController.getUserToAssignmentConnectors()
             .then(function(userToAssignmentConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToAssignmentConnectors, 0, userToAssignmentConnectorController.deleteUserToAssignmentConnectorById))
                     .then(function(res) {
@@ -534,22 +534,22 @@ function addSkillGroups() {
 
 function addConnectors() {
     var promises = [];
-    promises.push(roleController.getRoleByName('admin')
+    promises.push(roleController.getRole({name: 'admin'})
         .then(connectAdminAndAttributes));
 
-    promises.push(roleController.getRoleByName('user')
+    promises.push(roleController.getRole({name: 'user'})
         .then(connectUserAndAttributes));
 
-    promises.push(userController.getAllUsers()
+    promises.push(userController.getUsers()
         .then(connectUsersAndRandomOffice));
 
-    promises.push(userController.getAllUsers()
+    promises.push(userController.getUsers()
         .then(connectUsersAndRandomSkills));
 
-    promises.push(skillGroupController.getSkillGroupByName('technologies')
+    promises.push(skillGroupController.getSkillGroup({name: 'technologies'})
         .then(connectSkillGroupAndSkills));
 
-    promises.push(userController.getAllUsers()
+    promises.push(userController.getUsers()
         .then(connectUsersAndRandomAssignments));
 
     return Promise.all(promises);
@@ -557,13 +557,13 @@ function addConnectors() {
 
 function addConnectorsDefault() {
     var promises = [];
-    promises.push(roleController.getRoleByName('admin')
+    promises.push(roleController.getRole({name: 'admin'})
         .then(connectAdminAndAttributes));
 
-    promises.push(roleController.getRoleByName('user')
+    promises.push(roleController.getRole({name: 'user'})
         .then(connectUserAndAttributes));
 
-    promises.push(skillGroupController.getSkillGroupByName('technologies')
+    promises.push(skillGroupController.getSkillGroup({name: 'technologies'})
         .then(connectSkillGroupAndSkills));
 
     return Promise.all(promises);

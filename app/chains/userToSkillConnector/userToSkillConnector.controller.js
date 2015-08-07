@@ -81,8 +81,8 @@ exports.getUserToSkillConnectorsBySkillId = function(skillId) {
     return userToSkillConnectorDao.getUserToSkillConnectorsBySkillId(skillId);
 };
 
-exports.getAllUserToSkillConnectors = function() {
-    return userToSkillConnectorDao.getAllUserToSkillConnectors();
+exports.getUserToSkillConnectors = function(query) {
+    return userToSkillConnectorDao.getUserToSkillConnectors(query);
 };
 
 exports.updateUserToSkillConnector = function(id, body, email) {

@@ -32,8 +32,8 @@ exports.getFileById = function(id) {
     return fileDao.getFileById(id);
 };
 
-exports.getAllFiles = function() {
-    return fileDao.getAllFiles();
+exports.getFiles = function(query) {
+    return fileDao.getFiles(query);
 };
 
 exports.deleteFileById = function(id) {
