@@ -15,9 +15,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get all userToSkillConnectors
+    // get all userToSkillConnectors by query
     routes.get('/', function(request, response) {
-        userToSkillConnectorController.getAllUserToSkillConnectors()
+        userToSkillConnectorController.getUserToSkillConnectors(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
@@ -34,20 +34,6 @@ module.exports = function(routes) {
     routes.delete('/:id', function(request, response) {
         userToSkillConnectorController.deleteUserToSkillConnectorById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
-    // get userToSkillConnectors for user
-    routes.get('/user/:id', function(request, response) {
-        userToSkillConnectorController.getUserToSkillConnectorsByUserId(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
-    // get userToSkillConnectors for skill
-    routes.get('/skill/:id', function(request, response) {
-        userToSkillConnectorController.getUserToSkillConnectorsBySkillId(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 

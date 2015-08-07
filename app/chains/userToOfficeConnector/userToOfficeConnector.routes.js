@@ -15,9 +15,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get all userToOfficeConnectors
+    // get all userToOfficeConnectors by query
     routes.get('/', function(request, response) {
-        userToOfficeConnectorController.getAllUserToOfficeConnectors()
+        userToOfficeConnectorController.getUserToOfficeConnectors(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
@@ -35,20 +35,6 @@ module.exports = function(routes) {
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 
-    });
-
-    // get userToOfficeConnectors for user
-    routes.get('/user/:id', function(request, response) {
-        userToOfficeConnectorController.getUserToOfficeConnectorsByUserId(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
-    // get userToOfficeConnectors for office
-    routes.get('/office/:id', function(request, response) {
-        userToOfficeConnectorController.getUserToOfficeConnectorsByOfficeId(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
     });
 
     // update a userToOfficeConnector given an id and an object

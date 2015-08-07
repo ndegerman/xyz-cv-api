@@ -37,24 +37,13 @@ exports.assignAttributesToRole = function(attributes, roleId) {
     return Promise.all(promises);
 };
 
-exports.createRoleToAttributeConnector = function(roleToAttributeConnector) {return validateRoleToAttributeConnector(roleToAttributeConnector)
+exports.createRoleToAttributeConnector = function(roleToAttributeConnector) {
+    return validateRoleToAttributeConnector(roleToAttributeConnector)
         .then(roleToAttributeConnectorDao.createRoleToAttributeConnector);
 };
 
-exports.getRoleToAttributeConnectorsByRoleId = function(roleId) {
-    return roleToAttributeConnectorDao.getRoleToAttributeConnectorsByRoleId(roleId);
-};
-
-exports.getRoleToAttributeConnectorsByRole = function(role) {
-    return roleToAttributeConnectorDao.getRoleToAttributeConnectorsByRoleId(role._id);
-};
-
-exports.getRoleToAttributeConnectorsByAttributeId = function(attributeId) {
-    return roleToAttributeConnectorDao.getRoleToAttributeConnectorsByAttributeId(attributeId);
-};
-
-exports.getAllRoleToAttributeConnectors = function() {
-    return roleToAttributeConnectorDao.getAllRoleToAttributeConnectors();
+exports.getRoleToAttributeConnectors = function(query) {
+    return roleToAttributeConnectorDao.getRoleToAttributeConnectors(query);
 };
 
 exports.deleteRoleToAttributeConnectorById = function(id) {

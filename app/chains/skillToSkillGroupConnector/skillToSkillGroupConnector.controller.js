@@ -50,8 +50,8 @@ exports.getSkillToSkillGroupConnectorsBySkillId = function(skillId) {
     return skillToSkillGroupConnectorDao.getSkillToSkillGroupConnectorsBySkillId(skillId);
 };
 
-exports.getAllSkillToSkillGroupConnectors = function() {
-    return skillToSkillGroupConnectorDao.getAllSkillToSkillGroupConnectors();
+exports.getSkillToSkillGroupConnectors = function(query) {
+    return skillToSkillGroupConnectorDao.getSkillToSkillGroupConnectors(query);
 };
 
 exports.deleteSkillToSkillGroupConnectorById = function(id) {

@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var config = require('config');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 var url = config.API_URL + 'userToOfficeConnector';
 
@@ -34,34 +35,10 @@ exports.getUserToOfficeConnectorById = function(id) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getUserToOfficeConnectorsByOfficeId = function(id) {
+exports.getUserToOfficeConnectors = function(query) {
     var options = {
         resolveWithFullResponse: true,
-        uri: url + '?officeId=' + id,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetPolyQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getUserToOfficeConnectorsByUserId = function(id) {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url + '?userId=' + id,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetPolyQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getAllUserToOfficeConnectors = function() {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url,
+        uri: url + utils.getQueryByObject(query),
         method: 'GET'
     };
 

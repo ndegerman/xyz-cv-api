@@ -50,7 +50,7 @@ describe('/office', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -320,7 +320,7 @@ describe('/office', function() {
         }];
 
         nock(mockedUrl)
-            .get('/office')
+            .get('/office?')
             .reply(200, resultAllGet)
 
             .get('/user?email=a@softhouse.se')

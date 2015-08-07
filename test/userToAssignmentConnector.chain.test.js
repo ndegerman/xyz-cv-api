@@ -46,7 +46,7 @@ describe('/userToAssignmentConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -89,7 +89,7 @@ describe('/userToAssignmentConnector', function() {
             .post('/userToAssignmentConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -126,7 +126,7 @@ describe('/userToAssignmentConnector', function() {
             .post('/userToAssignmentConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -166,7 +166,7 @@ describe('/userToAssignmentConnector', function() {
             .post('/userToAssignmentConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -212,7 +212,7 @@ describe('/userToAssignmentConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -253,7 +253,7 @@ describe('/userToAssignmentConnector', function() {
             .post('/userToAssignmentConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -293,7 +293,7 @@ describe('/userToAssignmentConnector', function() {
             .post('/userToAssignmentConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -333,7 +333,7 @@ describe('/userToAssignmentConnector', function() {
             .post('/userToAssignmentConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -365,14 +365,14 @@ describe('/userToAssignmentConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/userToAssignmentConnector')
+            .get('/userToAssignmentConnector?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToAssignmentConnector')
+            .get('/userToAssignmentConnector?')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -403,14 +403,14 @@ describe('/userToAssignmentConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/userToAssignmentConnector?userId=789')
+            .get('/userToAssignmentConnector?userId=789&')
             .reply(200, resultGetByUserId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToAssignmentConnector/user/789')
+            .get('/userToAssignmentConnector?userId=789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -442,14 +442,14 @@ describe('/userToAssignmentConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/userToAssignmentConnector?assignmentId=456')
+            .get('/userToAssignmentConnector?assignmentId=456&')
             .reply(200, resultGetByAssignmentId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToAssignmentConnector/assignment/456')
+            .get('/userToAssignmentConnector?assignmentId=456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -474,14 +474,14 @@ describe('/userToAssignmentConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/userToAssignmentConnector?userId=123')
+            .get('/userToAssignmentConnector?userId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToAssignmentConnector/user/123')
+            .get('/userToAssignmentConnector?userId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -503,14 +503,14 @@ describe('/userToAssignmentConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/userToAssignmentConnector?assignmentId=123')
+            .get('/userToAssignmentConnector?assignmentId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToAssignmentConnector/assignment/123')
+            .get('/userToAssignmentConnector?assignmentId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -535,7 +535,7 @@ describe('/userToAssignmentConnector', function() {
             .delete('/userToAssignmentConnector/123')
             .reply(204, {})
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -567,7 +567,7 @@ describe('/userToAssignmentConnector', function() {
             .delete('/userToAssignmentConnector/123')
             .reply(404, resultUserNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)

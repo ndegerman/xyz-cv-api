@@ -29,16 +29,12 @@ exports.createNewAssignment = function(assignmentObject) {
         .then(assignmentDao.createNewAssignment);
 };
 
-exports.getAssignmentByName = function(name) {
-    return assignmentDao.getAssignmentByName(name);
+exports.getAssignments = function(query) {
+    return assignmentDao.getAssignments(query);
 };
 
 exports.getAssignmentById = function(id) {
     return assignmentDao.getAssignmentById(id);
-};
-
-exports.getAllAssignments = function() {
-    return assignmentDao.getAllAssignments();
 };
 
 exports.deleteAssignmentById = function(id) {

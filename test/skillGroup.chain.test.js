@@ -40,7 +40,7 @@ describe('/skillGroup', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -81,7 +81,7 @@ describe('/skillGroup', function() {
             .post('/skillGroup')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -118,7 +118,7 @@ describe('/skillGroup', function() {
             .post('/skillGroup')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -157,7 +157,7 @@ describe('/skillGroup', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -196,7 +196,7 @@ describe('/skillGroup', function() {
             .post('/skillGroup')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -234,7 +234,7 @@ describe('/skillGroup', function() {
             .post('/skillGroup')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -276,7 +276,7 @@ describe('/skillGroup', function() {
             .post('/skillGroup')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -307,10 +307,10 @@ describe('/skillGroup', function() {
         }];
 
         nock(mockedUrl)
-            .get('/skillGroup')
+            .get('/skillGroup?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -347,7 +347,7 @@ describe('/skillGroup', function() {
             .get('/skillGroup/1234')
             .reply(200, resultGetOne)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -380,7 +380,7 @@ describe('/skillGroup', function() {
             .get('/skillGroup/123')
             .reply(404, resultSkillGroupNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -409,7 +409,7 @@ describe('/skillGroup', function() {
             .delete('/skillGroup/1234')
             .reply(204, {})
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -441,7 +441,7 @@ describe('/skillGroup', function() {
             .delete('/skillGroup/123')
             .reply(404, resultSkillGroupNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)

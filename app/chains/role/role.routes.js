@@ -15,16 +15,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get roles
+    // get roles by query
     routes.get('/', function(request, response) {
-        roleController.getAllRoles()
-            .then(responseHandler.sendJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
-    // get role by the query
-    routes.get('/query', function(request, response) {
-        roleController.getRoleByName(request.query.name)
+        roleController.getRoles(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

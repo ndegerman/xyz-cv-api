@@ -42,7 +42,7 @@ describe('/roleToAttributeConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -85,7 +85,7 @@ describe('/roleToAttributeConnector', function() {
             .post('/roleToAttributeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -122,7 +122,7 @@ describe('/roleToAttributeConnector', function() {
             .post('/roleToAttributeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -163,7 +163,7 @@ describe('/roleToAttributeConnector', function() {
             .post('/roleToAttributeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -205,7 +205,7 @@ describe('/roleToAttributeConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -246,7 +246,7 @@ describe('/roleToAttributeConnector', function() {
             .post('/roleToAttributeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -286,7 +286,7 @@ describe('/roleToAttributeConnector', function() {
             .post('/roleToAttributeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -325,7 +325,7 @@ describe('/roleToAttributeConnector', function() {
             .post('/roleToAttributeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -357,10 +357,10 @@ describe('/roleToAttributeConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/roleToAttributeConnector')
+            .get('/roleToAttributeConnector?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -395,14 +395,14 @@ describe('/roleToAttributeConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/roleToAttributeConnector?roleId=789')
+            .get('/roleToAttributeConnector?roleId=789&')
             .reply(200, resultGetByRoleId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/roleToAttributeConnector/role/789')
+            .get('/roleToAttributeConnector?roleId=789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -433,14 +433,14 @@ describe('/roleToAttributeConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/roleToAttributeConnector?attributeId=456')
+            .get('/roleToAttributeConnector?attributeId=456&')
             .reply(200, resultGetByAttributeId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/roleToAttributeConnector/attribute/456')
+            .get('/roleToAttributeConnector?attributeId=456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -465,14 +465,14 @@ describe('/roleToAttributeConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/roleToAttributeConnector?roleId=123')
+            .get('/roleToAttributeConnector?roleId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/roleToAttributeConnector/role/123')
+            .get('/roleToAttributeConnector?roleId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -494,14 +494,14 @@ describe('/roleToAttributeConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/roleToAttributeConnector?attributeId=123')
+            .get('/roleToAttributeConnector?attributeId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/roleToAttributeConnector/attribute/123')
+            .get('/roleToAttributeConnector?attributeId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -526,7 +526,7 @@ describe('/roleToAttributeConnector', function() {
             .delete('/roleToAttributeConnector/123')
             .reply(204, {})
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -558,7 +558,7 @@ describe('/roleToAttributeConnector', function() {
             .delete('/roleToAttributeConnector/123')
             .reply(404, resultRoleNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)

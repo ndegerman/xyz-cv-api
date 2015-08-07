@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var config = require('config');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 var url = config.API_URL + 'userToSkillConnector';
 
@@ -34,34 +35,10 @@ exports.getUserToSkillConnectorById = function(id) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getUserToSkillConnectorsBySkillId = function(id) {
+exports.getUserToSkillConnectors = function(query) {
     var options = {
         resolveWithFullResponse: true,
-        uri: url + '?skillId=' + id,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetPolyQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getUserToSkillConnectorsByUserId = function(id) {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url + '?userId=' + id,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetPolyQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getAllUserToSkillConnectors = function() {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url,
+        uri: url + utils.getQueryByObject(query),
         method: 'GET'
     };
 

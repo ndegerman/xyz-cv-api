@@ -7,12 +7,13 @@ var userController = require('./user.controller');
 var responseHandler = require('../../utils/response.handler');
 var authenticationHandler = require('../../utils/authentication.handler');
 var authentication = require('../../middleware/authentication.middleware');
+var utils = require('../../utils/utils');
 
 module.exports = function(routes) {
 
     // get users
     routes.get('/', function(request, response) {
-        userController.getAllUsers()
+        userController.getUsers(request.query)
             .then(authenticationHandler.filterHiddenEntities(request.headers['x-forwarded-email'], ['canEditUser']))
             .then(authenticationHandler.trimManyByattributes(request.headers['x-forwarded-email'], ['canViewUser', 'canEditUser']))
             .then(responseHandler.sendJsonResponse(response))
@@ -21,7 +22,8 @@ module.exports = function(routes) {
 
     //get current user
     routes.get('/current', function(request, response) {
-        userController.getUserByEmail(request.headers['x-forwarded-email'])
+        userController.getUsers({email: request.headers['x-forwarded-email']})
+            .then(utils.returnFirstIndex)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

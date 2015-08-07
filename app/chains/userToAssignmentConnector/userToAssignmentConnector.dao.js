@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var config = require('config');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 var url = config.API_URL + 'userToAssignmentConnector';
 
@@ -34,34 +35,10 @@ exports.getUserToAssignmentConnectorById = function(id) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getUserToAssignmentConnectorsByAssignmentId = function(id) {
+exports.getUserToAssignmentConnectors = function(query) {
     var options = {
         resolveWithFullResponse: true,
-        uri: url + '?assignmentId=' + id,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetPolyQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getUserToAssignmentConnectorsByUserId = function(id) {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url + '?userId=' + id,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetPolyQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getAllUserToAssignmentConnectors = function() {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url,
+        uri: url + utils.getQueryByObject(query),
         method: 'GET'
     };
 

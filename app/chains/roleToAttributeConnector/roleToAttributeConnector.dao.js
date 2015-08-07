@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var config = require('config');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 var url = config.API_URL + 'roleToAttributeConnector';
 
@@ -21,34 +22,10 @@ exports.createRoleToAttributeConnector = function(roleToAttributeConnector) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getRoleToAttributeConnectorsByAttributeId = function(id) {
+exports.getRoleToAttributeConnectors = function(query) {
     var options = {
         resolveWithFullResponse: true,
-        uri: url + '?attributeId=' + id,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetPolyQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getRoleToAttributeConnectorsByRoleId = function(id) {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url + '?roleId=' + id,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetPolyQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getAllRoleToAttributeConnectors = function() {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url,
+        uri: url + utils.getQueryByObject(query),
         method: 'GET'
     };
 

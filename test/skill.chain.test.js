@@ -11,7 +11,7 @@ var mockedUrl = config.API_URL;
 
 //------------------------------------------------------------
 
-describe('api/skill', function() {
+describe('/skill', function() {
 
     afterEach(function(done) {
         nock.cleanAll();
@@ -44,7 +44,7 @@ describe('api/skill', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -85,7 +85,7 @@ describe('api/skill', function() {
             .post('/skill')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -121,7 +121,7 @@ describe('api/skill', function() {
             .post('/skill')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -161,7 +161,7 @@ describe('api/skill', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -201,7 +201,7 @@ describe('api/skill', function() {
             .post('/skill')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -240,7 +240,7 @@ describe('api/skill', function() {
             .post('/skill')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -282,7 +282,7 @@ describe('api/skill', function() {
             .post('/skill')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -313,10 +313,10 @@ describe('api/skill', function() {
         }];
 
         nock(mockedUrl)
-            .get('/skill')
+            .get('/skill?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -354,7 +354,7 @@ describe('api/skill', function() {
             .get('/skill/1234')
             .reply(200, resultGetOne)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -386,7 +386,7 @@ describe('api/skill', function() {
             .get('/skill/123')
             .reply(404, resultSkillNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -415,7 +415,7 @@ describe('api/skill', function() {
             .delete('/skill/1234')
             .reply(204, {})
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -447,7 +447,7 @@ describe('api/skill', function() {
             .delete('/skill/123')
             .reply(404, resultSkillNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)

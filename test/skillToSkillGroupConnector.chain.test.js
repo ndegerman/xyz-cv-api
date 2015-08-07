@@ -42,7 +42,7 @@ describe('/skillToSkillGroupConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -85,7 +85,7 @@ describe('/skillToSkillGroupConnector', function() {
             .post('/skillToSkillGroupConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -122,7 +122,7 @@ describe('/skillToSkillGroupConnector', function() {
             .post('/skillToSkillGroupConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -162,7 +162,7 @@ describe('/skillToSkillGroupConnector', function() {
             .post('/skillToSkillGroupConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -205,7 +205,7 @@ describe('/skillToSkillGroupConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -246,7 +246,7 @@ describe('/skillToSkillGroupConnector', function() {
             .post('/skillToSkillGroupConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -286,7 +286,7 @@ describe('/skillToSkillGroupConnector', function() {
             .post('/skillToSkillGroupConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -325,7 +325,7 @@ describe('/skillToSkillGroupConnector', function() {
             .post('/skillToSkillGroupConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -357,10 +357,10 @@ describe('/skillToSkillGroupConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/skillToSkillGroupConnector')
+            .get('/skillToSkillGroupConnector?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -396,14 +396,14 @@ describe('/skillToSkillGroupConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/skillToSkillGroupConnector?skillGroupId=789')
+            .get('/skillToSkillGroupConnector?skillGroupId=789&')
             .reply(200, resultGetBySkillGroupId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/skillToSkillGroupConnector/skillGroup/789')
+            .get('/skillToSkillGroupConnector?skillGroupId=789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -434,14 +434,14 @@ describe('/skillToSkillGroupConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/skillToSkillGroupConnector?skillId=456')
+            .get('/skillToSkillGroupConnector?skillId=456&')
             .reply(200, resultGetBySkillId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/skillToSkillGroupConnector/skill/456')
+            .get('/skillToSkillGroupConnector?skillId=456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -466,14 +466,14 @@ describe('/skillToSkillGroupConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/skillToSkillGroupConnector?skillGroupId=123')
+            .get('/skillToSkillGroupConnector?skillGroupId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/skillToSkillGroupConnector/skillGroup/123')
+            .get('/skillToSkillGroupConnector?skillGroupId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -495,14 +495,14 @@ describe('/skillToSkillGroupConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/skillToSkillGroupConnector?skillId=123')
+            .get('/skillToSkillGroupConnector?skillId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/skillToSkillGroupConnector/skill/123')
+            .get('/skillToSkillGroupConnector?skillId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -527,7 +527,7 @@ describe('/skillToSkillGroupConnector', function() {
             .delete('/skillToSkillGroupConnector/123')
             .reply(204, {})
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -559,7 +559,7 @@ describe('/skillToSkillGroupConnector', function() {
             .delete('/skillToSkillGroupConnector/123')
             .reply(404, resultSkillGroupNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)

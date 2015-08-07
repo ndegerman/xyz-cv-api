@@ -42,7 +42,7 @@ describe('/userToOfficeConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -85,7 +85,7 @@ describe('/userToOfficeConnector', function() {
             .post('/userToOfficeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -122,7 +122,7 @@ describe('/userToOfficeConnector', function() {
             .post('/userToOfficeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -162,7 +162,7 @@ describe('/userToOfficeConnector', function() {
             .post('/userToOfficeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -204,7 +204,7 @@ describe('/userToOfficeConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -245,7 +245,7 @@ describe('/userToOfficeConnector', function() {
             .post('/userToOfficeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -285,7 +285,7 @@ describe('/userToOfficeConnector', function() {
             .post('/userToOfficeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -325,7 +325,7 @@ describe('/userToOfficeConnector', function() {
             .post('/userToOfficeConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -357,10 +357,10 @@ describe('/userToOfficeConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/userToOfficeConnector')
+            .get('/userToOfficeConnector?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -398,7 +398,7 @@ describe('/userToOfficeConnector', function() {
             .get('/userToOfficeConnector/123')
             .reply(200, resultGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -433,14 +433,14 @@ describe('/userToOfficeConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/userToOfficeConnector?userId=789')
+            .get('/userToOfficeConnector?userId=789&')
             .reply(200, resultGetByUserId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToOfficeConnector/user/789')
+            .get('/userToOfficeConnector?userId=789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -472,14 +472,14 @@ describe('/userToOfficeConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/userToOfficeConnector?officeId=456')
+            .get('/userToOfficeConnector?officeId=456&')
             .reply(200, resultGetByOfficeId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToOfficeConnector/office/456')
+            .get('/userToOfficeConnector?officeId=456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -504,14 +504,14 @@ describe('/userToOfficeConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/userToOfficeConnector?userId=123')
+            .get('/userToOfficeConnector?userId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToOfficeConnector/user/123')
+            .get('/userToOfficeConnector?userId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -533,14 +533,14 @@ describe('/userToOfficeConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/userToOfficeConnector?officeId=123')
+            .get('/userToOfficeConnector?officeId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToOfficeConnector/office/123')
+            .get('/userToOfficeConnector?officeId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -580,7 +580,7 @@ describe('/userToOfficeConnector', function() {
             .get('/userToOfficeConnector/123')
             .reply(200, resultGetById)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -624,7 +624,7 @@ describe('/userToOfficeConnector', function() {
             .get('/userToOfficeConnector/123')
             .reply(200, resultGetById)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -653,7 +653,7 @@ describe('/userToOfficeConnector', function() {
             .delete('/userToOfficeConnector/123')
             .reply(204, {})
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -685,7 +685,7 @@ describe('/userToOfficeConnector', function() {
             .delete('/userToOfficeConnector/123')
             .reply(404, resultUserNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)

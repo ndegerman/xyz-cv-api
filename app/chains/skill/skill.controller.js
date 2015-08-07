@@ -30,16 +30,12 @@ exports.createNewSkill = function(skillObject) {
         .then(skillDao.createNewSkill);
 };
 
-exports.getSkillByName = function(name) {
-    return skillDao.getSkillByName(name);
-};
-
 exports.getSkillById = function(id) {
     return skillDao.getSkillById(id);
 };
 
-exports.getAllSkills = function() {
-    return skillDao.getAllSkills();
+exports.getSkills = function(query) {
+    return skillDao.getSkills(query);
 };
 
 exports.deleteSkillById = function(id) {

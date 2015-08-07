@@ -46,7 +46,7 @@ describe('/userToSkillConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -91,7 +91,7 @@ describe('/userToSkillConnector', function() {
             .post('/userToSkillConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -128,7 +128,7 @@ describe('/userToSkillConnector', function() {
             .post('/userToSkillConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -168,7 +168,7 @@ describe('/userToSkillConnector', function() {
             .post('/userToSkillConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -214,7 +214,7 @@ describe('/userToSkillConnector', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -257,7 +257,7 @@ describe('/userToSkillConnector', function() {
             .post('/userToSkillConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -297,7 +297,7 @@ describe('/userToSkillConnector', function() {
             .post('/userToSkillConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -337,7 +337,7 @@ describe('/userToSkillConnector', function() {
             .post('/userToSkillConnector')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -369,10 +369,10 @@ describe('/userToSkillConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/userToSkillConnector')
+            .get('/userToSkillConnector?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -410,7 +410,7 @@ describe('/userToSkillConnector', function() {
             .get('/userToSkillConnector/123')
             .reply(200, resultGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -445,14 +445,14 @@ describe('/userToSkillConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/userToSkillConnector?userId=789')
+            .get('/userToSkillConnector?userId=789&')
             .reply(200, resultGetByUserId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToSkillConnector/user/789')
+            .get('/userToSkillConnector?userId=789')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -484,14 +484,14 @@ describe('/userToSkillConnector', function() {
         }];
 
         nock(mockedUrl)
-            .get('/userToSkillConnector?skillId=456')
+            .get('/userToSkillConnector?skillId=456&')
             .reply(200, resultGetBySkillId)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToSkillConnector/skill/456')
+            .get('/userToSkillConnector?skillId=456')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -516,14 +516,14 @@ describe('/userToSkillConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/userToSkillConnector?userId=123')
+            .get('/userToSkillConnector?userId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToSkillConnector/user/123')
+            .get('/userToSkillConnector?userId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -545,14 +545,14 @@ describe('/userToSkillConnector', function() {
         var resultNotInDb = msg.NO_SUCH_ITEM;
 
         nock(mockedUrl)
-            .get('/userToSkillConnector?skillId=123')
+            .get('/userToSkillConnector?skillId=123&')
             .reply(404, resultNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
-            .get('/userToSkillConnector/skill/123')
+            .get('/userToSkillConnector?skillId=123')
             .set('x-forwarded-email', 'a@softhouse.se')
             .set('x-forwarded-user', 'A')
             .set('Content-Type', 'application/json')
@@ -594,7 +594,7 @@ describe('/userToSkillConnector', function() {
             .get('/userToSkillConnector/123')
             .reply(200, resultGetById)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -640,7 +640,7 @@ describe('/userToSkillConnector', function() {
             .get('/userToSkillConnector/123')
             .reply(200, resultGetById)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -685,7 +685,7 @@ describe('/userToSkillConnector', function() {
             .get('/userToSkillConnector/123')
             .reply(200, resultGetById)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -730,7 +730,7 @@ describe('/userToSkillConnector', function() {
             .get('/userToSkillConnector/123')
             .reply(200, resultGetById)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -759,7 +759,7 @@ describe('/userToSkillConnector', function() {
             .delete('/userToSkillConnector/123')
             .reply(204, {})
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -791,7 +791,7 @@ describe('/userToSkillConnector', function() {
             .delete('/userToSkillConnector/123')
             .reply(404, resultUserNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)

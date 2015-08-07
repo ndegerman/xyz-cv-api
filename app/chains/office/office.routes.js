@@ -16,9 +16,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get offices
+    // get offices by query
     routes.get('/', function(request, response) {
-        officeController.getAllOffices()
+        officeController.getOffices(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
