@@ -17,10 +17,33 @@ function validateUserToOfficeConnector(userToOfficeConnector) {
     });
 }
 
+function setUserToOfficeConnectorProperties(body) {
+    return function(userToOfficeConnector) {
+        return new Promise(function(resolve, reject) {
+            if (body.userId) {
+                return errorHandler.getHttpError(400)
+                    .then(reject);
+            }
+
+            userToOfficeConnector = utils.extend(userToOfficeConnector, body);
+            return resolve(userToOfficeConnector);
+        });
+    };
+}
+
 function getUserToOfficeConnectorTemplate() {
     return {
         userId: null,
         officeId: null
+    };
+}
+
+function setIdOnConnector(id) {
+    return function(userToOfficeConnector) {
+        return new Promise(function(resolve, reject) {
+            userToOfficeConnector._id = id;
+            return resolve(userToOfficeConnector);
+        });
     };
 }
 
@@ -52,6 +75,18 @@ exports.getUserToOfficeConnectorsByOfficeId = function(officeId) {
 
 exports.getAllUserToOfficeConnectors = function() {
     return userToOfficeConnectorDao.getAllUserToOfficeConnectors();
+};
+
+exports.getUserToOfficeConnectorById = function(id) {
+    return userToOfficeConnectorDao.getUserToOfficeConnectorById(id);
+};
+
+exports.updateUserToOfficeConnector = function(id, body, email) {
+    return exports.getUserToOfficeConnectorById(id)
+        .then(setUserToOfficeConnectorProperties(body))
+        .then(validateUserToOfficeConnector)
+        .then(setIdOnConnector(id))
+        .then(userToOfficeConnectorDao.updateUserToOfficeConnector);
 };
 
 exports.deleteUserToOfficeConnectorById = function(id) {

@@ -29,6 +29,14 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    //get userToOfficeConnector by id
+    routes.get('/:id', function(request, response) {
+        userToOfficeConnectorController.getUserToOfficeConnectorById(request.params.id)
+            .then(responseHandler.sendJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+
+    });
+
     // get userToOfficeConnectors for user
     routes.get('/user/:id', function(request, response) {
         userToOfficeConnectorController.getUserToOfficeConnectorsByUserId(request.params.id)
@@ -41,6 +49,14 @@ module.exports = function(routes) {
         userToOfficeConnectorController.getUserToOfficeConnectorsByOfficeId(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    // update a userToOfficeConnector given an id and an object
+    routes.put('/:id', function(request, response) {
+        userToOfficeConnectorController.updateUserToOfficeConnector(request.params.id, request.body, request.headers['x-forwarded-email'])
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+
     });
 
     // delete userToOfficeConnectors containing the given user id
