@@ -37,10 +37,10 @@ describe('/authentication', function() {
         }];
 
         nock(mockedUrl)
-            .get('/role')
+            .get('/role?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -84,7 +84,7 @@ describe('/authentication', function() {
                 })
                 .reply(200, resultPost)
 
-                .get('/user?email=a@softhouse.se')
+                .get('/user?email=a@softhouse.se&')
                 .reply(200, getUserByEmailResponse);
 
             request(url)
@@ -130,7 +130,7 @@ describe('/authentication', function() {
                 })
                 .reply(200, resultPost)
 
-                .get('/user?email=a@softhouse.se')
+                .get('/user?email=a@softhouse.se&')
                 .reply(200, getUserByEmailResponse);
 
             request(url)
@@ -176,7 +176,7 @@ describe('/authentication', function() {
                 })
                 .reply(200, resultPost)
 
-                .get('/user?email=a@softhouse.se')
+                .get('/user?email=a@softhouse.se&')
                 .reply(200, getUserByEmailResponse);
 
             request(url)
@@ -242,13 +242,13 @@ describe('/authentication', function() {
                 })
                 .reply(200, resultPost)
 
-                .get('/user?email=a@softhouse.se')
+                .get('/user?email=a@softhouse.se&')
                 .reply(200, getUserByEmailResponse)
 
-                .get('/role?name=user')
+                .get('/role?name=user&')
                 .reply(200, resultGetRole)
 
-                .get('/roleToAttributeConnector?roleId=123')
+                .get('/roleToAttributeConnector?roleId=123&')
                 .reply(200, resultGetConnectors)
 
                 .get('/attribute')
@@ -295,7 +295,7 @@ describe('/authentication', function() {
                 })
                 .reply(200, resultPost)
 
-                .get('/user?email=a@softhouse.se')
+                .get('/user?email=a@softhouse.se&')
                 .reply(200, getUserByEmailResponse);
 
             request(url)
@@ -356,13 +356,13 @@ describe('/authentication', function() {
                 })
                 .reply(200, resultPost)
 
-                .get('/user?email=a@softhouse.se')
+                .get('/user?email=a@softhouse.se&')
                 .reply(200, getUserByEmailResponse)
 
-                .get('/role?name=user')
+                .get('/role?name=user&')
                 .reply(200, resultGetRole)
 
-                .get('/roleToAttributeConnector?roleId=123')
+                .get('/roleToAttributeConnector?roleId=123&')
                 .reply(200, resultGetConnectors)
 
                 .get('/attribute')
@@ -432,13 +432,13 @@ describe('/authentication', function() {
                 })
                 .reply(200, resultPost)
 
-                .get('/user?email=a@softhouse.se')
+                .get('/user?email=a@softhouse.se&')
                 .reply(200, getUserByEmailResponse)
 
-                .get('/role?name=user')
+                .get('/role?name=user&')
                 .reply(200, resultGetRole)
 
-                .get('/roleToAttributeConnector?roleId=123')
+                .get('/roleToAttributeConnector?roleId=123&')
                 .reply(200, resultGetConnectors)
 
                 .get('/attribute')
@@ -505,13 +505,13 @@ describe('/authentication', function() {
                 })
                 .reply(200, resultPost)
 
-                .get('/user?email=a@softhouse.se')
+                .get('/user?email=a@softhouse.se&')
                 .reply(200, getUserByEmailResponse)
 
-                .get('/role?name=user')
+                .get('/role?name=user&')
                 .reply(200, resultGetRole)
 
-                .get('/roleToAttributeConnector?roleId=123')
+                .get('/roleToAttributeConnector?roleId=123&')
                 .reply(200, resultGetConnectors)
 
                 .get('/attribute')
@@ -579,13 +579,13 @@ describe('/authentication', function() {
                 })
                 .reply(200, resultPost)
 
-                .get('/user?email=a@softhouse.se')
+                .get('/user?email=a@softhouse.se&')
                 .reply(200, getUserByEmailResponse)
 
-                .get('/role?name=user')
+                .get('/role?name=user&')
                 .reply(200, resultGetRole)
 
-                .get('/roleToAttributeConnector?roleId=123')
+                .get('/roleToAttributeConnector?roleId=123&')
                 .reply(200, resultGetConnectors)
 
                 .get('/attribute')

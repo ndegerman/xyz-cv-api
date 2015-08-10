@@ -15,9 +15,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get all skillToSkillGroupConnectors
+    // get all skillToSkillGroupConnectors by query
     routes.get('/', function(request, response) {
-        skillToSkillGroupConnectorController.getAllSkillToSkillGroupConnectors()
+        skillToSkillGroupConnectorController.getSkillToSkillGroupConnectors(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

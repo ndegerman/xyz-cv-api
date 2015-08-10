@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var config = require('config');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 var url = config.API_URL + 'user';
 
@@ -47,22 +48,10 @@ exports.getUserById = function(id) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getUserByEmail = function(email) {
+exports.getUsers = function(query) {
     var options = {
         resolveWithFullResponse: true,
-        uri: url + '?email=' + email,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetMonoQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getAllUsers = function() {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url,
+        uri: url + utils.getQueryByObject(query),
         method: 'GET'
     };
 

@@ -5,6 +5,7 @@ var config = require('config');
 var Promise = require('bluebird');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 var url = config.API_URL + 'office';
 
@@ -21,18 +22,6 @@ exports.createNewOffice = function(office) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getOfficeByName = function(name) {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url + '?name=' + name,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetMonoQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
 exports.getOfficeById = function(id) {
     var options = {
         resolveWithFullResponse: true,
@@ -46,10 +35,10 @@ exports.getOfficeById = function(id) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getAllOffices = function() {
+exports.getOffices = function(query) {
     var options = {
         resolveWithFullResponse: true,
-        uri: url,
+        uri: url + utils.getQueryByObject(query),
         method: 'GET'
     };
 

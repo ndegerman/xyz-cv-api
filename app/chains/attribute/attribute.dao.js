@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var config = require('config');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 var url = config.API_URL + 'attribute';
 
@@ -34,22 +35,10 @@ exports.getAttributeById = function(id) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getAttributeByName = function(name) {
+exports.getAttributes = function(query) {
     var options = {
         resolveWithFullResponse: true,
-        uri: url + '?name=' + name,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetMonoQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
-exports.getAllAttributes = function() {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url,
+        uri: url + utils.getQueryByObject(query),
         method: 'GET'
     };
 

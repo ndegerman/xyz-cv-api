@@ -15,9 +15,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get assignments
+    // get assignments by query
     routes.get('/', function(request, response) {
-        assignmentController.getAllAssignments()
+        assignmentController.getAssignments(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

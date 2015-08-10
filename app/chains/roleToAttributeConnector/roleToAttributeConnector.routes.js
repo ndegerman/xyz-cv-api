@@ -15,9 +15,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get all roleToAttributeConnectors
+    // get roleToAttributeConnectors by query
     routes.get('/', function(request, response) {
-        roleToAttributeConnectorController.getAllRoleToAttributeConnectors()
+        roleToAttributeConnectorController.getRoleToAttributeConnectors(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
@@ -26,20 +26,6 @@ module.exports = function(routes) {
     routes.delete('/:id', function(request, response) {
         roleToAttributeConnectorController.deleteRoleToAttributeConnectorById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
-    // get roleToAttributeConnectors for role
-    routes.get('/role/:id', function(request, response) {
-        roleToAttributeConnectorController.getRoleToAttributeConnectorsByRoleId(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
-    // get roleToAttributeConnectors for attribute
-    routes.get('/attribute/:id', function(request, response) {
-        roleToAttributeConnectorController.getRoleToAttributeConnectorsByAttributeId(request.params.id)
-            .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 

@@ -60,16 +60,8 @@ exports.createUserToOfficeConnector = function(userToOfficeConnector) {
         .then(userToOfficeConnectorDao.createUserToOfficeConnector);
 };
 
-exports.getUserToOfficeConnectorsByUserId = function(userId) {
-    return userToOfficeConnectorDao.getUserToOfficeConnectorsByUserId(userId);
-};
-
-exports.getUserToOfficeConnectorsByOfficeId = function(officeId) {
-    return userToOfficeConnectorDao.getUserToOfficeConnectorsByOfficeId(officeId);
-};
-
-exports.getAllUserToOfficeConnectors = function() {
-    return userToOfficeConnectorDao.getAllUserToOfficeConnectors();
+exports.getUserToOfficeConnectors = function(query) {
+    return userToOfficeConnectorDao.getUserToOfficeConnectors(query);
 };
 
 exports.getUserToOfficeConnectorById = function(id) {

@@ -41,7 +41,7 @@ describe('/assignment', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -83,7 +83,7 @@ describe('/assignment', function() {
             .post('/assignment')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -120,7 +120,7 @@ describe('/assignment', function() {
             .post('/assignment')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -159,7 +159,7 @@ describe('/assignment', function() {
             })
             .reply(200, resultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -198,7 +198,7 @@ describe('/assignment', function() {
             .post('/assignment')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -236,7 +236,7 @@ describe('/assignment', function() {
             .post('/assignment')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -279,7 +279,7 @@ describe('/assignment', function() {
             .post('/assignment')
             .reply(200, badResultPost)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -310,10 +310,10 @@ describe('/assignment', function() {
         }];
 
         nock(mockedUrl)
-            .get('/assignment')
+            .get('/assignment?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -350,7 +350,7 @@ describe('/assignment', function() {
             .get('/assignment/1234')
             .reply(200, resultGetOne)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -382,7 +382,7 @@ describe('/assignment', function() {
             .get('/assignment/123')
             .reply(404, resultAssignmentNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -411,7 +411,7 @@ describe('/assignment', function() {
             .delete('/assignment/1234')
             .reply(204, {})
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)
@@ -443,7 +443,7 @@ describe('/assignment', function() {
             .delete('/assignment/123')
             .reply(404, resultAssignmentNotInDb)
 
-            .get('/user?email=a@softhouse.se')
+            .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
 
         request(url)

@@ -15,9 +15,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get attributes
+    // get attributes by query
     routes.get('/', function(request, response) {
-        attributeController.getAllAttributes()
+        attributeController.getAttributes(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

@@ -34,12 +34,8 @@ exports.getAttributeById = function(id) {
     return attributeDao.getAttributeById(id);
 };
 
-exports.getAttributeByName = function(name) {
-    return attributeDao.getAttributeByName(name);
-};
-
-exports.getAllAttributes = function() {
-    return attributeDao.getAllAttributes();
+exports.getAttributes = function(query) {
+    return attributeDao.getAttributes(query);
 };
 
 exports.deleteAttributeById = function(id) {

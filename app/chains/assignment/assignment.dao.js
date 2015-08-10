@@ -5,6 +5,7 @@ var config = require('config');
 var Promise = require('bluebird');
 var responseHandler = require('../../utils/response.handler');
 var errorHandler = require('../../utils/error.handler');
+var utils = require('../../utils/utils');
 
 var url = config.API_URL + 'assignment';
 
@@ -21,18 +22,6 @@ exports.createNewAssignment = function(assignment) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getAssignmentByName = function(name) {
-    var options = {
-        resolveWithFullResponse: true,
-        uri: url + '?name=' + name,
-        method: 'GET'
-    };
-
-    return request(options)
-        .then(responseHandler.parseGetMonoQuery)
-        .catch(errorHandler.throwDREAMSHttpError);
-};
-
 exports.getAssignmentById = function(id) {
     var options = {
         resolveWithFullResponse: true,
@@ -46,10 +35,10 @@ exports.getAssignmentById = function(id) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
-exports.getAllAssignments = function() {
+exports.getAssignments = function(query) {
     var options = {
         resolveWithFullResponse: true,
-        uri: url,
+        uri: url + utils.getQueryByObject(query),
         method: 'GET'
     };
 
