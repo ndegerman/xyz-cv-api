@@ -20,11 +20,6 @@ function validateUserToOfficeConnector(userToOfficeConnector) {
 function setUserToOfficeConnectorProperties(body) {
     return function(userToOfficeConnector) {
         return new Promise(function(resolve, reject) {
-            if (body.userId) {
-                return errorHandler.getHttpError(400)
-                    .then(reject);
-            }
-
             userToOfficeConnector = utils.extend(userToOfficeConnector, body);
             return resolve(userToOfficeConnector);
         });
