@@ -38,19 +38,19 @@ module.exports = function(routes) {
 
     });
 
-    // delete a user given an id
-    routes.delete('/:id', authentication.isAllowedOrSelf('canEditUser'), function(request, response) {
-        userController.deleteUserById(request.params.id)
-            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
     // update a user given an id and an object
     routes.put('/:id', authentication.isAllowedOrSelf('canEditUser'), authentication.checkForForbiddenFields(['hidden', 'email', 'role'], ['canEditUser']), function(request, response) {
         userController.updateUser(request.params.id, request.body, request.headers['x-forwarded-email'])
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 
+    });
+
+    // delete a user given an id
+    routes.delete('/:id', authentication.isAllowedOrSelf('canEditUser'), function(request, response) {
+        userController.deleteUserById(request.params.id)
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
     });
 
     return routes;

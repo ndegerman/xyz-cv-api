@@ -27,6 +27,11 @@ module.exports = function(routes) {
     });
 
     // get a file by the given id
+    routes.get('/thumbnail/:id', function(request, response) {
+        return responseHandler.sendThumbnailResponse(response)(request.params.id);
+    });
+
+    // get a file by the given id
     routes.get('/:id', function(request, response) {
         fileController.getFileById(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
@@ -40,11 +45,6 @@ module.exports = function(routes) {
             .then(fileController.deleteFileById)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
-    });
-
-    // get a file by the given id
-    routes.get('/thumbnail/:id', function(request, response) {
-        return responseHandler.sendThumbnailResponse(response)(request.params.id);
     });
 
     return routes;
