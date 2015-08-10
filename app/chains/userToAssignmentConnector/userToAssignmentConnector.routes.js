@@ -30,19 +30,19 @@ module.exports = function(routes) {
 
     });
 
-    // delete the userToAssignmentConnector with the given id
-    routes.delete('/:id', function(request, response) {
-        userToAssignmentConnectorController.deleteUserToAssignmentConnectorById(request.params.id)
-            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
     // update a userToAssignmentConnector given an id and an object
     routes.put('/:id', function(request, response) {
         userToAssignmentConnectorController.updateUserToAssignmentConnector(request.params.id, request.body, request.headers['x-forwarded-email'])
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 
+    });
+
+    // delete the userToAssignmentConnector with the given id
+    routes.delete('/:id', function(request, response) {
+        userToAssignmentConnectorController.deleteUserToAssignmentConnectorById(request.params.id)
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
     });
 
     // delete userToAssignmentConnectors containing the given user id

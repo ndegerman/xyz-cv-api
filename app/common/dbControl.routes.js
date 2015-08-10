@@ -534,10 +534,10 @@ function addSkillGroups() {
 
 function addConnectors() {
     var promises = [];
-    promises.push(roleController.getRole({name: 'admin'})
+    promises.push(roleController.getRoles({name: 'admin'})
         .then(connectAdminAndAttributes));
 
-    promises.push(roleController.getRole({name: 'user'})
+    promises.push(roleController.getRoles({name: 'user'})
         .then(connectUserAndAttributes));
 
     promises.push(userController.getUsers()
@@ -546,7 +546,7 @@ function addConnectors() {
     promises.push(userController.getUsers()
         .then(connectUsersAndRandomSkills));
 
-    promises.push(skillGroupController.getSkillGroup({name: 'technologies'})
+    promises.push(skillGroupController.getSkillGroups({name: 'technologies'})
         .then(connectSkillGroupAndSkills));
 
     promises.push(userController.getUsers()
@@ -557,13 +557,13 @@ function addConnectors() {
 
 function addConnectorsDefault() {
     var promises = [];
-    promises.push(roleController.getRole({name: 'admin'})
+    promises.push(roleController.getRoles({name: 'admin'})
         .then(connectAdminAndAttributes));
 
-    promises.push(roleController.getRole({name: 'user'})
+    promises.push(roleController.getRoles({name: 'user'})
         .then(connectUserAndAttributes));
 
-    promises.push(skillGroupController.getSkillGroup({name: 'technologies'})
+    promises.push(skillGroupController.getSkillGroups({name: 'technologies'})
         .then(connectSkillGroupAndSkills));
 
     return Promise.all(promises);
@@ -575,14 +575,14 @@ function connectUsersAndRandomSkills(users) {
         years: randomHandler.getYears
     };
 
-    return skillController.getAllSkills()
+    return skillController.getSkills()
         .then(function(skills) {
             return connectItemsToRandomItems(users, skills, 'userId', 'skillId', 0, userToSkillConnectorController.createUserToSkillConnector, config.DEMO.SKILL_ON_USER_PROBABILITY, extraFields);
         });
 }
 
 function connectUsersAndRandomAssignments(users) {
-    return skillController.getAllSkills()
+    return skillController.getSkills()
         .then(function(skills) {
             var extraFields = {
                 skills: randomHandler.getBinomailUniqueSkillIds(skills, config.DEMO.SKILL_ON_ASSIGNMENT_PROBABILITY),
@@ -591,7 +591,7 @@ function connectUsersAndRandomAssignments(users) {
                 description: faker.lorem.sentence
             };
 
-            return assignmentController.getAllAssignments()
+            return assignmentController.getAssignments()
                 .then(function(assignments) {
                     return connectItemsToRandomItems(users, assignments, 'userId', 'assignmentId', 0, userToAssignmentConnectorController.createUserToAssignmentConnector, config.DEMO.USER_ON_ASSIGNMENT_PROBABILITY, extraFields);
                 });
@@ -599,19 +599,19 @@ function connectUsersAndRandomAssignments(users) {
 }
 
 function connectUsersAndRandomOffice(users) {
-    return officeController.getAllOffices()
+    return officeController.getOffices()
         .then(function(offices) {
             return connectItemsToRandomItem(users, offices, 'userId', 'officeId', 0, userToOfficeConnectorController.createUserToOfficeConnector);
         });
 }
 
 function connectAdminAndAttributes(role) {
-    return attributeController.getAllAttributes()
+    return attributeController.getAttributes()
         .then(function(attributes) {
             return new Promise(function(resolve) {
                 var promises = [];
                 attributes.forEach(function(attribute) {
-                    promises.push(roleToAttributeConnectorController.createRoleToAttributeConnector({roleId: role._id, attributeId: attribute._id}));
+                    promises.push(roleToAttributeConnectorController.createRoleToAttributeConnector({roleId: role[0]._id, attributeId: attribute._id}));
                 });
 
                 return Promise.all(promises)
@@ -621,13 +621,13 @@ function connectAdminAndAttributes(role) {
 }
 
 function connectUserAndAttributes(role) {
-    return attributeController.getAllAttributes()
+    return attributeController.getAttributes()
         .then(function(attributes) {
             return new Promise(function(resolve) {
                 var promises = [];
                 attributes.forEach(function(attribute) {
                     if (isUserAttribute(attribute)) {
-                        promises.push(roleToAttributeConnectorController.createRoleToAttributeConnector({roleId: role._id, attributeId: attribute._id}));
+                        promises.push(roleToAttributeConnectorController.createRoleToAttributeConnector({roleId: role[0]._id, attributeId: attribute._id}));
                     }
                 });
 
@@ -638,12 +638,12 @@ function connectUserAndAttributes(role) {
 }
 
 function connectSkillGroupAndSkills(skillGroup) {
-    return skillController.getAllSkills()
+    return skillController.getSkills()
         .then(function(skills) {
             return new Promise(function(resolve) {
                 var promises = [];
                 skills.forEach(function(skill) {
-                    promises.push(skillToSkillGroupConnectorController.createSkillToSkillGroupConnector({skillId: skill._id, skillGroupId: skillGroup._id}));
+                    promises.push(skillToSkillGroupConnectorController.createSkillToSkillGroupConnector({skillId: skill._id, skillGroupId: skillGroup[0]._id}));
                 });
 
                 return Promise.all(promises)

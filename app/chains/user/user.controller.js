@@ -19,7 +19,7 @@ function validateUser(user) {
 }
 
 function getUserTemplate(name, email) {
-    name = name === undefined ? name : name.replace('xx.','').replace('.', ' ');
+    name = name === undefined ? name : name.replace('xx.', '').replace('.', ' ');
     return {
         email: email,
         name: name,
@@ -90,7 +90,7 @@ exports.createUserIfNonexistent = function(name, email) {
                         exports.createNewUser(getUserTemplate(name, email))
                             .then(resolve);
                     }
-                })
+                });
             }).then(resolve);
     });
 };

@@ -22,13 +22,6 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // delete the userToOfficeConnector with the given id
-    routes.delete('/:id', function(request, response) {
-        userToOfficeConnectorController.deleteUserToOfficeConnectorById(request.params.id)
-            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
-            .catch(responseHandler.sendErrorResponse(response));
-    });
-
     //get userToOfficeConnector by id
     routes.get('/:id', function(request, response) {
         userToOfficeConnectorController.getUserToOfficeConnectorById(request.params.id)
@@ -43,6 +36,13 @@ module.exports = function(routes) {
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
 
+    });
+
+    // delete the userToOfficeConnector with the given id
+    routes.delete('/:id', function(request, response) {
+        userToOfficeConnectorController.deleteUserToOfficeConnectorById(request.params.id)
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
     });
 
     // delete userToOfficeConnectors containing the given user id
