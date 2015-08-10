@@ -208,8 +208,6 @@ function getRoleAttributeObjects(role) {
 
         Promise.all([connectors, attributes])
             .then(function() {
-                //console.log(attributes.value());
-                //console.log(connectors.value());
                 return utils.extractPropertiesFromConnectors('attributeId', connectors.value())
                     .then(utils.matchListAndObjectIds(attributes.value()))
                     .then(resolve);
@@ -236,7 +234,7 @@ function getUserId(email) {
 
         if (!userId) {
             return userController.getUsers({email: email})
-                .then(getIdfromUser)
+                .then(getIdFromUserList)
                 .then(setEmailToIdCache(email))
                 .then(resolve);
         } else {
@@ -254,9 +252,9 @@ function setEmailToIdCache(email) {
     };
 }
 
-function getIdfromUser(user) {
+function getIdFromUserList(user) {
     return new Promise(function(resolve) {
-        return resolve(user._id);
+        return resolve(user[0]._id);
     });
 }
 
