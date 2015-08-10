@@ -19,6 +19,7 @@ function validateUser(user) {
 }
 
 function getUserTemplate(name, email) {
+    name = name === undefined ? name : name.replace('xx.','').replace('.', ' ');
     return {
         email: email,
         name: name,
@@ -81,14 +82,16 @@ exports.createNewUser = function(user) {
 exports.createUserIfNonexistent = function(name, email) {
     return new Promise(function(resolve) {
         return exports.getUsers({email: email})
-            .then(resolve)
-            .catch(function() {
+            .then(function(users) {
                 return new Promise(function(resolve) {
-                    exports.createNewUser(getUserTemplate(name, email))
-                    .then(resolve);
+                    if (users[0]) {
+                        return resolve(users[0]);
+                    } else {
+                        exports.createNewUser(getUserTemplate(name, email))
+                            .then(resolve);
+                    }
                 })
-                    .then(resolve);
-            });
+            }).then(resolve);
     });
 };
 

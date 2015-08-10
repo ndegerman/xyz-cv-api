@@ -176,7 +176,7 @@ function getUserRole(email) {
 
 function setUserRoleCache(user) {
     return new Promise(function(resolve) {
-        cacheHandler.setToUserRoleCache(user[0].email, user[0].role);
+        cacheHandler.setToUserRoleCache(user.email, user.role);
         return resolve(user.role);
     });
 }
