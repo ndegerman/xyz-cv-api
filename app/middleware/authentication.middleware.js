@@ -5,6 +5,7 @@
  */
 var responseHandler = require('../utils/response.handler');
 var authenticationHandler = require('../utils/authentication.handler');
+var userController = require('../chains/user/user.controller');
 var utils = require('../utils/utils');
 var Promise = require('bluebird');
 
@@ -22,9 +23,9 @@ exports.authentication = function(request, response, next) {
         .catch(responseHandler.sendErrorResponse(response));
 };
 
-exports.isAllowedOrSelf = function(attribute) {
+exports.isAllowedOrSelf = function(attribute, firstField, secondField) {
     return function(request, response, next) {
-        return authenticationHandler.isSelf(request.headers['x-forwarded-email'], request.params.id)
+        return authenticationHandler.isSelf(request.headers['x-forwarded-email'], request[firstField][secondField])
             .then(function(result) {
                 if (result) {
                     return next();
@@ -47,6 +48,24 @@ exports.isAllowed = function(attribute) {
                 }
             })
             .catch(responseHandler.sendUnauthorizedResponse(response));
+    };
+};
+
+exports.isAllowedOrOwnConnector = function(attribute, getFunction) {
+    return function(request, response, next) {
+        var connector = getFunction(request.params.id);
+        var user = userController.getUsers({email: request.headers['x-forwarded-email']});
+
+        return Promise.all([connector, user])
+            .then(function() {
+                var connectorUserId = connector.value().userId;
+                var userId = user.value()[0]._id;
+                if ((userId && connectorUserId === userId) && ((request.body.userId === userId) || (!request.body.userId))) {
+                    return next();
+                } else {
+                    return exports.isAllowed(attribute)(request, response, next);
+                }
+            });
     };
 };
 

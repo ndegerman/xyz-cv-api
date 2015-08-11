@@ -31,21 +31,7 @@ function getUserToSkillConnectorTemplate() {
 function setUserToSkillConnectorProperties(body) {
     return function(userToSkillConnector) {
         return new Promise(function(resolve, reject) {
-            if (body.userId) {
-                return errorHandler.getHttpError(400)
-                    .then(reject);
-            }
-
             userToSkillConnector = utils.extend(userToSkillConnector, body);
-            return resolve(userToSkillConnector);
-        });
-    };
-}
-
-function setIdOnConnector(id) {
-    return function(userToSkillConnector) {
-        return new Promise(function(resolve, reject) {
-            userToSkillConnector._id = id;
             return resolve(userToSkillConnector);
         });
     };
@@ -89,7 +75,7 @@ exports.updateUserToSkillConnector = function(id, body, email) {
     return exports.getUserToSkillConnectorById(id)
         .then(setUserToSkillConnectorProperties(body))
         .then(validateUserToSkillConnector)
-        .then(setIdOnConnector(id))
+        .then(utils.setIdOnBody(id))
         .then(userToSkillConnectorDao.updateUserToSkillConnector);
 };
 

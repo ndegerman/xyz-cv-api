@@ -8,11 +8,20 @@ var config = require('config');
 var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
+var cacheHandler = require('../app/utils/cache.handler');
 
 describe('/userToOfficeConnector', function() {
 
+    beforeEach(function(done) {
+        cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
+        cacheHandler.setToRoleAttributesCache('admin', ['canEditUser', 'canViewUser']);
+        done();
+    });
+
     afterEach(function(done) {
         nock.cleanAll();
+        cacheHandler.clearUserRoleCache();
+        cacheHandler.clearRoleAttributesCache();
         done();
     });
 
@@ -574,6 +583,7 @@ describe('/userToOfficeConnector', function() {
         };
 
         nock(mockedUrl)
+            .persist()
             .put('/userToOfficeConnector/123')
             .reply(204)
 
@@ -602,56 +612,23 @@ describe('/userToOfficeConnector', function() {
 
     //===============================================================================
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when updating a userToOfficeConnector with a userId', function(done) {
-        var result = msg.INVALID_JSON_OBJECT;
-
-        var body = {
-            userId: '123'
-        };
+    it('should reply with HTTP status code 200 and a correctly formatted string when deleting a userToOfficeConnector by its id', function(done) {
+        var resultDelete = msg.SUCCESS_DELETE;
 
         var resultGetById = {
             _id: '123',
-            skillId: '456',
-            userId: '1234',
+            officeId: '456',
+            userId: '789',
             createdAt: '2015-06-15T11:36:08.114Z',
             updatedAt: '2015-06-15T11:36:08.114Z'
         };
 
         nock(mockedUrl)
-            .put('/userToOfficeConnector/123')
-            .reply(204)
+            .delete('/userToOfficeConnector/123')
+            .reply(204, {})
 
             .get('/userToOfficeConnector/123')
             .reply(200, resultGetById)
-
-            .get('/user?email=a@softhouse.se&')
-            .reply(200, getUserByEmailResponse);
-
-        request(url)
-            .put('/userToOfficeConnector/123')
-            .set('x-forwarded-email', 'a@softhouse.se')
-            .set('x-forwarded-user', 'A')
-            .set('Content-Type', 'application/json')
-            .send(body)
-
-            // end handles the response
-            .end(function(err, res) {
-                expect(err).to.exist;
-                expect(res).to.exist;
-                expect(res.status).to.equal(400);
-                expect(res.text).to.equal(result);
-                done();
-            });
-    });
-
-    //===============================================================================
-
-    it('should reply with HTTP status code 200 and a correctly formatted string when deleting a userToOfficeConnector by its id', function(done) {
-        var resultDelete = msg.SUCCESS_DELETE;
-
-        nock(mockedUrl)
-            .delete('/userToOfficeConnector/123')
-            .reply(204, {})
 
             .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
@@ -681,9 +658,20 @@ describe('/userToOfficeConnector', function() {
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a userToOfficeConnector not in the database', function(done) {
         var resultUserNotInDb = msg.NO_SUCH_ITEM;
 
+        var resultGetById = {
+            _id: '123',
+            officeId: '456',
+            userId: '789',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
         nock(mockedUrl)
             .delete('/userToOfficeConnector/123')
             .reply(404, resultUserNotInDb)
+
+            .get('/userToOfficeConnector/123')
+            .reply(200, resultGetById)
 
             .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);

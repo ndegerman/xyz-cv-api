@@ -73,6 +73,7 @@ exports.updateUserToAssignmentConnector = function(id, body, email) {
     return exports.getUserToAssignmentConnectorById(id)
         .then(setUserToAssignmentConnectorProperties(body))
         .then(validateUserToAssignmentConnector)
+        .then(utils.setIdOnBody(id))
         .then(userToAssignmentConnectorDao.updateUserToAssignmentConnector);
 };
 

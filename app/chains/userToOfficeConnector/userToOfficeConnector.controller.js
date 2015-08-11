@@ -33,15 +33,6 @@ function getUserToOfficeConnectorTemplate() {
     };
 }
 
-function setIdOnConnector(id) {
-    return function(userToOfficeConnector) {
-        return new Promise(function(resolve, reject) {
-            userToOfficeConnector._id = id;
-            return resolve(userToOfficeConnector);
-        });
-    };
-}
-
 exports.assignOfficesToUser = function(offices, userId) {
     var promises = [];
     offices.forEach(function(officeId) {
@@ -72,7 +63,7 @@ exports.updateUserToOfficeConnector = function(id, body, email) {
     return exports.getUserToOfficeConnectorById(id)
         .then(setUserToOfficeConnectorProperties(body))
         .then(validateUserToOfficeConnector)
-        .then(setIdOnConnector(id))
+        .then(utils.setIdOnBody(id))
         .then(userToOfficeConnectorDao.updateUserToOfficeConnector);
 };
 

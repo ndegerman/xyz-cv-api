@@ -8,11 +8,20 @@ var config = require('config');
 var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
+var cacheHandler = require('../app/utils/cache.handler');
 
 describe('/userToAssignmentConnector', function() {
 
+    beforeEach(function(done) {
+        cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
+        cacheHandler.setToRoleAttributesCache('admin', ['canEditUser', 'canViewUser']);
+        done();
+    });
+
     afterEach(function(done) {
         nock.cleanAll();
+        cacheHandler.clearUserRoleCache();
+        cacheHandler.clearRoleAttributesCache();
         done();
     });
 
@@ -531,9 +540,16 @@ describe('/userToAssignmentConnector', function() {
     it('should reply with HTTP status code 200 and a correctly formatted string when deleting a userToAssignmentConnector by its id', function(done) {
         var resultDelete = msg.SUCCESS_DELETE;
 
+        var userToAssignmentConnector = {
+            userId: '123'
+        };
+
         nock(mockedUrl)
             .delete('/userToAssignmentConnector/123')
             .reply(204, {})
+
+            .get('/userToAssignmentConnector/123')
+            .reply(200, userToAssignmentConnector)
 
             .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
@@ -563,9 +579,16 @@ describe('/userToAssignmentConnector', function() {
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a userToAssignmentConnector not in the database', function(done) {
         var resultUserNotInDb = msg.NO_SUCH_ITEM;
 
+        var userToAssignmentConnector = {
+            userId: '123'
+        };
+
         nock(mockedUrl)
             .delete('/userToAssignmentConnector/123')
             .reply(404, resultUserNotInDb)
+
+            .get('/userToAssignmentConnector/123')
+            .reply(200, userToAssignmentConnector)
 
             .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);

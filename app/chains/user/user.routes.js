@@ -12,7 +12,7 @@ var utils = require('../../utils/utils');
 module.exports = function(routes) {
 
     // get users
-    routes.get('/', function(request, response) {
+    routes.get('/', authentication.isAllowed('canViewUser'), function(request, response) {
         userController.getUsers(request.query)
             .then(authenticationHandler.filterHiddenEntities(request.headers['x-forwarded-email'], ['canEditUser']))
             .then(authenticationHandler.trimManyByattributes(request.headers['x-forwarded-email'], ['canViewUser', 'canEditUser']))
@@ -29,7 +29,7 @@ module.exports = function(routes) {
     });
 
     //get user by id
-    routes.get('/:id', function(request, response) {
+    routes.get('/:id', authentication.isAllowed('canViewUser'), function(request, response) {
         userController.getUserById(request.params.id)
             .then(authenticationHandler.blockHidden(request.headers['x-forwarded-email'], ['canEditUser']))
             .then(authenticationHandler.trimByAttributes(request.headers['x-forwarded-email'], ['canViewUser', 'canEditUser']))
@@ -39,7 +39,7 @@ module.exports = function(routes) {
     });
 
     // update a user given an id and an object
-    routes.put('/:id', authentication.isAllowedOrSelf('canEditUser'), authentication.checkForForbiddenFields(['hidden', 'email', 'role'], ['canEditUser']), function(request, response) {
+    routes.put('/:id', authentication.isAllowedOrSelf('canEditUser', 'params', 'id'), authentication.checkForForbiddenFields(['hidden', 'email', 'role'], ['canEditUser']), function(request, response) {
         userController.updateUser(request.params.id, request.body, request.headers['x-forwarded-email'])
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
@@ -47,7 +47,7 @@ module.exports = function(routes) {
     });
 
     // delete a user given an id
-    routes.delete('/:id', authentication.isAllowedOrSelf('canEditUser'), function(request, response) {
+    routes.delete('/:id', authentication.isAllowedOrSelf('canEditUser', 'params', 'id'), function(request, response) {
         userController.deleteUserById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
