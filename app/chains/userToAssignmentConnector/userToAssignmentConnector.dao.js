@@ -54,7 +54,7 @@ exports.updateUserToAssignmentConnector = function(userToAssignmentConnector) {
         method: 'PUT',
         json: userToAssignmentConnector
     };
-    console.log(options);
+
     return request(options)
         .then(responseHandler.parsePut)
         .catch(errorHandler.throwDREAMSHttpError);
