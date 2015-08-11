@@ -5,11 +5,12 @@
  */
 var attributeController = require('./attribute.controller');
 var responseHandler = require('../../utils/response.handler');
+var authentication = require('../../middleware/authentication.middleware');
 
 module.exports = function(routes) {
 
     // create an attribute
-    routes.post('/', function(request, response) {
+    routes.post('/', authentication.isAllowed('canEditAttribute'), function(request, response) {
         attributeController.createNewAttribute(request.body)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
@@ -30,7 +31,7 @@ module.exports = function(routes) {
     });
 
     // delete an attribute given an id
-    routes.delete('/:id', function(request, response) {
+    routes.delete('/:id', authentication.isAllowed('canEditAttribute'), function(request, response) {
         attributeController.deleteAttributeById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));

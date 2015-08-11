@@ -14,7 +14,7 @@ describe('/office', function() {
 
     beforeEach(function(done) {
         cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
-        cacheHandler.setToRoleAttributesCache('admin', ['canEditOffice']);
+        cacheHandler.setToRoleAttributesCache('admin', ['canEditOffice', 'canViewOffice']);
         done();
     });
 

@@ -17,14 +17,14 @@ module.exports = function(routes) {
     });
 
     // get offices by query
-    routes.get('/', function(request, response) {
+    routes.get('/', authentication.isAllowed('canViewOffice'), function(request, response) {
         officeController.getOffices(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     // get an office by the given id
-    routes.get('/:id', function(request, response) {
+    routes.get('/:id', authentication.isAllowed('canViewOffice'), function(request, response) {
         officeController.getOfficeById(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));

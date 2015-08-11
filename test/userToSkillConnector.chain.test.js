@@ -8,11 +8,20 @@ var config = require('config');
 var msg = require('../app/utils/message.handler');
 var url = 'localhost:' + config.PORT;
 var mockedUrl = config.API_URL;
+var cacheHandler = require('../app/utils/cache.handler');
 
 describe('/userToSkillConnector', function() {
 
+    beforeEach(function(done) {
+        cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
+        cacheHandler.setToRoleAttributesCache('admin', ['canEditUser', 'canViewUser']);
+        done();
+    });
+
     afterEach(function(done) {
         nock.cleanAll();
+        cacheHandler.clearUserRoleCache();
+        cacheHandler.clearRoleAttributesCache();
         done();
     });
 
@@ -588,6 +597,7 @@ describe('/userToSkillConnector', function() {
         };
 
         nock(mockedUrl)
+            .persist()
             .put('/userToSkillConnector/123')
             .reply(204)
 
@@ -634,6 +644,7 @@ describe('/userToSkillConnector', function() {
         };
 
         nock(mockedUrl)
+            .persist()
             .put('/userToSkillConnector/123')
             .reply(204)
 
@@ -679,6 +690,7 @@ describe('/userToSkillConnector', function() {
         };
 
         nock(mockedUrl)
+            .persist()
             .put('/userToSkillConnector/123')
             .reply(204)
 
@@ -724,6 +736,7 @@ describe('/userToSkillConnector', function() {
         };
 
         nock(mockedUrl)
+            .persist()
             .put('/userToSkillConnector/123')
             .reply(204)
 
@@ -755,9 +768,21 @@ describe('/userToSkillConnector', function() {
     it('should reply with HTTP status code 200 and a correctly formatted string when deleting a userToSkillConnector by its id', function(done) {
         var resultDelete = msg.SUCCESS_DELETE;
 
+        var resultGetById = {
+            _id: '123',
+            skillId: '456',
+            userId: '789',
+            level: '3',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
         nock(mockedUrl)
             .delete('/userToSkillConnector/123')
             .reply(204, {})
+
+            .get('/userToSkillConnector/123')
+            .reply(200, resultGetById)
 
             .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);
@@ -787,9 +812,21 @@ describe('/userToSkillConnector', function() {
     it('should reply with HTTP status code 404 and a correctly formatted string when deleting a userToSkillConnector not in the database', function(done) {
         var resultUserNotInDb = msg.NO_SUCH_ITEM;
 
+        var resultGetById = {
+            _id: '123',
+            skillId: '456',
+            userId: '789',
+            level: '3',
+            createdAt: '2015-06-15T11:36:08.114Z',
+            updatedAt: '2015-06-15T11:36:08.114Z'
+        };
+
         nock(mockedUrl)
             .delete('/userToSkillConnector/123')
             .reply(404, resultUserNotInDb)
+
+            .get('/userToSkillConnector/123')
+            .reply(200, resultGetById)
 
             .get('/user?email=a@softhouse.se&')
             .reply(200, getUserByEmailResponse);

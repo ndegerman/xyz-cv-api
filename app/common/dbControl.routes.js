@@ -491,12 +491,42 @@ function addAttributes() {
         },
         {
             name: 'canEditUser'
+        },
+        {
+            name: 'canViewAssignment'
+        },
+        {
+            name: 'canEditAssignment'
+        },
+        {
+            name: 'canEditAttribute'
+        },
+        {
+            name: 'canViewFile'
+        },
+        {
+            name: 'canEditFile'
+        },
+        {
+            name: 'canEditRole'
+        },
+        {
+            name: 'canViewSkill'
+        },
+        {
+            name: 'canEditSkill'
+        },
+        {
+            name: 'canEditSkillGroup'
         }
     ];
 
     userAttributes = [
         'canViewOffice',
-        'canViewUser'
+        'canViewUser',
+        'canViewAssignment',
+        'canViewFile',
+        'canViewSkill'
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));

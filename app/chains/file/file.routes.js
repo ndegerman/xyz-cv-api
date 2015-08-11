@@ -7,11 +7,12 @@
 var responseHandler = require('../../utils/response.handler');
 var fileHandler = require('../../utils/file.handler');
 var fileController = require('./file.controller');
+var authentication = require('../../middleware/authentication.middleware');
 
 module.exports = function(routes) {
 
     //post a file
-    routes.post('/', function(request, response) {
+    routes.post('/', authentication.isAllowed('canViewFile'), function(request, response) {
         fileHandler.checkIfSuccess(request, response)
             .then(fileController.createNewFile)
             .then(responseHandler.sendSuccessUploadJsonResponse(response))
@@ -20,26 +21,26 @@ module.exports = function(routes) {
     });
 
     // get files by query
-    routes.get('/', function(request, response) {
+    routes.get('/', authentication.isAllowed('canViewFile'), function(request, response) {
         fileController.getFiles(request.query)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     // get a file by the given id
-    routes.get('/thumbnail/:id', function(request, response) {
+    routes.get('/thumbnail/:id', authentication.isAllowed('canViewFile'), function(request, response) {
         return responseHandler.sendThumbnailResponse(response)(request.params.id);
     });
 
     // get a file by the given id
-    routes.get('/:id', function(request, response) {
+    routes.get('/:id', authentication.isAllowed('canViewFile'), function(request, response) {
         fileController.getFileById(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     // delete a file in both api and dao given an id
-    routes.delete('/:id', function(request, response) {
+    routes.delete('/:id', authentication.isAllowed('canEditFile'), function(request, response) {
         fileController.getFileById(request.params.id)
             .then(fileHandler.deleteFile)
             .then(fileController.deleteFileById)

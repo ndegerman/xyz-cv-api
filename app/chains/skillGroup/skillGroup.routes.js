@@ -3,13 +3,14 @@
 /**
  * Module dependencies.
  */
+var authentication = require('../../middleware/authentication.middleware');
 var skillGroupController = require('./skillGroup.controller');
 var responseHandler = require('../../utils/response.handler');
 
 module.exports = function(routes) {
 
     // create a skillGroup
-    routes.post('/', function(request, response) {
+    routes.post('/', authentication.isAllowed('canEditSkillGroup'), function(request, response) {
         skillGroupController.createNewSkillGroup(request.body)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
@@ -30,7 +31,7 @@ module.exports = function(routes) {
     });
 
     // delete a skillGroup given an id
-    routes.delete('/:id', function(request, response) {
+    routes.delete('/:id', authentication.isAllowed('canEditSkillGroup'), function(request, response) {
         skillGroupController.deleteSkillGroupById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));

@@ -16,7 +16,7 @@ describe('/user', function() {
 
     beforeEach(function(done) {
         cacheHandler.setToUserRoleCache('a@softhouse.se', 'admin');
-        cacheHandler.setToRoleAttributesCache('admin', ['canEditProfile']);
+        cacheHandler.setToRoleAttributesCache('admin', ['canEditUser', 'canViewUser']);
         cacheHandler.setToEmailIdCache('a@softhouse.se', '1234');
         done();
     });
@@ -48,12 +48,38 @@ describe('/user', function() {
             updatedAt: '2015-06-09T15:05:09.352Z'
         }];
 
+        var getRole = [{
+            name: 'admin',
+            _id: '123'
+        }];
+
+        var getConnectors = [{
+            roleId: '123',
+            attributeId: '234',
+            _id: '345'
+        }];
+
+        var getAttributes = [{
+            _id: '234',
+            name: 'canViewUser'
+        }]
+
         nock(mockedUrl)
-            .get('/user')
+            .persist()
+            .get('/user?')
             .reply(200, resultAllGet)
 
-            .get('/user?email=a@softhouse.se')
-            .reply(200, getUserByEmailResponse);
+            .get('/user?email=a@softhouse.se&')
+            .reply(200, getUserByEmailResponse)
+
+            .get('/role?name=admin&')
+            .reply(200, getRole)
+
+            .get('/roleToAttributeConnector?roleId=123&')
+            .reply(200, getConnectors)
+
+            .get('/attribute')
+            .reply(200, getAttributes);
 
         request(url)
             .get('/user')
@@ -114,7 +140,7 @@ describe('/user', function() {
 
     //===============================================================================
 
-    it('8 should reply with HTTP status code 200 and a correctly formatted JSON object when getting the current user', function(done) {
+    it('should reply with HTTP status code 200 and a correctly formatted JSON object when getting the current user', function(done) {
         var resultGetOne = getUserByEmailResponse[0];
 
         nock(mockedUrl)
@@ -236,11 +262,11 @@ describe('/user', function() {
 
     //===============================================================================
 
-    it('should reply with HTTP status code 204 and a correctly formatted string when updating a user\'s role', function(done) {
+    it('should reply with HTTP status code 204 and a correctly formatted string when updating a user\'s name', function(done) {
         var resultPut = msg.SUCCESS_UPDATE;
 
         var body = {
-            role: 'newRole'
+            name: 'newName'
         };
 
         var user = {
@@ -281,14 +307,14 @@ describe('/user', function() {
 
     //===============================================================================
 
-    it('should reply with HTTP status code 400 and a correctly formatted string when updating a user\'s role not in database', function(done) {
+    it('should reply with HTTP status code 400 and a correctly formatted string when updating a user\'s name not in database', function(done) {
 
         var resultPutNotInDb = msg.NO_SUCH_ITEM;
 
         var resultPut = msg.SUCCESS_UPDATE;
 
         var body = {
-            role: 'newRole'
+            name: 'newName'
         };
 
         var user = {

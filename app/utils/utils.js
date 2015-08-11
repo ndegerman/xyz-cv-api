@@ -159,6 +159,15 @@ exports.returnFirstIndex = function(list) {
     });
 };
 
+exports.setIdOnBody = function(id) {
+    return function(body) {
+        return new Promise(function(resolve, reject) {
+            body._id = id;
+            return resolve(body);
+        });
+    };
+};
+
 // HELPER
 // ============================================================================
 
