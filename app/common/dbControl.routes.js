@@ -58,6 +58,13 @@ module.exports = function(routes) {
     });
 
     routes.post('/default', function(request, response) {
+        bar = new ProgressBar('[:bar] :percent', {
+            total: 1,
+            incomplete: ' ',
+            width: 20,
+            clear: true
+        });
+
         addAllDefault()
             .then(addConnectorsDefault)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
@@ -426,7 +433,7 @@ function addSkills() {
 }
 
 function addSkillsDefault() {
-    var skills = randomHandler.getListofDefaultSkillAbbreviations();
+    var skills = randomHandler.getListOfDefaultSkillAbbreviations();
     return Promise.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
 
 }
