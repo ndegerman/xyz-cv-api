@@ -493,7 +493,9 @@ function addAttributes() {
                 'ICEPhone',
                 'address',
                 'city',
-                'ZIP'
+                'ZIP',
+                'endDateOfEmployment',
+                'startDateOfEmployment'
             ]
         },
         {
