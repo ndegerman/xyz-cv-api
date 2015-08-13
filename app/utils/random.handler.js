@@ -166,6 +166,10 @@ exports.getCertificates = function() {
     return list;
 };
 
+exports.getIdNumber = function() {
+    return 190000000000 + randomInt(9999999999);
+};
+
 function getRandomCertificatePrefix() {
     var list = [
         'Bachelor of ',
