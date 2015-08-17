@@ -270,7 +270,6 @@ exports.getListOfDefaultSkillAbbreviations = function() {
     {name: 'C++', icon: 'devicon-cplusplus-plain'},
     {name: 'C#', icon: 'devicon-csharp-plain'},
     {name: 'Debian', icon: 'devicon-debian-plain'},
-    {name: 'DropWizard', icon: null},
     {name: 'Django', icon: 'devicon-django-plain'},
     {name: 'Docker', icon: 'devicon-docker-plain'},
     {name: 'Doctrine', icon: 'devicon-doctrine-plain'},
