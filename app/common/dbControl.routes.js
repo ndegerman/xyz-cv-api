@@ -478,6 +478,9 @@ function addAttributes() {
         },
         {
             name: 'canEditSkillGroup'
+        },
+        {
+            name: 'canViewCompetence'
         }
     ];
 
