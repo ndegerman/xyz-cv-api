@@ -24,8 +24,6 @@ var authentication = require('../middleware/authentication.middleware');
 var faker = require('faker');
 var config = require('config');
 var Promise = require('bluebird');
-var ProgressBar = require('progress');
-var bar;
 var userAttributes;
 
 module.exports = function(routes) {
@@ -34,13 +32,6 @@ module.exports = function(routes) {
 
     // setup demo data
     routes.post('/demo-data', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
-        bar = new ProgressBar('[:bar] :percent', {
-            total: 4 * config.DEMO.USER_LIMIT + config.DEMO.NUMBER_OF_SKILLS,
-            incomplete: ' ',
-            width: 20,
-            clear: true
-        });
-
         addAll()
             .then(addConnectors)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
@@ -48,26 +39,12 @@ module.exports = function(routes) {
     });
 
     routes.delete('/purge', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
-        bar = new ProgressBar('[:bar] :percent', {
-            total: 12,
-            incomplete: ' ',
-            width: 20,
-            clear: true
-        });
-
         purgeAll()
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     routes.post('/default', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
-        bar = new ProgressBar('[:bar] :percent', {
-            total: 1,
-            incomplete: ' ',
-            width: 20,
-            clear: true
-        });
-
         addAllDefault()
             .then(addConnectorsDefault)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
@@ -105,7 +82,6 @@ function purgeUsers() {
             .then(function(users) {
                 return Promise.all(applyDeleteOnItemRec(users, 0, userController.deleteUserById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -119,7 +95,6 @@ function purgeRoles() {
             .then(function(roles) {
                 return Promise.all(applyDeleteOnItemRec(roles, 0, roleController.deleteRoleById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -133,7 +108,6 @@ function purgeAttributes() {
             .then(function(attributes) {
                 return Promise.all(applyDeleteOnItemRec(attributes, 0, attributeController.deleteAttributeById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -147,7 +121,6 @@ function purgeSkills() {
             .then(function(skills) {
                 return Promise.all(applyDeleteOnItemRec(skills, 0, skillController.deleteSkillById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -161,7 +134,6 @@ function purgeOffices() {
             .then(function(offices) {
                 return Promise.all(applyDeleteOnItemRec(offices, 0, officeController.deleteOfficeById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -175,7 +147,6 @@ function purgeSkillGroups() {
             .then(function(skillGroups) {
                 return Promise.all(applyDeleteOnItemRec(skillGroups, 0, skillGroupController.deleteSkillGroupById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -189,7 +160,6 @@ function purgeAssignments() {
             .then(function(assignments) {
                 return Promise.all(applyDeleteOnItemRec(assignments, 0, assignmentController.deleteAssignmentById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -203,7 +173,6 @@ function purgeUserToSkillConnectors() {
             .then(function(userToSkillConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToSkillConnectors, 0, userToSkillConnectorController.deleteUserToSkillConnectorById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -217,7 +186,6 @@ function purgeRoleToAttributeConnectors() {
             .then(function(roleToAttributeConnectors) {
                 return Promise.all(applyDeleteOnItemRec(roleToAttributeConnectors, 0, roleToAttributeConnectorController.deleteRoleToAttributeConnectorById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -231,7 +199,6 @@ function purgeSkillToSkillGroupConnectors() {
             .then(function(skillToSkillGroupConnectors) {
                 return Promise.all(applyDeleteOnItemRec(skillToSkillGroupConnectors, 0, skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -245,7 +212,6 @@ function purgeUserToOfficeConnectors() {
             .then(function(userToOfficeConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToOfficeConnectors, 0, userToOfficeConnectorController.deleteUserToOfficeConnectorById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -259,7 +225,6 @@ function purgeUserToAssignmentConnectors() {
             .then(function(userToAssignmentConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToAssignmentConnectors, 0, userToAssignmentConnectorController.deleteUserToAssignmentConnectorById))
                     .then(function(res) {
-                        bar.tick();
                         return res;
                     })
                     .then(resolve);
@@ -687,7 +652,6 @@ function applyAddOnItemsRec(items, index, applyFunction) {
             return resolve(items);
         }
 
-        bar.tick();
         return applyFunction(items[index])
             .then(function() {
                 index++;
@@ -734,7 +698,6 @@ function connectItemsToRandomItems(items, connectToItems, itemsProp, connectToIt
 
         return connectOneToAll(items[index], uniqueConnectToItems, itemsProp, connectToItemsProp, 0, applyFunction, extraFields)
             .then(function() {
-                bar.tick();
                 index++;
                 return connectItemsToRandomItems(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction, p, extraFields)
                     .then(resolve);
@@ -749,7 +712,6 @@ function connectItemsToRandomItem(items, connectToItems, itemsProp, connectToIte
             return resolve(items);
         }
 
-        bar.tick();
         var connector = {};
         connector[itemsProp] = items[index]._id;
         connector[connectToItemsProp] = connectToItems[faker.random.number(connectToItems.length - 1)]._id;
