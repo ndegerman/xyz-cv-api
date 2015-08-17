@@ -94,3 +94,14 @@ exports.checkForForbiddenFields = function(forbiddenFields, requiredAttributes) 
     };
 };
 
+exports.hasAllowedEmail = function(allowedEmails) {
+    return function(request, response, next) {
+        return new Promise(function(resolve) {
+            if (allowedEmails.indexOf(request.headers['x-forwarded-email'].toLowerCase()) >= 0) {
+                return next();
+            } else {
+                return responseHandler.sendUnauthorizedResponse(response)();
+            }
+        });
+    };
+};
