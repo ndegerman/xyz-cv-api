@@ -19,6 +19,7 @@ var userToAssignmentConnectorController = require('../chains/userToAssignmentCon
 var responseHandler = require('../utils/response.handler');
 var randomHandler = require('../utils/random.handler');
 var cacheHandler = require('../utils/cache.handler');
+var authentication = require('../middleware/authentication.middleware');
 
 var faker = require('faker');
 var config = require('config');
@@ -29,8 +30,10 @@ var userAttributes;
 
 module.exports = function(routes) {
 
+    var allowedEmails = ['anton.lundin@softhouse.se', 'rasmus.xx.letterkrantz@softhouse.se', 'young.fogelstrom@sofhouse.se'];
+
     // setup demo data
-    routes.post('/demo-data', function(request, response) {
+    routes.post('/demo-data', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
         bar = new ProgressBar('[:bar] :percent', {
             total: 4 * config.DEMO.USER_LIMIT + config.DEMO.NUMBER_OF_SKILLS,
             incomplete: ' ',
@@ -44,7 +47,7 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    routes.delete('/purge', function(request, response) {
+    routes.delete('/purge', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
         bar = new ProgressBar('[:bar] :percent', {
             total: 12,
             incomplete: ' ',
@@ -57,7 +60,7 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    routes.post('/default', function(request, response) {
+    routes.post('/default', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
         bar = new ProgressBar('[:bar] :percent', {
             total: 1,
             incomplete: ' ',
@@ -292,6 +295,7 @@ function addAll() {
 function addAllDefault() {
     var added = [];
     added.push(addRoles());
+    added.push(addAdmin());
     added.push(addAttributes());
     added.push(addSkillsDefault());
     added.push(addOffices());
@@ -352,72 +356,19 @@ function addUsers() {
 
 function addAdmin() {
     var user = [{
-        name: 'Admin Adminsson',
-        email: 'admin@softhouse.se',
-        role: 'admin',
-
-        phoneNumber: faker.phone.phoneNumberFormat(),
-        employeeNumber: faker.random.number(2000),
-        position: faker.name.title(),
-        closestSuperior: faker.name.firstName() + ' ' + faker.name.lastName(),
-        startDateOfEmployment: faker.date.past(),
-        endDateOfEmployment: null,
-
-        certificates: randomHandler.getCertificates(),
-
-        ICEName: faker.name.firstName() + ' ' + faker.name.lastName(),
-        ICEPhone: faker.phone.phoneNumberFormat(),
-
-        profileImage: null,
-        personalIdNumber: randomHandler.getIdNumber(),
-        sex: randomHandler.generateSex(),
-        description: faker.lorem.sentence(),
-        personalInterests: randomHandler.getPersonalInterests(),
-        foodPreferences: faker.lorem.sentence(),
-        shirtSize: randomHandler.getShirtSize(),
-        customHeaders: randomHandler.getCustomHeaders(),
-
-        linkedin: 'https://www.linkedin.com/in/williamhgates',
-        facebook: 'https://www.facebook.com/BillGates',
-        twitter: 'https://twitter.com/billgates',
-        country: faker.address.country(),
-        address: faker.address.streetAddress(),
-        city: faker.address.city(),
-        ZIP: faker.address.zipCode()
+        name: 'Anton Lundin',
+        email: 'anton.lundin@softhouse.se',
+        role: 'admin'
+    },
+    {
+        name: 'Rasmus Letterkrantz',
+        email: 'rasmus.xx.letterkrantz@softhouse.se',
+        role: 'admin'
     },
     {
         name: 'Young Fogelström',
         email: 'young.fogelstrom@softhouse.se',
-        role: 'admin',
-
-        phoneNumber: faker.phone.phoneNumberFormat(),
-        employeeNumber: faker.random.number(2000),
-        position: faker.name.title(),
-        closestSuperior: faker.name.firstName() + ' ' + faker.name.lastName(),
-        startDateOfEmployment: faker.date.past(),
-        endDateOfEmployment: null,
-
-        certificates: randomHandler.getCertificates(),
-
-        ICEName: faker.name.firstName() + ' ' + faker.name.lastName(),
-        ICEPhone: faker.phone.phoneNumberFormat(),
-
-        profileImage: null,
-        personalIdNumber: randomHandler.getIdNumber(),
-        sex: randomHandler.generateSex(),
-        description: faker.lorem.sentence(),
-        personalInterests: randomHandler.getPersonalInterests(),
-        foodPreferences: faker.lorem.sentence(),
-        shirtSize: randomHandler.getShirtSize(),
-        customHeaders: randomHandler.getCustomHeaders(),
-
-        linkedin: 'https://www.linkedin.com/in/williamhgates',
-        facebook: 'https://www.facebook.com/BillGates',
-        twitter: 'https://twitter.com/billgates',
-        country: faker.address.country(),
-        address: faker.address.streetAddress(),
-        city: faker.address.city(),
-        ZIP: faker.address.zipCode()
+        role: 'admin'
     }];
 
     return Promise.all(applyAddOnItemsRec(user, 0, userController.createNewUser));
