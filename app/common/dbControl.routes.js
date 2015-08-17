@@ -331,7 +331,7 @@ function addUsers() {
             ICEPhone: faker.phone.phoneNumberFormat(),
 
             profileImage: null,
-            personalIdNumber: faker.random.uuid(),
+            personalIdNumber: randomHandler.getIdNumber(),
             sex: randomHandler.generateSex(),
             description: faker.lorem.sentence(),
             personalInterests: randomHandler.getPersonalInterests(),
