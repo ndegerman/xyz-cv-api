@@ -335,7 +335,6 @@ exports.getListOfDefaultSkillAbbreviations = function() {
     {name: 'Configuration Manager', icon: null},
     {name: 'Project Manager', icon: null},
     {name: 'Scrummaster', icon: null},
-    {name: 'Line management', icon: null},
     {name: 'Product Owner', icon: null},
     {name: 'Agile Coach', icon: null},
     {name: 'Management Coach', icon: null},
