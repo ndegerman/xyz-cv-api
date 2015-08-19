@@ -34,52 +34,6 @@ node app/server.js
 
 **NOTE** Every request to the api needs to contain two headers, containing `x-forwarded-user` and `x-forwarded-email`. The is used by the server to create users upon connecting.
 
-### `POST /api/attribute`
-
-Used to create attributes that are used for access purposes. Make sure that the request is a formatted JSON object (in [Postman](https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm) you need to add a `Content-Type` header with `application/json`). The json object should have the following field:
-
-	"name": "yourAttributeName"
-
-#### Responses
-
-`200` - The given JSON body was saved to the `attribute` collection and returned in the response.
-
-`400` - The JSON body was omitted when the request was made.
-
-`500` - The item could not be saved.
-
-### `GET /api/attribute`
-
-Get all attributes.
-
-#### Responses
-
-`200` - all the items in the collection, contained in a list.
-
-`500` - Something went wrong when querying the database.
-
-### `GET /api/user`
-
-Get all users.
-
-#### Responses
-
-`200` - all the items in the collection, contained in a list.
-
-`500` - Something went wrong when querying the database.
-
-### `GET /api/user/<id>`
-
-Get a user item by its id.
-
-#### Responses
-
-`200` - The user with id `<id>` in the `user` collection.
-
-`404` - No user with id `<id>` was found in the collection.
-
-`500` - Something went wrong when querying the database.
-
 TODO
 
 ## License
