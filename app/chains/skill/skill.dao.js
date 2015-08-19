@@ -58,3 +58,30 @@ exports.deleteSkillById = function(id) {
         .then(responseHandler.parseDelete)
         .catch(errorHandler.throwDREAMSHttpError);
 };
+
+exports.createIndex = function(fields, query) {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: config.API_URL + '_indices/skill' + utils.getQueryByObject(query),
+        method: 'POST',
+        json: fields
+    };
+
+    console.log(options.uri)
+
+    return request(options)
+        .then(responseHandler.parsePostIndex)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
+exports.purgeIndices = function() {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: config.API_URL + '_indices/skill',
+        method: 'DELETE'
+    };
+
+    return request(options)
+        .then(responseHandler.parseDelete)
+        .catch(errorHandler.throwDREAMSHttpError);
+};

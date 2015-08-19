@@ -71,3 +71,30 @@ exports.deleteUserById = function(id) {
         .then(responseHandler.parseDelete)
         .catch(errorHandler.throwDREAMSHttpError);
 };
+
+exports.createIndex = function(fields, query) {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: config.API_URL + '_indices/user' + utils.getQueryByObject(query),
+        method: 'POST',
+        json: fields
+    };
+
+    return request(options)
+        .then(responseHandler.parsePostIndex)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
+exports.purgeIndices = function() {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: config.API_URL + '_indices/user',
+        method: 'DELETE'
+    };
+
+    return request(options)
+        .then(responseHandler.parseDelete)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
+

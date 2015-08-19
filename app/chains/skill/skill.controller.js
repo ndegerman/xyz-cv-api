@@ -41,3 +41,11 @@ exports.getSkills = function(query) {
 exports.deleteSkillById = function(id) {
     return skillDao.deleteSkillById(id);
 };
+
+exports.purgeIndices = function() {
+    return skillDao.purgeIndices();
+}
+
+exports.createIndex = function(fields, options) {
+    return skillDao.createIndex(fields, options);
+}

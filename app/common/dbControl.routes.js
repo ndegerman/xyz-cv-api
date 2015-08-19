@@ -51,8 +51,32 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    routes.post('/indices', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
+        purgeIndices()
+            .then(setIndices)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
     return routes;
 };
+
+// INDICES
+// ============================================================================
+
+function purgeIndices() {
+    var purge = [];
+    purge.push(userController.purgeIndices());
+    purge.push(skillController.purgeIndices());
+    return Promise.all(purge);
+}
+
+function setIndices() {
+    var set = [];
+    set.push(userController.createIndex({ email: 1 }, { unique: true }));
+    set.push(skillController.createIndex({ name: 1 }, { unique: true }));
+    return Promise.all(set);
+}
 
 // PURGE
 // ============================================================================

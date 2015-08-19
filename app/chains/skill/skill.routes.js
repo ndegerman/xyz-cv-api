@@ -37,5 +37,19 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    // create an indice
+    routes.post('/_indice', authentication.isAllowed('canEditIndex'), function(request, response) {
+        skillController.createIndex(request.body, request.query)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    // delete all indices for skills
+    routes.delete('/_indice', authentication.isAllowed('canEditIndex'), function(request, response) {
+        skillController.purgeIndices()
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
     return routes;
 };
