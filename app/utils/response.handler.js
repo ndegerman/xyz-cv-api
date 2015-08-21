@@ -52,11 +52,6 @@ exports.parsePostIndex = function(response) {
         .then(checkStatusCode(201));
 };
 
-exports.parseGetUpload = function(response) {
-    return checkResponse(response)
-        .then(checkStatusCode(200));
-}
-
 function checkResponse(response) {
     return new Promise(function(resolve, reject) {
         if (!response) {

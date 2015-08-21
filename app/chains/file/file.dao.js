@@ -68,7 +68,7 @@ exports.deleteFileById = function(id) {
 // ============================================================================
 
 exports.createNewUpload = function(file) {
-    var filePath = config.UPLOAD_PATH + file.generatedName
+    var filePath = config.UPLOAD_PATH + file.generatedName;
     var options = {
         resolveWithFullResponse: true,
         uri: config.API_URL + 'upload',

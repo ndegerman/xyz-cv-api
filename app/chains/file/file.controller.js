@@ -54,10 +54,3 @@ exports.getUploadByGeneratedName = function(name) {
     return fileDao.getUploadByGeneratedName(name);
 };
 
-function setRetinaName(file) {
-    return new Promise(function(resolve) {
-        file.generatedName = fileHandler.getRetinaName(file.generatedName);
-        return resolve(file);
-    });
-}
-
