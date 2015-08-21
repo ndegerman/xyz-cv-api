@@ -96,5 +96,3 @@ exports.purgeIndices = function() {
         .then(responseHandler.parseDelete)
         .catch(errorHandler.throwDREAMSHttpError);
 };
-
-

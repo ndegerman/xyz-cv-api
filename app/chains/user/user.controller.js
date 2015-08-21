@@ -105,8 +105,8 @@ exports.deleteUserById = function(id) {
 
 exports.purgeIndices = function() {
     return userDao.purgeIndices();
-}
+};
 
 exports.createIndex = function(fields, options) {
     return userDao.createIndex(fields, options);
-}
+};

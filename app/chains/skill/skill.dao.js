@@ -67,8 +67,6 @@ exports.createIndex = function(fields, query) {
         json: fields
     };
 
-    console.log(options.uri)
-
     return request(options)
         .then(responseHandler.parsePostIndex)
         .catch(errorHandler.throwDREAMSHttpError);

@@ -44,8 +44,8 @@ exports.deleteSkillById = function(id) {
 
 exports.purgeIndices = function() {
     return skillDao.purgeIndices();
-}
+};
 
 exports.createIndex = function(fields, options) {
     return skillDao.createIndex(fields, options);
-}
+};
