@@ -161,7 +161,8 @@ exports.sendFileResponse = function(response) {
 };
 
 exports.sendThumbnailResponse = function(response) {
-    return function(generatedName) {
-        response.download(config.UPLOAD_PATH + generatedName);
+    return function(stream) {
+        response.setHeader('Content-type', 'image/png');
+        stream.pipe(response);
     };
 };

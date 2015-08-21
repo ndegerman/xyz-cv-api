@@ -14,6 +14,7 @@ module.exports = function(routes) {
     //post a file
     routes.post('/', authentication.isAllowed('canViewFile'), function(request, response) {
         fileHandler.checkIfSuccess(request, response)
+            .then(fileController.createNewUpload)
             .then(fileController.createNewFile)
             .then(responseHandler.sendSuccessUploadJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
@@ -27,9 +28,9 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    // get a file by the given id
-    routes.get('/thumbnail/:id', authentication.isAllowed('canViewFile'), function(request, response) {
-        return responseHandler.sendThumbnailResponse(response)(request.params.id);
+    // get an uploaded image by it's generated name
+    routes.get('/thumbnail/:name', authentication.isAllowed('canViewFile'), function(request, response) {
+        return responseHandler.sendThumbnailResponse(response)(fileController.getUploadByGeneratedName(request.params.name));
     });
 
     // get a file by the given id
