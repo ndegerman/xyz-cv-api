@@ -6,6 +6,7 @@
 var skillController = require('./skill.controller');
 var responseHandler = require('../../utils/response.handler');
 var authentication = require('../../middleware/authentication.middleware');
+var config = require('config');
 
 module.exports = function(routes) {
 
@@ -38,14 +39,14 @@ module.exports = function(routes) {
     });
 
     // create an indice
-    routes.post('/_indice', authentication.isAllowed('canEditIndex'), function(request, response) {
+    routes.post('/_indice', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
         skillController.createIndex(request.body, request.query)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
     // delete all indices for skills
-    routes.delete('/_indice', authentication.isAllowed('canEditIndex'), function(request, response) {
+    routes.delete('/_indice', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
         skillController.purgeIndices()
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
