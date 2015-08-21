@@ -6,6 +6,7 @@ var errorHandler = require('./error.handler');
 var Promise = require('bluebird');
 var config = require('config');
 var lwip = require('lwip');
+var fileController = require('../chains/file/file.controller');
 
 exports.getHandler = function() {
     return multer(getConfig());
@@ -118,6 +119,15 @@ function getConfig() {
                                 if (error) {
                                     file.failed = true;
                                 }
+                                var fileEntity = getFileTemplate();
+                                fileEntity.originalName = file.name;
+                                fileEntity.generatedName = newName;
+                                fileController.createNewUpload(fileEntity)
+                                    .then(function() {
+                                        fs.emptyDir('uploads', function (err) {
+                                          if (err) console.log(err);
+                                        })
+                                    });
                             });
                         });
                     });

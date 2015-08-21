@@ -40,3 +40,24 @@ exports.deleteFileById = function(id) {
     return fileDao.deleteFileById(id);
 };
 
+exports.createNewUpload = function(file) {
+    return new Promise(function(resolve) {
+        return fileDao.createNewUpload(file)
+            .then(function(uploadId) {
+                file.uploadId = uploadId;
+                return resolve(file);
+            });
+    });
+};
+
+exports.getUploadByGeneratedName = function(name) {
+    return fileDao.getUploadByGeneratedName(name);
+};
+
+function setRetinaName(file) {
+    return new Promise(function(resolve) {
+        file.generatedName = fileHandler.getRetinaName(file.generatedName);
+        return resolve(file);
+    });
+}
+

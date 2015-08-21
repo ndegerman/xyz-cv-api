@@ -1,6 +1,6 @@
 {
     "SECRET": "turbohipster",
-    "API_URL": "http://localhost:3232/",
+    "API_URL": "http://localhost:3233/",
     "PREFIX": "cv",
     "UI_URL": "http://localhost:9000",
     "PORT": 9090,

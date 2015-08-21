@@ -52,6 +52,11 @@ exports.parsePostIndex = function(response) {
         .then(checkStatusCode(201));
 };
 
+exports.parseGetUpload = function(response) {
+    return checkResponse(response)
+        .then(checkStatusCode(200));
+}
+
 function checkResponse(response) {
     return new Promise(function(resolve, reject) {
         if (!response) {
@@ -161,7 +166,8 @@ exports.sendFileResponse = function(response) {
 };
 
 exports.sendThumbnailResponse = function(response) {
-    return function(generatedName) {
-        response.download(config.UPLOAD_PATH + generatedName);
+    return function(stream) {
+        response.setHeader('Content-type', 'image/png');
+        stream.pipe(response);
     };
 };
