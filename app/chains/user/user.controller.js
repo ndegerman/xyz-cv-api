@@ -4,6 +4,7 @@ var userDao = require('./user.dao');
 var Promise = require('bluebird');
 var errorHandler = require('../../utils/error.handler');
 var utils = require('../../utils/utils');
+var capitalize = require('string-capitalize');
 
 // TODO: Make the validation more covering
 function validateUser(user) {
@@ -19,10 +20,9 @@ function validateUser(user) {
 }
 
 function getUserTemplate(name, email) {
-    name = name === undefined ? name : name.replace('xx.', '').replace('.', ' ');
     return {
         email: email,
-        name: name,
+        name: getFormattedName(name),
         role: 'user',
         hidden: false,
 
@@ -110,3 +110,13 @@ exports.purgeIndices = function() {
 exports.createIndex = function(fields, options) {
     return userDao.createIndex(fields, options);
 };
+
+function getFormattedName(name) {
+    return name === undefined ? name : name
+    .replace('xx.', '')
+    .split('.')
+    .map(function(currentValue) {
+        return capitalize(currentValue);
+    })
+    .join(' ');
+}
