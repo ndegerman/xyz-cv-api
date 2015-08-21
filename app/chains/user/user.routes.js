@@ -8,6 +8,7 @@ var responseHandler = require('../../utils/response.handler');
 var authenticationHandler = require('../../utils/authentication.handler');
 var authentication = require('../../middleware/authentication.middleware');
 var utils = require('../../utils/utils');
+var config = require('config');
 
 module.exports = function(routes) {
 
@@ -49,6 +50,20 @@ module.exports = function(routes) {
     // delete a user given an id
     routes.delete('/:id', authentication.isAllowedOrSelf('canEditUser', 'params', 'id'), function(request, response) {
         userController.deleteUserById(request.params.id)
+            .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    // create an indice
+    routes.post('/_indice', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
+        userController.createIndex(request.body, request.query)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    // delete all indices for users
+    routes.delete('/:id', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
+        userController.purgeIndices()
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

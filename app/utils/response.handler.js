@@ -47,6 +47,11 @@ exports.parseGetMonoQuery = function(response) {
         .then(parseMonoQuery);
 };
 
+exports.parsePostIndex = function(response) {
+    return checkResponse(response)
+        .then(checkStatusCode(201));
+};
+
 function checkResponse(response) {
     return new Promise(function(resolve, reject) {
         if (!response) {

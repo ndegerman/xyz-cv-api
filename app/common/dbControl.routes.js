@@ -28,31 +28,53 @@ var userAttributes;
 
 module.exports = function(routes) {
 
-    var allowedEmails = ['anton.lundin@softhouse.se', 'rasmus.xx.letterkrantz@softhouse.se', 'young.fogelstrom@sofhouse.se'];
-
     // setup demo data
-    routes.post('/demo-data', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
+    routes.post('/demo-data', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
         addAll()
             .then(addConnectors)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    routes.delete('/purge', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
+    routes.delete('/purge', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
         purgeAll()
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
-    routes.post('/default', authentication.hasAllowedEmail(allowedEmails), function(request, response) {
+    routes.post('/default', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
         addAllDefault()
             .then(addConnectorsDefault)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    routes.post('/indices', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
+        purgeIndices()
+            .then(setIndices)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
     return routes;
 };
+
+// INDICES
+// ============================================================================
+
+function purgeIndices() {
+    var purge = [];
+    purge.push(userController.purgeIndices());
+    purge.push(skillController.purgeIndices());
+    return Promise.all(purge);
+}
+
+function setIndices() {
+    var set = [];
+    set.push(userController.createIndex({ email: 1 }, { unique: true }));
+    set.push(skillController.createIndex({ name: 1 }, { unique: true }));
+    return Promise.all(set);
+}
 
 // PURGE
 // ============================================================================
