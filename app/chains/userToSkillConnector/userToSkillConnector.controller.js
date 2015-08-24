@@ -71,7 +71,7 @@ exports.getUserToSkillConnectors = function(query) {
     return userToSkillConnectorDao.getUserToSkillConnectors(query);
 };
 
-exports.updateUserToSkillConnector = function(id, body, email) {
+exports.updateUserToSkillConnector = function(id, body) {
     return exports.getUserToSkillConnectorById(id)
         .then(setUserToSkillConnectorProperties(body))
         .then(validateUserToSkillConnector)

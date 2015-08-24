@@ -18,6 +18,7 @@ var userToAssignmentConnectorController = require('../chains/userToAssignmentCon
 
 var responseHandler = require('../utils/response.handler');
 var randomHandler = require('../utils/random.handler');
+var errorHandler = require('../utils/error.handler');
 var cacheHandler = require('../utils/cache.handler');
 var authentication = require('../middleware/authentication.middleware');
 
@@ -56,8 +57,62 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    routes.post('/moveUserToSkill/:from/:to', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
+        moveSkillConnectors(request.params.from, request.params.to, request.query.remove)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
     return routes;
 };
+
+// QUERY DATA
+// ============================================================================
+
+function moveSkillConnectors(from, to) {
+    var fromSkill = skillController.getSkills({name: from});
+    var toSkill = skillController.getSkills({name: to});
+    return Promise.all([fromSkill, toSkill])
+        .then(function() {
+            return new Promise(function(resolve, reject) {
+                fromSkill = fromSkill.value();
+                toSkill = toSkill.value();
+                if (!fromSkill.length || !toSkill.length){
+                    return errorHandler.getHttpError(404)
+                        .then(reject);
+                } else {
+                    fromSkill = fromSkill[0];
+                    toSkill = toSkill[0];
+                    return userToSkillConnectorController.getUserToSkillConnectors({skillId: fromSkill._id})
+                        .then(function(connectors) {
+                            return Promise.all(Promise.map(connectors, function(connector) {
+                                connector.skillId = toSkill._id;
+                                return userToSkillConnectorController.updateUserToSkillConnector(connector._id, connector);
+                            })).then(function() {
+                                return removeSkill(from)
+                                    .then(resolve)
+                            });
+                        });
+                }
+            })
+        })
+}
+
+function removeSkill(skillName) {
+    return skillController.getSkills({name: skillName})
+        .then(function(skills) {
+            return new Promise(function(resolve, reject) {
+                if ( !skills.length ){
+                    return errorHandler.getHttpError(404)
+                        .then(reject);
+                } else {
+                    var skill = skills[0]
+                    return skillController.deleteSkillById(skill._id)
+                        .then(resolve);
+                }
+            })
+        })
+}
 
 // INDICES
 // ============================================================================
