@@ -522,7 +522,7 @@ function addAttributes() {
             name: 'canEditSkillGroup'
         },
         {
-            name: 'canViewCompetence'
+            name: 'canViewDashboard'
         }
     ];
 
