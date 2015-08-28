@@ -14,7 +14,8 @@ exports.createNewAssignment = function(assignment) {
         resolveWithFullResponse: true,
         uri: url,
         method: 'POST',
-        json: assignment
+        json: assignment,
+        gzip: true
     };
 
     return request(options)
@@ -27,7 +28,8 @@ exports.getAssignmentById = function(id) {
         resolveWithFullResponse: true,
         uri: url + '/' + id,
         method: 'GET',
-        json: true
+        json: true,
+        gzip: true
     };
 
     return request(options)
@@ -39,7 +41,8 @@ exports.getAssignments = function(query) {
     var options = {
         resolveWithFullResponse: true,
         uri: url + utils.getQueryByObject(query),
-        method: 'GET'
+        method: 'GET',
+        gzip: true
     };
 
     return request(options)

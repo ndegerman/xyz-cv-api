@@ -14,7 +14,8 @@ exports.createUserToSkillConnector = function(userToSkillConnector) {
         resolveWithFullResponse: true,
         uri: url,
         method: 'POST',
-        json: userToSkillConnector
+        json: userToSkillConnector,
+        gzip: true
     };
 
     return request(options)
@@ -27,6 +28,7 @@ exports.getUserToSkillConnectorById = function(id) {
         resolveWithFullResponse: true,
         uri: url + '/' + id,
         method: 'GET',
+        gzip: true,
         json: true
     };
 
@@ -39,10 +41,14 @@ exports.getUserToSkillConnectors = function(query) {
     var options = {
         resolveWithFullResponse: true,
         uri: url + utils.getQueryByObject(query),
-        method: 'GET'
+        method: 'GET',
+        gzip: true
     };
 
     return request(options)
+        .then(function(value) {
+            return value;
+        })
         .then(responseHandler.parseGetPolyQuery)
         .catch(errorHandler.throwDREAMSHttpError);
 };

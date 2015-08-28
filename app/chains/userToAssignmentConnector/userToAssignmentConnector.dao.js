@@ -14,7 +14,8 @@ exports.createUserToAssignmentConnector = function(userToAssignmentConnector) {
         resolveWithFullResponse: true,
         uri: url,
         method: 'POST',
-        json: userToAssignmentConnector
+        json: userToAssignmentConnector,
+        gzip: true
     };
 
     return request(options)
@@ -27,7 +28,8 @@ exports.getUserToAssignmentConnectorById = function(id) {
         resolveWithFullResponse: true,
         uri: url + '/' + id,
         method: 'GET',
-        json: true
+        json: true,
+        gzip: true
     };
 
     return request(options)
@@ -39,7 +41,8 @@ exports.getUserToAssignmentConnectors = function(query) {
     var options = {
         resolveWithFullResponse: true,
         uri: url + utils.getQueryByObject(query),
-        method: 'GET'
+        method: 'GET',
+        gzip: true
     };
 
     return request(options)

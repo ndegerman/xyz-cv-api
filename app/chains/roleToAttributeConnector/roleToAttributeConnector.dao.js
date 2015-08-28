@@ -14,7 +14,8 @@ exports.createRoleToAttributeConnector = function(roleToAttributeConnector) {
         resolveWithFullResponse: true,
         uri: url,
         method: 'POST',
-        json: roleToAttributeConnector
+        json: roleToAttributeConnector,
+        gzip: true
     };
 
     return request(options)
@@ -26,7 +27,8 @@ exports.getRoleToAttributeConnectors = function(query) {
     var options = {
         resolveWithFullResponse: true,
         uri: url + utils.getQueryByObject(query),
-        method: 'GET'
+        method: 'GET',
+        gzip: true
     };
 
     return request(options)

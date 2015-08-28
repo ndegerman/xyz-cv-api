@@ -14,7 +14,8 @@ exports.createNewRole = function(role) {
         resolveWithFullResponse: true,
         uri: url,
         method: 'POST',
-        json: role
+        json: role,
+        gzip: true
     };
 
     return request(options)
@@ -27,7 +28,8 @@ exports.getRoleById = function(id) {
         resolveWithFullResponse: true,
         uri: url + '/' + id,
         method: 'GET',
-        json: true
+        json: true,
+        gzip: true
     };
 
     return request(options)
@@ -39,7 +41,8 @@ exports.getRoles = function(query) {
     var options = {
         resolveWithFullResponse: true,
         uri: url + utils.getQueryByObject(query),
-        method: 'GET'
+        method: 'GET',
+        gzip: true
     };
 
     return request(options)
