@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var morgan = require('morgan');
 var cors = require('cors');
+var compression = require('compression');
 
 var attributeRoutes = require('./chains/attribute/attribute.routes')(express.Router());
 var userRoutes = require('./chains/user/user.routes')(express.Router());
@@ -49,6 +50,9 @@ app.use(bodyParser.json());
 
 // logging
 app.use(morgan('dev'));
+
+// gzip
+app.use(compression());
 
 // ROUTES & MIDDLEWARE
 // ============================================================================

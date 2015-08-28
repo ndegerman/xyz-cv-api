@@ -14,7 +14,8 @@ exports.createNewAttribute = function(attribute) {
         resolveWithFullResponse: true,
         uri: url,
         method: 'POST',
-        json: attribute
+        json: attribute,
+        gzip: true
     };
 
     return request(options)
@@ -27,7 +28,8 @@ exports.getAttributeById = function(id) {
         resolveWithFullResponse: true,
         uri: url + '/' + id,
         method: 'GET',
-        json: true
+        json: true,
+        gzip: true
     };
 
     return request(options)
@@ -39,7 +41,8 @@ exports.getAttributes = function(query) {
     var options = {
         resolveWithFullResponse: true,
         uri: url + utils.getQueryByObject(query),
-        method: 'GET'
+        method: 'GET',
+        gzip: true
     };
 
     return request(options)

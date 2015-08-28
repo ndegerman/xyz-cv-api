@@ -19,7 +19,8 @@ exports.createNewFile = function(file) {
         resolveWithFullResponse: true,
         uri: url,
         method: 'POST',
-        json: file
+        json: file,
+        gzip: true
     };
 
     return request(options)
@@ -32,7 +33,8 @@ exports.getFileById = function(id) {
         resolveWithFullResponse: true,
         uri: url + '/' + id,
         method: 'GET',
-        json: true
+        json: true,
+        gzip: true
     };
 
     return request(options)
@@ -44,7 +46,8 @@ exports.getFiles = function(query) {
     var options = {
         resolveWithFullResponse: true,
         uri: url + utils.getQueryByObject(query),
-        method: 'GET'
+        method: 'GET',
+        gzip: true
     };
 
     return request(options)
