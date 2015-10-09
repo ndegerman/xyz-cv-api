@@ -444,7 +444,6 @@ function addAssignments() {
         while (usedDomainNames[domainName]) {
             domainName = faker.internet.domainName();
         }
-        console.log(domainName + ' and ' + usedDomainNames[domainName]);
         usedDomainNames[domainName] = 1;
         object.name = domainName;
         assignments.push(object);
