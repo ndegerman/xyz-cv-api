@@ -77,15 +77,15 @@ exports.getPersonalInterests = function() {
 
 exports.getShirtSize = function() {
     var sizes = getShirtSizes();
-    return sizes[randomInt(sizes.length - 1)];
+    return sizes[exports.randomInt(sizes.length - 1)];
 };
 
 exports.getSkillLevel = function() {
-    return randomInt(4) + 1;
+    return exports.randomInt(4) + 1;
 };
 
 exports.getYears = function() {
-    return randomInt(20) + 1;
+    return exports.randomInt(20) + 1;
 };
 
 exports.getBinomial = function(n, p) {
@@ -110,7 +110,7 @@ exports.getUniqueIndices = function(count, total) {
     var result = [];
 
     for (var q = 0; q < count; q++) {
-        var index = randomInt(max);
+        var index = exports.randomInt(max);
         result.push(list[index]);
         list[index] = list[max];
         max--;
@@ -167,7 +167,7 @@ exports.getCertificates = function() {
 };
 
 exports.getIdNumber = function() {
-    return 190000000000 + randomInt(9999999999);
+    return 190000000000 + exports.randomInt(9999999999);
 };
 
 function getRandomCertificatePrefix() {
@@ -180,12 +180,12 @@ function getRandomCertificatePrefix() {
         'JD in '
     ];
 
-    return list[randomInt(list.length) - 1];
+    return list[exports.randomInt(list.length) - 1];
 }
 
-function randomInt(high) {
+exports.randomInt = function(high) {
     return Math.floor(Math.random() * (high + 1));
-}
+};
 
 function getShirtSizes() {
     return [
@@ -213,7 +213,7 @@ exports.getListOfCustomers = function() {
     {name: 'Försäkringskassan'},
     {name: 'Orange'}
     ];
-}
+};
 
 exports.getListOfDomains = function() {
     return [
@@ -221,7 +221,7 @@ exports.getListOfDomains = function() {
     {name: 'Game development'},
     {name: 'Web portal'}
     ];
-}
+};
 
 exports.getListOfDefaultSkillAbbreviations = function() {
     return [

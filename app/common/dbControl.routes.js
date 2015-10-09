@@ -81,7 +81,7 @@ function moveSkillConnectors(from, to) {
             return new Promise(function(resolve, reject) {
                 fromSkill = fromSkill.value();
                 toSkill = toSkill.value();
-                if (!fromSkill.length || !toSkill.length){
+                if (!fromSkill.length || !toSkill.length) {
                     return errorHandler.getHttpError(404)
                         .then(reject);
                 } else {
@@ -94,28 +94,28 @@ function moveSkillConnectors(from, to) {
                                 return userToSkillConnectorController.updateUserToSkillConnector(connector._id, connector);
                             })).then(function() {
                                 return removeSkill(from)
-                                    .then(resolve)
+                                    .then(resolve);
                             });
                         });
                 }
-            })
-        })
+            });
+        });
 }
 
 function removeSkill(skillName) {
     return skillController.getSkills({name: skillName})
         .then(function(skills) {
             return new Promise(function(resolve, reject) {
-                if ( !skills.length ){
+                if (!skills.length) {
                     return errorHandler.getHttpError(404)
                         .then(reject);
                 } else {
-                    var skill = skills[0]
+                    var skill = skills[0];
                     return skillController.deleteSkillById(skill._id)
                         .then(resolve);
                 }
-            })
-        })
+            });
+        });
 }
 
 // INDICES
@@ -445,6 +445,7 @@ function addAssignments() {
         while (usedDomainNames[domainName]) {
             domainName = faker.internet.domainName();
         }
+
         usedDomainNames[domainName] = 1;
         object.name = domainName;
         assignments.push(object);
@@ -548,7 +549,7 @@ function addAttributes() {
         'canViewUser',
         'canViewAssignment',
         'canViewFile',
-        'canViewSkill',
+        'canViewSkill'
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
@@ -604,6 +605,8 @@ function addConnectors() {
     promises.push(userController.getUsers()
         .then(connectUsersAndRandomAssignments));
 
+    promises.push(connectAssignmentFields());
+
     return Promise.all(promises);
 }
 
@@ -647,6 +650,27 @@ function connectUsersAndRandomAssignments(users) {
                 .then(function(assignments) {
                     return connectItemsToRandomItems(users, assignments, 'userId', 'assignmentId', 0, userToAssignmentConnectorController.createUserToAssignmentConnector, config.DEMO.USER_ON_ASSIGNMENT_PROBABILITY, extraFields);
                 });
+        });
+}
+
+function connectAssignmentFields() {
+    var customers = customerController.getCustomers();
+    var assignments = assignmentController.getAssignments();
+    var domains = domainController.getDomains();
+    return Promise.all([customers, assignments])
+        .then(function() {
+            return new Promise(function(resolve) {
+                var extraFields = {
+                };
+                assignments = assignments.value();
+                customers = customers.value();
+                domains = domains.value();
+                return Promise.map(assignments, function(assignment) {
+                    assignment.customer = customers[randomHandler.randomInt(customers.length - 1)]._id;
+                    assignment.domain = domains[randomHandler.randomInt(domains.length - 1)]._id;
+                    return assignmentController.updateAssignment(assignment._id, assignment);
+                }).then(resolve);
+            });
         });
 }
 
