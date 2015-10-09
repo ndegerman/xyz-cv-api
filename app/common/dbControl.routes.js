@@ -126,6 +126,8 @@ function purgeIndices() {
     purge.push(userController.purgeIndices());
     purge.push(skillController.purgeIndices());
     purge.push(assignmentController.purgeIndices());
+    purge.push(customerController.purgeIndices());
+    purge.push(domainController.purgeIndices());
     return Promise.all(purge);
 }
 
@@ -134,6 +136,8 @@ function setIndices() {
     set.push(userController.createIndex({ email: 1 }, { unique: true }));
     set.push(skillController.createIndex({ name: 1 }, { unique: true }));
     set.push(assignmentController.createIndex({ name: 1}, { unique: true }));
+    set.push(customerController.createIndex({ name: 1}, { unique: true }));
+    set.push(domainController.createIndex({ name: 1}, { unique: true }));
     return Promise.all(set);
 }
 
