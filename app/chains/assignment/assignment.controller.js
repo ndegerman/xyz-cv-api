@@ -40,3 +40,11 @@ exports.getAssignmentById = function(id) {
 exports.deleteAssignmentById = function(id) {
     return assignmentDao.deleteAssignmentById(id);
 };
+
+exports.purgeIndices = function() {
+    return assignmentDao.purgeIndices();
+};
+
+exports.createIndex = function(fields, options) {
+    return assignmentDao.createIndex(fields, options);
+};
