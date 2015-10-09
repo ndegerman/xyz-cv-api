@@ -205,6 +205,16 @@ function getListOfAllSkillAbbreviations() {
     return exports.getListOfDefaultSkillAbbreviations().concat(getListOfSkillAbbreviationsNoIcons());
 }
 
+exports.getListOfCustomers = function() {
+    return [
+    {name: 'Telenor'},
+    {name: 'Ericsson'},
+    {name: 'Blekingetrafiken'},
+    {name: 'Försäkringskassan'},
+    {name: 'Orange'}
+    ];
+}
+
 exports.getListOfDefaultSkillAbbreviations = function() {
     return [
     {name: 'Angularjs', icon: 'devicon-angularjs-plain'},

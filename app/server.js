@@ -15,6 +15,7 @@ var skillRoutes = require('./chains/skill/skill.routes')(express.Router());
 var skillGroupRoutes = require('./chains/skillGroup/skillGroup.routes')(express.Router());
 var officeRoutes = require('./chains/office/office.routes')(express.Router());
 var assignmentRoutes = require('./chains/assignment/assignment.routes')(express.Router());
+var customerRoutes = require('./chains/customer/customer.routes')(express.Router());
 
 var fileRoutes = require('./chains/file/file.routes')(express.Router());
 
@@ -73,6 +74,7 @@ app.use('/skill', skillRoutes);
 app.use('/skillGroup', skillGroupRoutes);
 app.use('/office', officeRoutes);
 app.use('/assignment', assignmentRoutes);
+app.use('/customer', customerRoutes);
 
 app.use('/file', fileRoutes);
 app.use('/authentication', authenticationRoutes);

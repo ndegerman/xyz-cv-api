@@ -7,6 +7,7 @@ var assignmentController = require('../chains/assignment/assignment.controller')
 var attributeController = require('../chains/attribute/attribute.controller');
 var officeController = require('../chains/office/office.controller');
 var roleController = require('../chains/role/role.controller');
+var customerController = require('../chains/customer/customer.controller');
 var roleToAttributeConnectorController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
 var skillController = require('../chains/skill/skill.controller');
 var skillGroupController = require('../chains/skillGroup/skillGroup.controller');
@@ -147,6 +148,7 @@ function purgeAll() {
     purge.push(purgeOffices());
     purge.push(purgeSkillGroups());
     purge.push(purgeAssignments());
+    purge.push(purgeCustomers());
 
     purge.push(purgeUserToSkillConnectors());
     purge.push(purgeRoleToAttributeConnectors());
@@ -162,9 +164,6 @@ function purgeUsers() {
         userController.getUsers()
             .then(function(users) {
                 return Promise.all(applyDeleteOnItemRec(users, 0, userController.deleteUserById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -175,9 +174,16 @@ function purgeRoles() {
         roleController.getRoles()
             .then(function(roles) {
                 return Promise.all(applyDeleteOnItemRec(roles, 0, roleController.deleteRoleById))
-                    .then(function(res) {
-                        return res;
-                    })
+                    .then(resolve);
+            });
+    });
+}
+
+function purgeCustomers() {
+    return new Promise(function(resolve) {
+        customerController.getCustomers()
+            .then(function(customers) {
+                return Promise.all(applyDeleteOnItemRec(customers, 0, customerController.deleteCustomerById))
                     .then(resolve);
             });
     });
@@ -188,9 +194,6 @@ function purgeAttributes() {
         attributeController.getAttributes()
             .then(function(attributes) {
                 return Promise.all(applyDeleteOnItemRec(attributes, 0, attributeController.deleteAttributeById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -201,9 +204,6 @@ function purgeSkills() {
         skillController.getSkills()
             .then(function(skills) {
                 return Promise.all(applyDeleteOnItemRec(skills, 0, skillController.deleteSkillById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -214,9 +214,6 @@ function purgeOffices() {
         officeController.getOffices()
             .then(function(offices) {
                 return Promise.all(applyDeleteOnItemRec(offices, 0, officeController.deleteOfficeById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -227,9 +224,6 @@ function purgeSkillGroups() {
         skillGroupController.getSkillGroups()
             .then(function(skillGroups) {
                 return Promise.all(applyDeleteOnItemRec(skillGroups, 0, skillGroupController.deleteSkillGroupById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -240,9 +234,6 @@ function purgeAssignments() {
         assignmentController.getAssignments()
             .then(function(assignments) {
                 return Promise.all(applyDeleteOnItemRec(assignments, 0, assignmentController.deleteAssignmentById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -253,9 +244,6 @@ function purgeUserToSkillConnectors() {
         userToSkillConnectorController.getUserToSkillConnectors()
             .then(function(userToSkillConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToSkillConnectors, 0, userToSkillConnectorController.deleteUserToSkillConnectorById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -266,9 +254,6 @@ function purgeRoleToAttributeConnectors() {
         roleToAttributeConnectorController.getRoleToAttributeConnectors()
             .then(function(roleToAttributeConnectors) {
                 return Promise.all(applyDeleteOnItemRec(roleToAttributeConnectors, 0, roleToAttributeConnectorController.deleteRoleToAttributeConnectorById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -279,9 +264,6 @@ function purgeSkillToSkillGroupConnectors() {
         skillToSkillGroupConnectorController.getSkillToSkillGroupConnectors()
             .then(function(skillToSkillGroupConnectors) {
                 return Promise.all(applyDeleteOnItemRec(skillToSkillGroupConnectors, 0, skillToSkillGroupConnectorController.deleteSkillToSkillGroupConnectorById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -292,9 +274,6 @@ function purgeUserToOfficeConnectors() {
         userToOfficeConnectorController.getUserToOfficeConnectors()
             .then(function(userToOfficeConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToOfficeConnectors, 0, userToOfficeConnectorController.deleteUserToOfficeConnectorById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -305,9 +284,6 @@ function purgeUserToAssignmentConnectors() {
         userToAssignmentConnectorController.getUserToAssignmentConnectors()
             .then(function(userToAssignmentConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToAssignmentConnectors, 0, userToAssignmentConnectorController.deleteUserToAssignmentConnectorById))
-                    .then(function(res) {
-                        return res;
-                    })
                     .then(resolve);
             });
     });
@@ -335,6 +311,7 @@ function addAll() {
     added.push(addOffices());
     added.push(addSkillGroups());
     added.push(addAssignments());
+    added.push(addCustomers())
     return Promise.all(added);
 }
 
@@ -421,12 +398,14 @@ function addAdmin() {
 
 }
 
+function addCustomers() {
+    var customers = randomHandler.getListOfCustomers();
+    return Promise.all(applyAddOnItemsRec(customers, 0, customerController.createNewCustomer));
+}
+
 function addSkills() {
-
     var skills = randomHandler.getSkillAbbreviations(config.DEMO.NUMBER_OF_SKILLS);
-
     return Promise.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
-
 }
 
 function addSkillsDefault() {
@@ -533,6 +512,9 @@ function addAttributes() {
         },
         {
             name: 'canViewDashboard'
+        },
+        {
+            name: 'canEditCustomer'
         }
     ];
 
@@ -541,7 +523,8 @@ function addAttributes() {
         'canViewUser',
         'canViewAssignment',
         'canViewFile',
-        'canViewSkill'
+        'canViewSkill',
+        'canEditCustomer'
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
