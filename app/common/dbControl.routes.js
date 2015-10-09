@@ -31,7 +31,8 @@ module.exports = function(routes) {
 
     // setup demo data
     routes.post('/demo-data', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
-        addAll()
+        purgeAll()
+            .then(addAll)
             .then(addConnectors)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
@@ -44,7 +45,8 @@ module.exports = function(routes) {
     });
 
     routes.post('/default', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
-        addAllDefault()
+        purgeAll()
+            .then(addAllDefault)
             .then(addConnectorsDefault)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
@@ -121,6 +123,7 @@ function purgeIndices() {
     var purge = [];
     purge.push(userController.purgeIndices());
     purge.push(skillController.purgeIndices());
+    purge.push(assignmentController.purgeIndices());
     return Promise.all(purge);
 }
 
@@ -128,6 +131,7 @@ function setIndices() {
     var set = [];
     set.push(userController.createIndex({ email: 1 }, { unique: true }));
     set.push(skillController.createIndex({ name: 1 }, { unique: true }));
+    set.push(assignmentController.createIndex({ name: 1}, { unique: true }));
     return Promise.all(set);
 }
 
@@ -433,9 +437,16 @@ function addSkillsDefault() {
 
 function addAssignments() {
     var assignments = [];
+    var usedDomainNames = {};
     for (var i = 0; i < config.DEMO.NUMBER_OF_ASSIGNMENTS; i++) {
         var object = {};
-        object.name = faker.internet.domainName();
+        var domainName = faker.internet.domainName();
+        while (usedDomainNames[domainName]) {
+            domainName = faker.internet.domainName();
+        }
+        console.log(domainName + ' and ' + usedDomainNames[domainName]);
+        usedDomainNames[domainName] = 1;
+        object.name = domainName;
         assignments.push(object);
     }
 

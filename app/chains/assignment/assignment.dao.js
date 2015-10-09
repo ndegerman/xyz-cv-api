@@ -20,7 +20,10 @@ exports.createNewAssignment = function(assignment) {
 
     return request(options)
         .then(responseHandler.parsePost)
-        .catch(errorHandler.throwDREAMSHttpError);
+        .catch(function(res) {
+            console.log(assignment)
+            return errorHandler.throwDREAMSHttpError(res);
+        });
 };
 
 exports.getAssignmentById = function(id) {
@@ -54,6 +57,31 @@ exports.deleteAssignmentById = function(id) {
     var options = {
         resolveWithFullResponse: true,
         uri: url + '/' + id,
+        method: 'DELETE'
+    };
+
+    return request(options)
+        .then(responseHandler.parseDelete)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
+exports.createIndex = function(fields, query) {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: config.API_URL + '_indices/assignment' + utils.getQueryByObject(query),
+        method: 'POST',
+        json: fields
+    };
+
+    return request(options)
+        .then(responseHandler.parsePostIndex)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
+exports.purgeIndices = function() {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: config.API_URL + '_indices/assignment',
         method: 'DELETE'
     };
 
