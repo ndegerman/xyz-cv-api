@@ -6,6 +6,7 @@
 var domainController = require('./domain.controller');
 var responseHandler = require('../../utils/response.handler');
 var authentication = require('../../middleware/authentication.middleware');
+var config = require('config');
 
 module.exports = function(routes) {
 
@@ -34,6 +35,13 @@ module.exports = function(routes) {
     routes.delete('/:id', authentication.isAllowed('canEditDomain'), function(request, response) {
         domainController.deleteDomainById(request.params.id)
             .then(responseHandler.sendSuccessfulDeleteJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
+    // create an indice
+    routes.post('/_indice', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
+        domainController.createIndex(request.body, request.query)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });
 

@@ -40,3 +40,11 @@ exports.getCustomers = function(query) {
 exports.deleteCustomerById = function(id) {
     return customerDao.deleteCustomerById(id);
 };
+
+exports.purgeIndices = function() {
+    return customerDao.purgeIndices();
+};
+
+exports.createIndex = function(fields, options) {
+    return customerDao.createIndex(fields, options);
+};

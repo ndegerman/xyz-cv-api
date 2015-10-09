@@ -40,3 +40,11 @@ exports.getDomains = function(query) {
 exports.deleteDomainById = function(id) {
     return domainDao.deleteDomainById(id);
 };
+
+exports.purgeIndices = function() {
+    return domainDao.purgeIndices();
+};
+
+exports.createIndex = function(fields, options) {
+    return domainDao.createIndex(fields, options);
+};
