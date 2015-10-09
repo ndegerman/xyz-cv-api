@@ -215,6 +215,14 @@ exports.getListOfCustomers = function() {
     ];
 }
 
+exports.getListOfDomains = function() {
+    return [
+    {name: 'Telecom'},
+    {name: 'Game development'},
+    {name: 'Web portal'}
+    ];
+}
+
 exports.getListOfDefaultSkillAbbreviations = function() {
     return [
     {name: 'Angularjs', icon: 'devicon-angularjs-plain'},

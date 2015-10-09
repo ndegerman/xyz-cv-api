@@ -8,6 +8,7 @@ var attributeController = require('../chains/attribute/attribute.controller');
 var officeController = require('../chains/office/office.controller');
 var roleController = require('../chains/role/role.controller');
 var customerController = require('../chains/customer/customer.controller');
+var domainController = require('../chains/domain/domain.controller');
 var roleToAttributeConnectorController = require('../chains/roleToAttributeConnector/roleToAttributeConnector.controller');
 var skillController = require('../chains/skill/skill.controller');
 var skillGroupController = require('../chains/skillGroup/skillGroup.controller');
@@ -149,6 +150,7 @@ function purgeAll() {
     purge.push(purgeSkillGroups());
     purge.push(purgeAssignments());
     purge.push(purgeCustomers());
+    purge.push(purgeDomains());
 
     purge.push(purgeUserToSkillConnectors());
     purge.push(purgeRoleToAttributeConnectors());
@@ -184,6 +186,16 @@ function purgeCustomers() {
         customerController.getCustomers()
             .then(function(customers) {
                 return Promise.all(applyDeleteOnItemRec(customers, 0, customerController.deleteCustomerById))
+                    .then(resolve);
+            });
+    });
+}
+
+function purgeDomains() {
+    return new Promise(function(resolve) {
+        domainController.getDomains()
+            .then(function(domains) {
+                return Promise.all(applyDeleteOnItemRec(domains, 0, domainController.deleteDomainById))
                     .then(resolve);
             });
     });
@@ -311,7 +323,8 @@ function addAll() {
     added.push(addOffices());
     added.push(addSkillGroups());
     added.push(addAssignments());
-    added.push(addCustomers())
+    added.push(addCustomers());
+    added.push(addDomains());
     return Promise.all(added);
 }
 
@@ -401,6 +414,11 @@ function addAdmin() {
 function addCustomers() {
     var customers = randomHandler.getListOfCustomers();
     return Promise.all(applyAddOnItemsRec(customers, 0, customerController.createNewCustomer));
+}
+
+function addDomains() {
+    var domains = randomHandler.getListOfDomains();
+    return Promise.all(applyAddOnItemsRec(domains, 0, domainController.createNewDomain));
 }
 
 function addSkills() {
@@ -515,6 +533,9 @@ function addAttributes() {
         },
         {
             name: 'canEditCustomer'
+        },
+        {
+            name: 'canEditDomain'
         }
     ];
 
@@ -524,7 +545,6 @@ function addAttributes() {
         'canViewAssignment',
         'canViewFile',
         'canViewSkill',
-        'canEditCustomer'
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
