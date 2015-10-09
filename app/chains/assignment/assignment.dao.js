@@ -20,10 +20,7 @@ exports.createNewAssignment = function(assignment) {
 
     return request(options)
         .then(responseHandler.parsePost)
-        .catch(function(res) {
-            console.log(assignment)
-            return errorHandler.throwDREAMSHttpError(res);
-        });
+        .catch(errorHandler.throwDREAMSHttpError);
 };
 
 exports.getAssignmentById = function(id) {
