@@ -119,15 +119,16 @@ function getConfig() {
                                 if (error) {
                                     file.failed = true;
                                 }
+
                                 var fileEntity = getFileTemplate();
                                 fileEntity.originalName = file.name;
                                 fileEntity.generatedName = newName;
                                 fileController.createNewUpload(fileEntity)
                                     .then(function() {
-                                        fs.emptyDir('uploads', function (err) {
-                                          if (err) {
-                                            console.log(err);
-                                          }
+                                        fs.emptyDir('uploads', function(err) {
+                                            if (err) {
+                                                console.log(err);
+                                            }
                                         });
                                     });
                             });

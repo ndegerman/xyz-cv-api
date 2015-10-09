@@ -40,7 +40,7 @@ module.exports = function(routes) {
 
     // create an indice
     routes.post('/_indice', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
-        assignemntController.createIndex(request.body, request.query)
+        assignmentController.createIndex(request.body, request.query)
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
     });

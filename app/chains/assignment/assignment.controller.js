@@ -20,7 +20,9 @@ function validateAssignment(assignment) {
 
 function getAssignmentTemplate() {
     return {
-        name: null
+        name: null,
+        customer: null,
+        domain: null
     };
 }
 
@@ -47,4 +49,17 @@ exports.purgeIndices = function() {
 
 exports.createIndex = function(fields, options) {
     return assignmentDao.createIndex(fields, options);
+};
+
+function setAssignmentProperties(body) {
+    return function(assignment) {
+        utils.extend(assignment, body);
+        return assignment;
+    };
+}
+
+exports.updateAssignment = function(id, body) {
+    return exports.getAssignmentById(id)
+        .then(setAssignmentProperties(body))
+        .then(assignmentDao.updateAssignment);
 };

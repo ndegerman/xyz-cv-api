@@ -50,6 +50,20 @@ exports.getAssignments = function(query) {
         .catch(errorHandler.throwDREAMSHttpError);
 };
 
+exports.updateAssignment = function(assignment) {
+    var options = {
+        resolveWithFullResponse: true,
+        uri: url + '/' + assignment._id,
+        method: 'PUT',
+        json: assignment,
+        gzip: true
+    };
+
+    return request(options)
+        .then(responseHandler.parsePut)
+        .catch(errorHandler.throwDREAMSHttpError);
+};
+
 exports.deleteAssignmentById = function(id) {
     var options = {
         resolveWithFullResponse: true,
