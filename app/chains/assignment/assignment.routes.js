@@ -31,6 +31,14 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    // update an assignment given an id and an object
+    routes.put('/:id', function(request, response) {
+        assignmentController.updateAssignment(request.params.id, request.body)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+
+    });
+
     // delete an assignment given an id
     routes.delete('/:id', authentication.isAllowed('canEditAssignment'), function(request, response) {
         assignmentController.deleteAssignmentById(request.params.id)
