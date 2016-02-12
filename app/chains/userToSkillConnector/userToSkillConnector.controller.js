@@ -32,6 +32,7 @@ function getUserToSkillConnectorTemplate() {
 function setUserToSkillConnectorProperties(body) {
     return function(userToSkillConnector) {
         return new Promise(function(resolve, reject) {
+            userToSkillConnector = utils.extend(getUserToSkillConnectorTemplate(), userToSkillConnector);
             userToSkillConnector = utils.extend(userToSkillConnector, body);
             return resolve(userToSkillConnector);
         });
