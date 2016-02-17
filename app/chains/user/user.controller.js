@@ -42,6 +42,7 @@ function getUserTemplate(name, email) {
         personalIdNumber: null,
         sex: null,
         description: null,
+        summary: null,
         personalInterests: [],
         foodPreferences: null,
         shirtSize: null,
@@ -59,6 +60,7 @@ function getUserTemplate(name, email) {
 
 function setUserProperties(body) {
     return function(user) {
+        user = utils.extend(getUserTemplate(), user);
         utils.extend(user, body);
         return user;
     };
@@ -67,6 +69,7 @@ function setUserProperties(body) {
 exports.updateUser = function(id, body, email) {
     return exports.getUserById(id)
         .then(setUserProperties(body))
+        .then(utils.setIdOnBody(id))
         .then(userDao.updateUser);
 };
 
