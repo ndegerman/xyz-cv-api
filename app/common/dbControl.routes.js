@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var assignmentController = require('../chains/assignment/assignment.controller');
+var certificateController = require('../chains/certificate/certificate.controller');
 var attributeController = require('../chains/attribute/attribute.controller');
 var officeController = require('../chains/office/office.controller');
 var roleController = require('../chains/role/role.controller');
@@ -17,6 +18,7 @@ var userController = require('../chains/user/user.controller');
 var userToOfficeConnectorController = require('../chains/userToOfficeConnector/userToOfficeConnector.controller');
 var userToSkillConnectorController = require('../chains/userToSkillConnector/userToSkillConnector.controller');
 var userToAssignmentConnectorController = require('../chains/userToAssignmentConnector/userToAssignmentConnector.controller');
+var userToCertificateConnectorController = require('../chains/userToCertificateConnector/userToCertificateConnector.controller');
 
 var responseHandler = require('../utils/response.handler');
 var randomHandler = require('../utils/random.handler');
@@ -135,6 +137,7 @@ function purgeIndices() {
     purge.push(userController.purgeIndices());
     purge.push(skillController.purgeIndices());
     purge.push(assignmentController.purgeIndices());
+    purge.push(certificateController.purgeIndices());
     purge.push(customerController.purgeIndices());
     purge.push(domainController.purgeIndices());
     return Promise.all(purge);
@@ -145,6 +148,7 @@ function setIndices() {
     set.push(userController.createIndex({ email: 1 }, { unique: true }));
     set.push(skillController.createIndex({ name: 1 }, { unique: true }));
     set.push(assignmentController.createIndex({ name: 1}, { unique: true }));
+    set.push(certificateController.createIndex({ name: 1}, { unique: true }));
     set.push(customerController.createIndex({ name: 1}, { unique: true }));
     set.push(domainController.createIndex({ name: 1}, { unique: true }));
     return Promise.all(set);
@@ -162,6 +166,7 @@ function purgeAll() {
     purge.push(purgeOffices());
     purge.push(purgeSkillGroups());
     purge.push(purgeAssignments());
+    purge.push(purgeCertificates());
     purge.push(purgeCustomers());
     purge.push(purgeDomains());
 
@@ -170,6 +175,7 @@ function purgeAll() {
     purge.push(purgeSkillToSkillGroupConnectors());
     purge.push(purgeUserToOfficeConnectors());
     purge.push(purgeUserToAssignmentConnectors());
+    purge.push(purgeUserToCertificateConnectors());
     purge.push(purgeCache());
     return Promise.all(purge);
 }
@@ -264,6 +270,16 @@ function purgeAssignments() {
     });
 }
 
+function purgeCertificates() {
+    return new Promise(function(resolve) {
+        certificateController.getCertificates()
+            .then(function(certificates) {
+                return Promise.all(applyDeleteOnItemRec(certificates, 0, certificateController.deleteCertificateById))
+                    .then(resolve);
+            });
+    });
+}
+
 function purgeUserToSkillConnectors() {
     return new Promise(function(resolve) {
         userToSkillConnectorController.getUserToSkillConnectors()
@@ -314,6 +330,16 @@ function purgeUserToAssignmentConnectors() {
     });
 }
 
+function purgeUserToCertificateConnectors() {
+    return new Promise(function(resolve) {
+        userToCertificateConnectorController.getUserToCertificateConnectors()
+            .then(function(userToCertificateConnectors) {
+                return Promise.all(applyDeleteOnItemRec(userToCertificateConnectors, 0, userToCertificateConnectorController.deleteUserToCertificateConnectorById))
+                    .then(resolve);
+            });
+    });
+}
+
 function purgeCache() {
     return new Promise(function(resolve) {
         cacheHandler.clearUserRoleCache();
@@ -336,6 +362,7 @@ function addAll() {
     added.push(addOffices());
     added.push(addSkillGroups());
     added.push(addAssignments());
+    added.push(addCertificates());
     added.push(addCustomers());
     added.push(addDomains());
     return Promise.all(added);
@@ -460,6 +487,25 @@ function addAssignments() {
     return Promise.all(applyAddOnItemsRec(assignments, 0, assignmentController.createNewAssignment));
 }
 
+function addCertificates() {
+    var certificates = [];
+    var usedDomainNames = {};
+    for (var i = 0; i < config.DEMO.NUMBER_OF_CERTIFICATES; i++) {
+        var object = {};
+        var domainName = faker.internet.domainName();
+        while (usedDomainNames[domainName]) {
+            domainName = faker.internet.domainName();
+        }
+
+        usedDomainNames[domainName] = 1;
+        object.name = domainName;
+        certificates.push(object);
+    }
+
+    return Promise.all(applyAddOnItemsRec(certificates, 0, certificateController.createNewCertificate));
+
+}
+
 function addOffices() {
     var offices = [
         {
@@ -518,6 +564,12 @@ function addAttributes() {
             name: 'canEditAssignment'
         },
         {
+            name: 'canViewCertificate'
+        },
+        {
+            name: 'canEditCertificate'
+        },
+        {
             name: 'canEditAttribute'
         },
         {
@@ -553,6 +605,7 @@ function addAttributes() {
         'canViewOffice',
         'canViewUser',
         'canViewAssignment',
+        'canViewCertificate',
         'canViewFile',
         'canViewSkill'
     ];
@@ -611,6 +664,11 @@ function addConnectors() {
 
     promises.push(connectAssignmentFields());
 
+    promises.push(userController.getUsers()
+        .then(connectUsersAndRandomCertificates));
+
+    promises.push(connectCertificateFields());
+
     return Promise.all(promises);
 }
 
@@ -664,6 +722,23 @@ function connectUsersAndRandomAssignments(users) {
         });
 }
 
+function connectUsersAndRandomCertificates(users) {
+    return skillController.getSkills()
+        .then(function(skills) {
+            var extraFields = {
+                skills: randomHandler.getBinomailUniqueSkillIds(skills, config.DEMO.SKILL_ON_CERTIFICATE_PROBABILITY),
+                dateFrom: faker.date.past,
+                dateTo: faker.date.future,
+                description: faker.lorem.sentence
+            };
+
+            return certificateController.getCertificates()
+                .then(function(certificates) {
+                    return connectItemsToRandomItems(users, certificates, 'userId', 'certificateId', 0, userToCertificateConnectorController.createUserToCertificateConnector, config.DEMO.USER_ON_CERTIFICATE_PROBABILITY, extraFields);
+                });
+        });
+}
+
 function connectAssignmentFields() {
     var customers = customerController.getCustomers();
     var assignments = assignmentController.getAssignments();
@@ -680,6 +755,27 @@ function connectAssignmentFields() {
                     assignment.customer = customers[randomHandler.randomInt(customers.length - 1)]._id;
                     assignment.domain = domains[randomHandler.randomInt(domains.length - 1)]._id;
                     return assignmentController.updateAssignment(assignment._id, assignment);
+                }).then(resolve);
+            });
+        });
+}
+
+function connectCertificateFields() {
+    var customers = customerController.getCustomers();
+    var certificates = certificateController.getCertificates();
+    var domains = domainController.getDomains();
+    return Promise.all([customers, certificates])
+        .then(function() {
+            return new Promise(function(resolve) {
+                var extraFields = {
+                };
+                certificates = certificates.value();
+                customers = customers.value();
+                domains = domains.value();
+                return Promise.map(certificates, function(certificate) {
+                    certificate.customer = customers[randomHandler.randomInt(customers.length - 1)]._id;
+                    certificate.domain = domains[randomHandler.randomInt(domains.length - 1)]._id;
+                    return certificateController.updateCertificate(certificate._id, certificate);
                 }).then(resolve);
             });
         });
