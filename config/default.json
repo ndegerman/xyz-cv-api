@@ -11,7 +11,10 @@
         "NUMBER_OF_SKILLS": 25,
         "USER_ON_ASSIGNMENT_PROBABILITY": 0.2,
         "SKILL_ON_ASSIGNMENT_PROBABILITY": 0.3,
-        "NUMBER_OF_ASSIGNMENTS": 10
+        "NUMBER_OF_ASSIGNMENTS": 10,
+        "USER_ON_CERTIFICATE_PROBABILITY": 0.2,
+        "SKILL_ON_CERTIFICATE_PROBABILITY": 0.3,
+        "NUMBER_OF_CERTIFICATES": 10
     },
     "SUPER_USERS": ["anton.lundin@softhouse.se", "rasmus.xx.letterkrantz@softhouse.se", "young.fogelstrom@sofhouse.se"]
 }

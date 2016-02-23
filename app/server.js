@@ -15,6 +15,7 @@ var skillRoutes = require('./chains/skill/skill.routes')(express.Router());
 var skillGroupRoutes = require('./chains/skillGroup/skillGroup.routes')(express.Router());
 var officeRoutes = require('./chains/office/office.routes')(express.Router());
 var assignmentRoutes = require('./chains/assignment/assignment.routes')(express.Router());
+var certificateRoutes = require('./chains/certificate/certificate.routes')(express.Router());
 var customerRoutes = require('./chains/customer/customer.routes')(express.Router());
 var domainRoutes = require('./chains/domain/domain.routes')(express.Router());
 
@@ -25,6 +26,7 @@ var userToSkillConnectorRoutes = require('./chains/userToSkillConnector/userToSk
 var skillToSkillGroupConnectorRoutes = require('./chains/skillToSkillGroupConnector/skillToSkillGroupConnector.routes.js')(express.Router());
 var userToOfficeConnectorRoutes = require('./chains/userToOfficeConnector/userToOfficeConnector.routes.js')(express.Router());
 var userToAssignmentConnectorRoutes = require('./chains/userToAssignmentConnector/userToAssignmentConnector.routes.js')(express.Router());
+var userToCertificateConnectorRoutes = require('./chains/userToCertificateConnector/userToCertificateConnector.routes.js')(express.Router());
 
 var dbControlRoutes = require('./common/dbControl.routes')(express.Router());
 var authenticationRoutes = require('./common/authentication.routes')(express.Router());
@@ -75,6 +77,7 @@ app.use('/skill', skillRoutes);
 app.use('/skillGroup', skillGroupRoutes);
 app.use('/office', officeRoutes);
 app.use('/assignment', assignmentRoutes);
+app.use('/certificate', certificateRoutes);
 app.use('/customer', customerRoutes);
 app.use('/domain', domainRoutes);
 
@@ -86,6 +89,7 @@ app.use('/userToSkillConnector', userToSkillConnectorRoutes);
 app.use('/skillToSkillGroupConnector', skillToSkillGroupConnectorRoutes);
 app.use('/userToOfficeConnector', userToOfficeConnectorRoutes);
 app.use('/userToAssignmentConnector', userToAssignmentConnectorRoutes);
+app.use('/userToCertificateConnector', userToCertificateConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
 
