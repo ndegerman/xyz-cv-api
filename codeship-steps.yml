@@ -1,6 +1,6 @@
 - type: serial
   steps:
   - service: kushapi
-    command: bash ./enable-ssh.sh
+    command: bash /enable-ssh.sh
   - service: kushapi
     command: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no adminuser@kush.softhouselabs.com 'sudo bash ./xyz-cv-api/deploy.sh'
