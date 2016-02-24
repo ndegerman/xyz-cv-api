@@ -8,6 +8,7 @@ RUN cd /app && npm install --production
 # Add the rest of the project to a folder app in the container.
 ADD ./app /app
 ADD ./config /app/config
+ADD ./enable-ssh.sh /enable-ssh.sh
 
 # Set working directory for the app:
 WORKDIR /app
