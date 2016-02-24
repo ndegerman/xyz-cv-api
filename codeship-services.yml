@@ -2,5 +2,3 @@ kushapi:
   build: .
   ports:
    - "9000:9000"
-  volumes:
-   - .:/
