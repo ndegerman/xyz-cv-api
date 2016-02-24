@@ -1,0 +1,4 @@
+- type: serial
+  steps:
+  - service: kushapi
+    command: ssh adminuser@kush.softhouselabs.com 'sudo bash ./xyz-cv-api/deploy.sh'
