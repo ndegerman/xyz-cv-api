@@ -3,4 +3,4 @@
   - service: kushapi
     command: bash /enable-ssh.sh
   - service: kushapi
-    command: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no adminuser@kush.softhouselabs.com 'sudo bash ./xyz-cv-api/deploy.sh'
+    command: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no adminuser@kush.softhouselabs.com 'cd ./xyz-cv-api/ && sudo bash deploy.sh'
