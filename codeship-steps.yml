@@ -1,8 +1,8 @@
 - type: serial
   steps:
   - service: kushapi
-    command: sudo mkdir -p "$HOME/.ssh"
+    command: mkdir -p "$HOME/.ssh"
   - service: kushapi
-    command: sudo echo -e $PRIVATE_SSH_KEY >> $HOME/.ssh/id_rsa
+    command: echo -e $PRIVATE_SSH_KEY >> $HOME/.ssh/id_rsa
   - service: kushapi
     command: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no adminuser@kush.softhouselabs.com 'sudo bash ./xyz-cv-api/deploy.sh'
