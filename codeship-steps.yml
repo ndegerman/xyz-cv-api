@@ -1,4 +1,8 @@
 - type: serial
   steps:
   - service: kushapi
+    command: mkdir -p "$HOME/.ssh"
+  - service: kushapi
+    command: echo -e $PRIVATE_SSH_KEY >> $HOME/.ssh/id_rsa
+  - service: kushapi
     command: ssh adminuser@kush.softhouselabs.com 'sudo bash ./xyz-cv-api/deploy.sh'
