@@ -21,8 +21,7 @@ function validateCertificate(certificate) {
 function getCertificateTemplate() {
     return {
         name: null,
-        customer: null,
-        domain: null
+        description: null
     };
 }
 
