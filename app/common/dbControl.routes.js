@@ -400,7 +400,6 @@ function addUsers() {
     }
 
     return Promise.all(applyAddOnItemsRec(users, 0, userController.createNewUser));
-
 }
 
 function addAdmin() {
@@ -421,7 +420,6 @@ function addAdmin() {
     }];
 
     return Promise.all(applyAddOnItemsRec(user, 0, userController.createNewUser));
-
 }
 
 function addCustomers() {
@@ -442,7 +440,6 @@ function addSkills() {
 function addSkillsDefault() {
     var skills = randomHandler.getListOfDefaultSkillAbbreviations();
     return Promise.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
-
 }
 
 function addAssignments() {
@@ -461,7 +458,6 @@ function addAssignments() {
     }
 
     return Promise.all(applyAddOnItemsRec(assignments, 0, assignmentController.createNewAssignment));
-
 }
 
 function addOffices() {
@@ -485,8 +481,8 @@ function addOffices() {
             name: 'Sarajevo'
         }
     ];
-    return Promise.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice));
 
+    return Promise.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice));
 }
 
 function addAttributes() {
@@ -562,7 +558,6 @@ function addAttributes() {
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
-
 }
 
 function addRoles() {
@@ -574,8 +569,8 @@ function addRoles() {
             name: 'admin'
         }
     ];
-    return Promise.all(applyAddOnItemsRec(roles, 0, roleController.createNewRole));
 
+    return Promise.all(applyAddOnItemsRec(roles, 0, roleController.createNewRole));
 }
 
 function addSkillGroups() {
@@ -587,8 +582,8 @@ function addSkillGroups() {
             name: 'spokenLanguages'
         }
     ];
-    return Promise.all(applyAddOnItemsRec(skillGroups, 0, skillGroupController.createNewSkillGroup));
 
+    return Promise.all(applyAddOnItemsRec(skillGroups, 0, skillGroupController.createNewSkillGroup));
 }
 
 // ADD CONNECTORS
