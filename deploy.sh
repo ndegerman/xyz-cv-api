@@ -1,8 +1,5 @@
 # !/bin/sh
-set -e
-git pull
-docker kill kushapi
-docker rm kushapi
-docker build -t kushapi .
-docker run -d --name kushapi --link xyzdeploy_sitewatcher_1:xyz -e KATALOG_VHOSTS=default/cv-api kushapi
-^D
+mkdir -p "$HOME/.ssh"
+echo -e $PRIVATE_SSH_KEY >> $HOME/.ssh/id_rsa
+chmod 600 $HOME/.ssh/id_rsa
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no adminuser@kush.softhouselabs.com 'cd ./xyz-cv-api/ && sudo bash build.sh'
