@@ -67,6 +67,15 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    routes.post('/resetAttributes', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
+        purgeRoleToAttributeConnectors()
+            .then(purgeAttributes)
+            .then(addAttributes)
+            .then(addAttributeConnectorsDefault)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
     return routes;
 };
 
@@ -612,14 +621,21 @@ function addConnectors() {
 
 function addConnectorsDefault() {
     var promises = [];
+    promises.push(addAttributeConnectorsDefault());
+
+    promises.push(skillGroupController.getSkillGroups({name: 'technologies'})
+        .then(connectSkillGroupAndSkills));
+
+    return Promise.all(promises);
+}
+
+function addAttributeConnectorsDefault() {
+    var promises = [];
     promises.push(roleController.getRoles({name: 'admin'})
         .then(connectAdminAndAttributes));
 
     promises.push(roleController.getRoles({name: 'user'})
         .then(connectUserAndAttributes));
-
-    promises.push(skillGroupController.getSkillGroups({name: 'technologies'})
-        .then(connectSkillGroupAndSkills));
 
     return Promise.all(promises);
 }
