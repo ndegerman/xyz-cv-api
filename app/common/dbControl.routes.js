@@ -67,6 +67,15 @@ module.exports = function(routes) {
             .catch(responseHandler.sendErrorResponse(response));
     });
 
+    routes.post('/resetAttributes', authentication.hasAllowedEmail(config.SUPER_USERS), function(request, response) {
+        purgeRoleToAttributeConnectors()
+            .then(purgeAttributes)
+            .then(addAttributes)
+            .then(addAttributeConnectorsDefault)
+            .then(responseHandler.sendSuccessfulPutJsonResponse(response))
+            .catch(responseHandler.sendErrorResponse(response));
+    });
+
     return routes;
 };
 
@@ -391,7 +400,6 @@ function addUsers() {
     }
 
     return Promise.all(applyAddOnItemsRec(users, 0, userController.createNewUser));
-
 }
 
 function addAdmin() {
@@ -412,7 +420,6 @@ function addAdmin() {
     }];
 
     return Promise.all(applyAddOnItemsRec(user, 0, userController.createNewUser));
-
 }
 
 function addCustomers() {
@@ -433,7 +440,6 @@ function addSkills() {
 function addSkillsDefault() {
     var skills = randomHandler.getListOfDefaultSkillAbbreviations();
     return Promise.all(applyAddOnItemsRec(skills, 0, skillController.createNewSkill));
-
 }
 
 function addAssignments() {
@@ -452,7 +458,6 @@ function addAssignments() {
     }
 
     return Promise.all(applyAddOnItemsRec(assignments, 0, assignmentController.createNewAssignment));
-
 }
 
 function addOffices() {
@@ -476,8 +481,8 @@ function addOffices() {
             name: 'Sarajevo'
         }
     ];
-    return Promise.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice));
 
+    return Promise.all(applyAddOnItemsRec(offices, 0, officeController.createNewOffice));
 }
 
 function addAttributes() {
@@ -553,7 +558,6 @@ function addAttributes() {
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
-
 }
 
 function addRoles() {
@@ -565,8 +569,8 @@ function addRoles() {
             name: 'admin'
         }
     ];
-    return Promise.all(applyAddOnItemsRec(roles, 0, roleController.createNewRole));
 
+    return Promise.all(applyAddOnItemsRec(roles, 0, roleController.createNewRole));
 }
 
 function addSkillGroups() {
@@ -578,8 +582,8 @@ function addSkillGroups() {
             name: 'spokenLanguages'
         }
     ];
-    return Promise.all(applyAddOnItemsRec(skillGroups, 0, skillGroupController.createNewSkillGroup));
 
+    return Promise.all(applyAddOnItemsRec(skillGroups, 0, skillGroupController.createNewSkillGroup));
 }
 
 // ADD CONNECTORS
@@ -612,14 +616,21 @@ function addConnectors() {
 
 function addConnectorsDefault() {
     var promises = [];
+    promises.push(addAttributeConnectorsDefault());
+
+    promises.push(skillGroupController.getSkillGroups({name: 'technologies'})
+        .then(connectSkillGroupAndSkills));
+
+    return Promise.all(promises);
+}
+
+function addAttributeConnectorsDefault() {
+    var promises = [];
     promises.push(roleController.getRoles({name: 'admin'})
         .then(connectAdminAndAttributes));
 
     promises.push(roleController.getRoles({name: 'user'})
         .then(connectUserAndAttributes));
-
-    promises.push(skillGroupController.getSkillGroups({name: 'technologies'})
-        .then(connectSkillGroupAndSkills));
 
     return Promise.all(promises);
 }
