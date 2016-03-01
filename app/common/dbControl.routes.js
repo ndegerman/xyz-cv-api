@@ -503,7 +503,6 @@ function addCertificates() {
     }
 
     return Promise.all(applyAddOnItemsRec(certificates, 0, certificateController.createNewCertificate));
-
 }
 
 function addOffices() {
@@ -928,7 +927,6 @@ function connectItemsToRandomItems(items, connectToItems, itemsProp, connectToIt
                     .then(resolve);
             });
     });
-
 }
 
 function connectItemsToRandomItem(items, connectToItems, itemsProp, connectToItemsProp, index, applyFunction) {
@@ -947,7 +945,6 @@ function connectItemsToRandomItem(items, connectToItems, itemsProp, connectToIte
                     .then(resolve);
             });
     });
-
 }
 
 function isUserAttribute(attribute) {
