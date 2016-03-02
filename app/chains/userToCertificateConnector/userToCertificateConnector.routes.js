@@ -28,7 +28,6 @@ module.exports = function(routes) {
         userToCertificateConnectorController.getUserToCertificateConnectorById(request.params.id)
             .then(responseHandler.sendJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
-
     });
 
     // update a userToCertificateConnector given an id and an object
@@ -36,7 +35,6 @@ module.exports = function(routes) {
         userToCertificateConnectorController.updateUserToCertificateConnector(request.params.id, request.body, request.headers['x-forwarded-email'])
             .then(responseHandler.sendSuccessfulPutJsonResponse(response))
             .catch(responseHandler.sendErrorResponse(response));
-
     });
 
     // delete the userToCertificateConnector with the given id
