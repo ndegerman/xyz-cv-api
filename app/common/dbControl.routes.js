@@ -14,6 +14,7 @@ var roleToAttributeConnectorController = require('../chains/roleToAttributeConne
 var skillController = require('../chains/skill/skill.controller');
 var skillGroupController = require('../chains/skillGroup/skillGroup.controller');
 var skillToSkillGroupConnectorController = require('../chains/skillToSkillGroupConnector/skillToSkillGroupConnector.controller');
+var otherController = require('../chains/other/other.controller');
 var userController = require('../chains/user/user.controller');
 var languageController = require('../chains/language/language.controller');
 var userToOfficeConnectorController = require('../chains/userToOfficeConnector/userToOfficeConnector.controller');
@@ -21,6 +22,7 @@ var userToSkillConnectorController = require('../chains/userToSkillConnector/use
 var userToAssignmentConnectorController = require('../chains/userToAssignmentConnector/userToAssignmentConnector.controller');
 var userToCertificateConnectorController = require('../chains/userToCertificateConnector/userToCertificateConnector.controller');
 var userToLanguageConnectorController = require('../chains/userToLanguageConnector/userToLanguageConnector.controller');
+var userToOtherConnectorController = require('../chains/userToOtherConnector/userToOtherConnector.controller');
 
 var responseHandler = require('../utils/response.handler');
 var randomHandler = require('../utils/random.handler');
@@ -143,6 +145,7 @@ function purgeIndices() {
     purge.push(customerController.purgeIndices());
     purge.push(domainController.purgeIndices());
     purge.push(languageController.purgeIndices());
+    purge.push(otherController.purgeIndices());
     return Promise.all(purge);
 }
 
@@ -155,6 +158,7 @@ function setIndices() {
     set.push(customerController.createIndex({ name: 1}, { unique: true }));
     set.push(domainController.createIndex({ name: 1}, { unique: true }));
     set.push(languageController.createIndex({ name: 1 }, { unique: true }));
+    set.push(otherController.createIndex({ name: 1 }, { unique: true }));
     return Promise.all(set);
 }
 
@@ -173,6 +177,7 @@ function purgeAll() {
     purge.push(purgeCertificates());
     purge.push(purgeCustomers());
     purge.push(purgeDomains());
+    purge.push(purgeOthers());
 
     purge.push(purgeUserToSkillConnectors());
     purge.push(purgeRoleToAttributeConnectors());
@@ -180,6 +185,7 @@ function purgeAll() {
     purge.push(purgeUserToOfficeConnectors());
     purge.push(purgeUserToAssignmentConnectors());
     purge.push(purgeUserToCertificateConnectors());
+    purge.push(purgeUserToOtherConnectors());
     purge.push(purgeCache());
     return Promise.all(purge);
 }
@@ -284,6 +290,16 @@ function purgeCertificates() {
     });
 }
 
+function purgeOthers() {
+    return new Promise(function(resolve) {
+        otherController.getOthers()
+            .then(function(others) {
+                return Promise.all(applyDeleteOnItemRec(others, 0, otherController.deleteOtherById))
+                    .then(resolve);
+            });
+    });
+}
+
 function purgeUserToSkillConnectors() {
     return new Promise(function(resolve) {
         userToSkillConnectorController.getUserToSkillConnectors()
@@ -339,6 +355,16 @@ function purgeUserToCertificateConnectors() {
         userToCertificateConnectorController.getUserToCertificateConnectors()
             .then(function(userToCertificateConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToCertificateConnectors, 0, userToCertificateConnectorController.deleteUserToCertificateConnectorById))
+                    .then(resolve);
+            });
+    });
+}
+
+function purgeUserToOtherConnectors() {
+    return new Promise(function(resolve) {
+        userToOtherConnectorController.getUserToOtherConnectors()
+            .then(function(userToOtherConnectors) {
+                return Promise.all(applyDeleteOnItemRec(userToOtherConnectors, 0, userToOtherConnectorController.deleteUserToOtherConnectorById))
                     .then(resolve);
             });
     });
@@ -607,6 +633,12 @@ function addAttributes() {
         },
         {
             name: 'canEditLanguage'
+        },
+        {
+            name: 'canEditOther'
+        },
+        {
+            name: 'canViewOther'
         }
     ];
 
@@ -617,7 +649,8 @@ function addAttributes() {
         'canViewCertificate',
         'canViewFile',
         'canViewSkill',
-        'canViewLanguage'
+        'canViewLanguage',
+        'canViewOther'
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
