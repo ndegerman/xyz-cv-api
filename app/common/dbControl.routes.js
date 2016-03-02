@@ -15,10 +15,12 @@ var skillController = require('../chains/skill/skill.controller');
 var skillGroupController = require('../chains/skillGroup/skillGroup.controller');
 var skillToSkillGroupConnectorController = require('../chains/skillToSkillGroupConnector/skillToSkillGroupConnector.controller');
 var userController = require('../chains/user/user.controller');
+var languageController = require('../chains/language/language.controller');
 var userToOfficeConnectorController = require('../chains/userToOfficeConnector/userToOfficeConnector.controller');
 var userToSkillConnectorController = require('../chains/userToSkillConnector/userToSkillConnector.controller');
 var userToAssignmentConnectorController = require('../chains/userToAssignmentConnector/userToAssignmentConnector.controller');
 var userToCertificateConnectorController = require('../chains/userToCertificateConnector/userToCertificateConnector.controller');
+var userToLanguageConnectorController = require('../chains/userToLanguageConnector/userToLanguageConnector.controller');
 
 var responseHandler = require('../utils/response.handler');
 var randomHandler = require('../utils/random.handler');
@@ -140,6 +142,7 @@ function purgeIndices() {
     purge.push(certificateController.purgeIndices());
     purge.push(customerController.purgeIndices());
     purge.push(domainController.purgeIndices());
+    purge.push(languageController.purgeIndices());
     return Promise.all(purge);
 }
 
@@ -151,6 +154,7 @@ function setIndices() {
     set.push(certificateController.createIndex({ name: 1}, { unique: true }));
     set.push(customerController.createIndex({ name: 1}, { unique: true }));
     set.push(domainController.createIndex({ name: 1}, { unique: true }));
+    set.push(languageController.createIndex({ name: 1 }, { unique: true }));
     return Promise.all(set);
 }
 
@@ -597,6 +601,12 @@ function addAttributes() {
         },
         {
             name: 'canEditDomain'
+        },
+        {
+            name: 'canViewLanguage'
+        },
+        {
+            name: 'canEditLanguage'
         }
     ];
 
@@ -606,7 +616,8 @@ function addAttributes() {
         'canViewAssignment',
         'canViewCertificate',
         'canViewFile',
-        'canViewSkill'
+        'canViewSkill',
+        'canViewLanguage'
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
