@@ -18,6 +18,7 @@ var otherRoutes = require('./chains/other/other.routes')(express.Router());
 var officeRoutes = require('./chains/office/office.routes')(express.Router());
 var assignmentRoutes = require('./chains/assignment/assignment.routes')(express.Router());
 var certificateRoutes = require('./chains/certificate/certificate.routes')(express.Router());
+var courseRoutes = require('./chains/course/course.routes')(express.Router());
 var customerRoutes = require('./chains/customer/customer.routes')(express.Router());
 var domainRoutes = require('./chains/domain/domain.routes')(express.Router());
 
@@ -31,6 +32,7 @@ var userToOtherConnectorRoutes = require('./chains/userToOtherConnector/userToOt
 var userToOfficeConnectorRoutes = require('./chains/userToOfficeConnector/userToOfficeConnector.routes.js')(express.Router());
 var userToAssignmentConnectorRoutes = require('./chains/userToAssignmentConnector/userToAssignmentConnector.routes.js')(express.Router());
 var userToCertificateConnectorRoutes = require('./chains/userToCertificateConnector/userToCertificateConnector.routes.js')(express.Router());
+var userToCourseConnectorRoutes = require('./chains/userToCourseConnector/userToCourseConnector.routes.js')(express.Router());
 
 var dbControlRoutes = require('./common/dbControl.routes')(express.Router());
 var authenticationRoutes = require('./common/authentication.routes')(express.Router());
@@ -86,6 +88,7 @@ app.use('/certificate', certificateRoutes);
 app.use('/customer', customerRoutes);
 app.use('/domain', domainRoutes);
 app.use('/language', languageRoutes);
+app.use('/course', courseRoutes);
 
 app.use('/file', fileRoutes);
 app.use('/authentication', authenticationRoutes);
@@ -98,6 +101,7 @@ app.use('/userToOfficeConnector', userToOfficeConnectorRoutes);
 app.use('/userToAssignmentConnector', userToAssignmentConnectorRoutes);
 app.use('/userToCertificateConnector', userToCertificateConnectorRoutes);
 app.use('/userToLanguageConnector', userToLanguageConnectorRoutes);
+app.use('/userToCourseConnector', userToCourseConnectorRoutes);
 
 app.use(errorMiddleware.errorFilter);
 

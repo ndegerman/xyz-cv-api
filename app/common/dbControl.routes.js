@@ -17,12 +17,14 @@ var skillToSkillGroupConnectorController = require('../chains/skillToSkillGroupC
 var otherController = require('../chains/other/other.controller');
 var userController = require('../chains/user/user.controller');
 var languageController = require('../chains/language/language.controller');
+var courseController = require('../chains/course/course.controller');
 var userToOfficeConnectorController = require('../chains/userToOfficeConnector/userToOfficeConnector.controller');
 var userToSkillConnectorController = require('../chains/userToSkillConnector/userToSkillConnector.controller');
 var userToAssignmentConnectorController = require('../chains/userToAssignmentConnector/userToAssignmentConnector.controller');
 var userToCertificateConnectorController = require('../chains/userToCertificateConnector/userToCertificateConnector.controller');
 var userToLanguageConnectorController = require('../chains/userToLanguageConnector/userToLanguageConnector.controller');
 var userToOtherConnectorController = require('../chains/userToOtherConnector/userToOtherConnector.controller');
+var userToCourseConnectorController = require('../chains/userToCourseConnector/userToCourseConnector.controller');
 
 var responseHandler = require('../utils/response.handler');
 var randomHandler = require('../utils/random.handler');
@@ -146,6 +148,7 @@ function purgeIndices() {
     purge.push(domainController.purgeIndices());
     purge.push(languageController.purgeIndices());
     purge.push(otherController.purgeIndices());
+    purge.push(courseController.purgeIndices());
     return Promise.all(purge);
 }
 
@@ -159,6 +162,7 @@ function setIndices() {
     set.push(domainController.createIndex({ name: 1}, { unique: true }));
     set.push(languageController.createIndex({ name: 1 }, { unique: true }));
     set.push(otherController.createIndex({ name: 1 }, { unique: true }));
+    set.push(courseController.createIndex({ name: 1 }, { unique: true }));
     return Promise.all(set);
 }
 
@@ -178,6 +182,7 @@ function purgeAll() {
     purge.push(purgeCustomers());
     purge.push(purgeDomains());
     purge.push(purgeOthers());
+    purge.push(purgeCourses());
 
     purge.push(purgeUserToSkillConnectors());
     purge.push(purgeRoleToAttributeConnectors());
@@ -186,6 +191,7 @@ function purgeAll() {
     purge.push(purgeUserToAssignmentConnectors());
     purge.push(purgeUserToCertificateConnectors());
     purge.push(purgeUserToOtherConnectors());
+    purge.push(purgeUserToCourseConnectors());
     purge.push(purgeCache());
     return Promise.all(purge);
 }
@@ -300,6 +306,16 @@ function purgeOthers() {
     });
 }
 
+function purgeCourses() {
+    return new Promise(function(resolve) {
+        courseController.getCourses()
+            .then(function(courses) {
+                return Promise.all(applyDeleteOnItemRec(courses, 0, courseController.deleteCourseById))
+                    .then(resolve);
+            });
+    });
+}
+
 function purgeUserToSkillConnectors() {
     return new Promise(function(resolve) {
         userToSkillConnectorController.getUserToSkillConnectors()
@@ -365,6 +381,16 @@ function purgeUserToOtherConnectors() {
         userToOtherConnectorController.getUserToOtherConnectors()
             .then(function(userToOtherConnectors) {
                 return Promise.all(applyDeleteOnItemRec(userToOtherConnectors, 0, userToOtherConnectorController.deleteUserToOtherConnectorById))
+                    .then(resolve);
+            });
+    });
+}
+
+function purgeUserToCourseConnectors() {
+    return new Promise(function(resolve) {
+        userToCourseConnectorController.getUserToCourseConnectors()
+            .then(function(userToCourseConnectors) {
+                return Promise.all(applyDeleteOnItemRec(userToCourseConnectors, 0, userToCourseConnectorController.deleteUserToCourseConnectorById))
                     .then(resolve);
             });
     });
@@ -639,6 +665,12 @@ function addAttributes() {
         },
         {
             name: 'canViewOther'
+        },
+        {
+            name: 'canViewCourse'
+        },
+        {
+            name: 'canEditCourse'
         }
     ];
 
@@ -650,7 +682,8 @@ function addAttributes() {
         'canViewFile',
         'canViewSkill',
         'canViewLanguage',
-        'canViewOther'
+        'canViewOther',
+        'canViewCourse'
     ];
 
     return Promise.all(applyAddOnItemsRec(allAttributes, 0, attributeController.createNewAttribute));
